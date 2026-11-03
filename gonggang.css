@@ -180,6 +180,27 @@
 .qr-url { overflow-wrap: anywhere; color: var(--text-2); }
 .qr-use { grid-column: 1 / -1; display: flex; gap: 14px; }
 
+/* 제보 상자 */
+.tip-box {
+  position: sticky; top: calc(var(--bar-h) + var(--tab-h) + 16px);
+  padding: 20px 22px; border: 2px solid var(--accent); border-radius: 14px; background: var(--surface);
+  box-shadow: 0 6px 24px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.tip-box .eyebrow { margin: 0 0 4px; color: var(--accent); }
+.tip-box h3 { margin: 0 0 12px; font-size: 20px; line-height: 1.4; letter-spacing: -0.015em; }
+.tip-summary { margin: 0 0 14px; padding: 10px 12px; border-radius: 8px; background: var(--code-bg); font-size: 14px; }
+.tip-summary div { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 8px; padding: 2px 0; }
+.tip-summary dt { color: var(--text-3); font-weight: 600; }
+.tip-summary dd { margin: 0; overflow-wrap: anywhere; }
+.btn-big { width: 100%; justify-content: center; min-height: 54px; font-size: 17px; font-weight: 700; border-radius: 10px; }
+.btn-big:disabled { opacity: .45; }
+.tip-status { margin: 10px 0 0; min-height: 1.4em; font-size: 14px; font-weight: 600; color: var(--accent); }
+.tip-alt { margin: 8px 0 0; color: var(--text-3); }
+.small-actions { gap: 14px; margin-top: -4px; }
+.draft-wrap { margin-top: 22px; border-top: 1px solid var(--rule); padding-top: 12px; }
+.draft-wrap > summary { cursor: pointer; font-weight: 650; font-size: 15px; padding: 6px 0; }
+.draft-wrap[open] > summary { margin-bottom: 10px; }
+
 /* 제보 */
 .draft-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
 .draft-actions .btn { flex: 1; justify-content: center; }
@@ -192,6 +213,7 @@
 
 @media (max-width: 1000px) {
   .tt-layout, .import-grid { grid-template-columns: minmax(0, 1fr); }
+  .tip-box { position: static; }
 }
 @media (max-width: 600px) {
   .tabbar .wrap { scrollbar-width: none; }

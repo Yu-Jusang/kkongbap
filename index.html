@@ -12,8 +12,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/400.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/500.css">
 <link rel="stylesheet" href="style.css?v=2">
-<link rel="stylesheet" href="gonggang.css?v=6">
-<script type="module" src="app.js?v=8"></script>
+<link rel="stylesheet" href="gonggang.css?v=7">
+<script type="module" src="app.js?v=9"></script>
 </head>
 <body data-project="gonggang" class="has-tabs">
 <a class="skip" href="#main">본문 바로가기</a>
@@ -117,23 +117,33 @@
 <!-- 05 공지 붙여넣기·제보 -->
 <div id="import-view" class="view wrap wide" hidden>
 <div class="content solo">
-<section aria-labelledby="s-import-h" id="import-zone"><div class="sec-head"><span class="n">05</span><h2 id="s-import-h">공지 붙여넣고, 내 캘린더에 · 꽁밥에 제보</h2></div>
-<p class="lead">공지문이나 포스터 사진을 Ctrl+V로 붙여넣으세요. 사진 글자는 이 브라우저 안에서 읽고 서버로 보내지 않습니다. 읽어낸 행사는 내 캘린더에만 넣거나, 꽁밥에 제보해 모두가 보게 할 수 있습니다.</p>
+<section aria-labelledby="s-import-h" id="import-zone"><div class="sec-head"><span class="n">05</span><h2 id="s-import-h">붙여넣고, 딸깍 제보</h2></div>
+<p class="lead">공지 사진이나 글을 붙여넣고 ‘꽁밥에 제보하기’만 누르면 됩니다. 사진 속 글자와 QR코드는 이 브라우저 안에서 읽습니다. 같은 내용을 내 캘린더에만 넣을 수도 있습니다.</p>
 <div class="import-grid">
 <div>
-<div class="drop"><strong>사진도 바로 Ctrl+V</strong><p>스크린샷·포스터를 붙여넣거나 파일을 골라 주세요.</p><label class="btn btn-secondary btn-sm file-label">사진 파일 선택<input id="image-file" type="file" accept="image/png,image/jpeg,image/webp,image/bmp" aria-label="공지 사진 선택"></label><small>PNG·JPG·WebP·BMP · 최대 12MB · 한 번에 한 장 · 처음 한 번 인식 모델(약 18MB)을 내려받습니다</small></div>
+<div class="drop"><strong>사진은 Ctrl+V 또는 끌어놓기</strong><p>스크린샷·포스터를 붙여넣거나 파일을 골라 주세요.</p><label class="btn btn-secondary btn-sm file-label">사진 파일 선택<input id="image-file" type="file" accept="image/png,image/jpeg,image/webp,image/bmp" aria-label="공지 사진 선택"></label><small>PNG·JPG·WebP·BMP · 최대 12MB · 처음 한 번 인식 모델(약 18MB)을 내려받습니다</small></div>
 <div id="image-preview" class="image-preview" hidden><img alt="글자 인식에 사용한 공지 사진"><div><span id="image-name"></span><button type="button" class="text-button" id="image-clear">지우기</button></div></div>
 <div id="ocr-status" class="ocr-status" role="status" aria-live="polite" hidden><span></span><button type="button" class="text-button" id="ocr-cancel" hidden>취소</button></div>
 <p class="detail-foot" id="ocr-hint"></p>
-<label class="field" for="notice-text">공지문 · 사진에서 읽은 글자<textarea id="notice-text" maxlength="16000" rows="12" placeholder="행사 공지를 붙여넣으세요."></textarea></label>
-<div class="actions"><button type="button" class="btn btn-primary" id="read-notice">내용 읽기</button><button type="button" class="btn btn-secondary" id="notice-example">예시 넣기</button><label class="field inline">기준 연도<input id="notice-year" type="number" min="2020" max="2100"></label></div>
+<label class="field" for="notice-text">공지 글 · 사진에서 읽은 글자<textarea id="notice-text" maxlength="16000" rows="9" placeholder="공지 글을 붙여넣으세요. 링크만 있어도 됩니다."></textarea></label>
+<div class="actions small-actions"><button type="button" class="text-button" id="read-notice">다시 읽기</button><button type="button" class="text-button" id="notice-example">예시 넣기</button><label class="field inline">기준 연도<input id="notice-year" type="number" min="2020" max="2100"></label></div>
 <p class="form-error" id="notice-error" role="alert"></p>
-<p class="small muted">공지가 이미 있다면 원문 링크만으로도 <a id="tip-blank" href="https://docs.google.com/forms/d/e/1FAIpQLScQERykaPcm0gTkBKBiFoXujGY8-f011gSyMnaSuJy8mPWR5g/viewform" target="_blank" rel="noopener noreferrer">바로 제보</a>할 수 있습니다(로그인 불필요).</p>
 </div>
-<form id="draft-form" class="panel-box" hidden><h3>읽어낸 내용 확인</h3><p class="small muted">원문과 다르면 고친 뒤 추가하세요. 빈칸은 미확인으로 남습니다.</p><div id="draft-fields"></div><div class="draft-actions"><button class="btn btn-primary" type="submit">내 캘린더에 추가</button><a class="btn btn-secondary" id="tip-form" href="https://docs.google.com/forms/d/e/1FAIpQLScQERykaPcm0gTkBKBiFoXujGY8-f011gSyMnaSuJy8mPWR5g/viewform" target="_blank" rel="noopener noreferrer">꽁밥에 제보</a></div><p class="detail-foot">‘꽁밥에 제보’는 이 초안으로 칸을 채운 구글 폼을 엽니다. 로그인 없이 낼 수 있고 응답은 운영자만 봅니다. 원문 링크를 꼭 넣고, 이름·연락처는 적지 마세요. 운영자가 원문을 확인한 뒤 사이트에 올립니다. 공개 기록을 남기고 싶다면 <a id="tip-link" href="https://github.com/Yu-Jusang/kkongbap/issues/new?template=tip.yml" target="_blank" rel="noopener noreferrer">GitHub 이슈로 제보</a>할 수도 있습니다(계정 필요).</p></form>
+<aside class="tip-box" id="tip-box" aria-labelledby="tip-title">
+<p class="eyebrow">제보 상자</p>
+<h3 id="tip-title">공지를 붙여넣으면 바로 보낼 수 있어요</h3>
+<dl class="tip-summary" id="tip-summary" hidden></dl>
+<label class="field">원문 링크 <small>있으면 붙여 주세요. 없어도 됩니다.</small><input id="tip-source" type="url" inputmode="url" placeholder="https://" autocomplete="off"></label>
+<button type="button" class="btn btn-primary btn-big" id="tip-send" disabled>꽁밥에 제보하기</button>
+<p class="tip-status" id="tip-status" role="status" aria-live="polite"></p>
+<p class="detail-foot">로그인 없이 운영자에게만 보내집니다. 사진 파일은 보내지 않고, 사진에서 읽은 글과 QR 링크를 보냅니다. 운영자가 원문을 확인한 뒤 사이트에 올립니다. 이름·연락처는 적지 마세요.</p>
+<p class="small tip-alt"><a id="tip-form" href="https://docs.google.com/forms/d/e/1FAIpQLScQERykaPcm0gTkBKBiFoXujGY8-f011gSyMnaSuJy8mPWR5g/viewform" target="_blank" rel="noopener noreferrer">구글 폼에서 직접 쓰기</a> · <a id="tip-link" href="https://github.com/Yu-Jusang/kkongbap/issues/new?template=tip.yml" target="_blank" rel="noopener noreferrer">GitHub 이슈로 공개 제보</a></p>
+</aside>
 </div>
+<details class="draft-wrap" id="draft-wrap" hidden><summary>읽어낸 내용 확인 · 내 캘린더에 추가</summary>
+<form id="draft-form" class="panel-box"><p class="small muted">원문과 다르면 고친 뒤 추가하세요. 고친 내용은 제보에도 함께 들어갑니다. 빈칸은 미확인으로 남습니다.</p><div id="draft-fields"></div><div class="draft-actions"><button class="btn btn-secondary" type="submit">내 캘린더에 추가</button></div></form>
+</details>
 </section>
-<section aria-labelledby="s-mine-h"><div class="sec-head"><span class="n">06</span><h2 id="s-mine-h">직접 추가한 행사</h2><span class="sec-aside" id="mine-count"></span></div><div id="mine" class="results"></div></section>
 </div>
 </div>
 
@@ -177,7 +187,7 @@
 <tr><td>카드와 상세 연결</td><td>모든 행사에 고유 주소가 있어 카드 문구·게시물 링크에서 곧바로 상세를 엽니다. 상세에는 원문 링크와 확인일이 붙습니다.</td><td><span class="tag tag-server">구현</span></td></tr>
 <tr><td>혜택·조건 구분</td><td>음식·음료, 기프티콘·경품, 체험을 원문 내용으로 나누고, 선착순·추첨·전원 지급 문구를 카드에 그대로 표시합니다.</td><td><span class="tag tag-server">구현</span></td></tr>
 <tr><td>시즌 묶음</td><td>건강주간, 학생회 간식행사, 채용설명회·진로, 특강·발표회, 공모전·설문 참여로 행사를 묶습니다. 카드 탭에서 묶음별 카드(문구·캡션·이미지)를 만들고, 행사 찾기에서 묶음으로 거를 수 있습니다. 묶음은 행사 제목으로 정하고, 지난 행사는 카드에 싣지 않습니다.</td><td><span class="tag tag-server">구현</span></td></tr>
-<tr><td>공개 제보함</td><td>‘붙여넣기·제보’에서 읽어낸 초안(사진 속 QR의 신청 링크 포함)으로 구글 폼 칸을 채워 엽니다. 로그인 없이 낼 수 있고 응답은 운영자만 봅니다. 연락처 칸은 없고 원문 링크·행사 이름·혜택이 필수입니다. 공개 기록이 필요하면 GitHub 이슈 양식(‘반영’·‘보류’ 라벨)으로도 받습니다.</td><td><span class="tag tag-server">구현</span></td></tr>
+<tr><td>공개 제보함</td><td>‘붙여넣기·제보’에 사진을 붙이거나 글을 붙여넣고 ‘꽁밥에 제보하기’를 한 번 누르면, 사이트가 읽은 글·정리한 항목·사진 속 QR 링크가 운영자의 구글 폼으로 바로 갑니다. 로그인이 필요 없고 응답은 운영자만 봅니다. 폼을 직접 열어도 모든 칸이 선택이라 원문 링크나 공지 글 하나만 내면 됩니다. 사진 파일 자체는 보내지 않습니다. 공개 기록이 필요하면 GitHub 이슈 양식으로도 받습니다.</td><td><span class="tag tag-server">구현</span></td></tr>
 <tr><td>학식 메뉴</td><td>생협 식단 페이지를 하루 세 번(06:00·10:30·16:00) 읽어 오늘부터 7일 치 메뉴·가격·운영시간을 보여 줍니다(이용 허락을 받은 뒤 시작). 학식 탭에서 날짜별 메뉴, 메뉴 검색, 3,000원 이하 표시, 천원의 아침밥, 지금 운영 중인 곳, 내 공강에 갈 수 있는 식당을 봅니다.</td><td><span class="tag tag-server">구현</span></td></tr>
 <tr><td>인스타그램 계정 운영</td><td>카드 탭이 게시 준비를 맡습니다: 1080×1350 이미지, 해시태그가 붙은 캡션, 대체 텍스트, 게시 순서 안내. 실제 게시·댓글 이벤트·예약 게시는 운영 계정 권한이 필요하고, 예약·자동 게시는 비즈니스 계정과 Meta 개발자 앱 승인이 있어야 해 이 사이트가 하지 않습니다.</td><td><span class="tag tag-both">일부 구현</span></td></tr>
 </tbody></table></div>

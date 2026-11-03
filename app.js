@@ -85,7 +85,7 @@ function render(){
   for(const id of VIEWS)$(`#${id}-view`).hidden=id!==view;
   document.querySelectorAll('[data-tab]').forEach(tab=>tab.setAttribute('aria-selected',String(tab.dataset.tab===view)));
   if(loaded||demo){renderEvents();renderWeek();}
-  renderTimetable();renderMine();renderSources();renderFood();
+  renderTimetable();renderSources();renderFood();
 }
 
 function filtered(){
@@ -507,10 +507,6 @@ function renderFood(){
   $('#menu-link').href=`${MENU_URL}?date=${date}`;
 }
 
-function renderMine(){
-  $('#mine-count').textContent=`${personal.length}건 · 이 브라우저에만 저장`;
-  $('#mine').innerHTML=personal.length?personal.map(card).join(''):'<p class="tl-empty">공지를 읽어 추가한 행사가 여기에 표시됩니다.</p>';
-}
 function renderSources(){
   const checks=status.sourceChecks||[];
   $('#source-updated').textContent=status.verifiedAt?`자료 확인 ${status.verifiedAt}`:'';
@@ -537,14 +533,49 @@ function formUrl(d){
   for(const [k,entry] of Object.entries(TIP_FORM.entries))if(f[k])q.set(entry,f[k].slice(0,1000));
   return `${TIP_FORM.url}?${q}`;
 }
+// 지금 보낼 제보 내용: 고친 초안 + 제보 상자의 원문 링크
+function currentTip(){
+  const d=draft?{...draft,...Object.fromEntries([...new FormData($('#draft-form'))].map(([k,v])=>[k,String(v).trim()]))}:{};
+  const source=$('#tip-source').value.trim();
+  if(source)d.sourceUrl=source;
+  return d;
+}
 function updateTipLink(){
-  if(!draft)return;
-  const d={...draft,...Object.fromEntries([...new FormData($('#draft-form'))].map(([k,v])=>[k,String(v).trim()]))};
+  const d=currentTip();
   $('#tip-form').href=formUrl(d);
   $('#tip-link').href=tipUrl(d);
+  updateTipBox();
+}
+// 제보 상자: 붙여넣은 글이 있으면 바로 보낼 수 있게 하고, 읽어낸 핵심만 요약해 보여 준다.
+let tipSent='';
+function tipKey(){return $('#notice-text').value.trim()+'|'+$('#tip-source').value.trim();}
+function updateTipBox(){
+  const text=$('#notice-text').value.trim(),source=$('#tip-source').value.trim(),ready=text.length>=5||!!safeUrl(source);
+  const d=currentTip(),rows=[['행사',d.title],['언제',d.date?when(d):''],['어디서',d.location],['혜택',d.benefit],['신청',d.registrationUrl?'QR·신청 링크 있음':'']].filter(([,v])=>v);
+  $('#tip-summary').hidden=!rows.length;
+  $('#tip-summary').innerHTML=rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
+  const sent=tipSent&&tipSent===tipKey();
+  $('#tip-title').textContent=sent?'제보했습니다. 고마워요!':ready?(rows.length?'이 내용으로 보낼게요':'붙여넣은 글을 그대로 보낼게요'):'공지를 붙여넣으면 바로 보낼 수 있어요';
+  $('#tip-send').disabled=!ready||sent;
+  $('#tip-send').textContent=sent?'보냈습니다':'꽁밥에 제보하기';
+  if(!sent&&$('#tip-status').dataset.sent){$('#tip-status').textContent='';delete $('#tip-status').dataset.sent;}
+}
+// 구글 폼 응답 주소로 바로 보낸다(로그인 없음). 응답 내용은 운영자만 본다.
+async function sendTip(){
+  const d=currentTip(),f=tipFields(d),text=$('#notice-text').value.trim();
+  const qr=(draft?.qr||imageQR||[]).map(c=>`${c.label||'QR'}: ${c.text}`).join('\n');
+  const notes=[text.slice(0,6000),qr&&`[사진 속 QR]\n${qr}`,textFromImage&&'(사진에서 읽은 글 · 사이트에서 보냄)'].filter(Boolean).join('\n\n');
+  const body=new URLSearchParams();
+  for(const [k,entry] of Object.entries(TIP_FORM.entries)){const v=k==='notes'?notes:f[k];if(v)body.set(entry,v.slice(0,k==='notes'?8000:1000));}
+  $('#tip-send').disabled=true;$('#tip-status').textContent='보내는 중…';
+  try{
+    await fetch(TIP_FORM.url.replace(/\/viewform$/,'/formResponse'),{method:'POST',mode:'no-cors',body});
+    tipSent=tipKey();$('#tip-status').textContent='운영자가 원문을 확인한 뒤 사이트에 올립니다.';$('#tip-status').dataset.sent='1';toast('꽁밥에 제보했습니다.');
+  }catch{$('#tip-status').textContent='보내지 못했습니다. 인터넷 연결을 확인하거나 ‘구글 폼에서 직접 쓰기’를 이용해 주세요.';}
+  updateTipBox();
 }
 function showDraft(next){
-  draft=next;$('#draft-form').hidden=!draft;if(!draft)return;
+  draft=next;$('#draft-wrap').hidden=!draft;if(!draft){updateTipBox();return;}
   $('#draft-fields').innerHTML=DRAFT_FIELDS.map(([key,label,type])=>{
     const value=draft[key]??'';
     const input=type==='textarea'?`<textarea name="${key}" rows="3">${esc(value)}</textarea>`:type==='category'?`<select name="${key}">${Object.entries(CATEGORY).map(([v,t])=>`<option value="${v}"${v===value?' selected':''}>${t}</option>`).join('')}</select>`:`<input name="${key}" type="${type}" value="${esc(value)}">`;
@@ -716,7 +747,11 @@ function initialize(){
   $('#image-file').onchange=e=>{const f=e.target.files?.[0];e.target.value='';if(f)readImage(f);};
   $('#image-clear').onclick=clearImage;
   $('#ocr-cancel').onclick=()=>{ocrJob++;ocrAbort?.abort();ocrStatus('사진 읽기를 취소했습니다.');};
-  $('#notice-text').addEventListener('input',e=>{if(!e.target.value.trim())textFromImage=false;});
+  // 글을 붙여넣거나 고치면 잠시 뒤 저절로 다시 읽는다(‘다시 읽기’를 누르지 않아도 된다).
+  let readTimer;
+  $('#notice-text').addEventListener('input',e=>{if(!e.target.value.trim()){textFromImage=false;showDraft(null);$('#notice-error').textContent='';}clearTimeout(readTimer);readTimer=setTimeout(()=>{if($('#notice-text').value.trim())readNotice();},500);updateTipBox();});
+  $('#tip-source').addEventListener('input',e=>{const f=$('#draft-form').elements.sourceUrl;if(f)f.value=e.target.value.trim();updateTipLink();updateTipBox();});
+  $('#tip-send').onclick=sendTip;
   const zone=$('#import-zone');
   zone.addEventListener('paste',e=>{const item=[...e.clipboardData.items].find(i=>i.kind==='file'&&i.type.startsWith('image/'));if(item){e.preventDefault();const f=item.getAsFile();if(f)readImage(f);}});
   zone.addEventListener('dragover',e=>{if(e.dataTransfer.types.includes('Files'))e.preventDefault();});
