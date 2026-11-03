@@ -1,5 +1,5 @@
 import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,demoEvents,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf} from './core.js?v=4';
-import {SOURCES,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION,BUNDLES,CAFETERIAS,MENU_URL,MENU_CHECKED} from './content.js?v=3';
+import {SOURCES,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION,BUNDLES,CAFETERIAS,MENU_URL,MENU_CHECKED,TIP_FORM} from './content.js?v=4';
 
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -521,17 +521,27 @@ function renderSources(){
 const DRAFT_FIELDS=[['title','행사명','text'],['date','행사 날짜','date'],['endDate','끝 날짜 (기간 행사)','date'],['deadline','신청 마감','date'],['deadlineTime','마감 시각','time'],['start','시작','time'],['end','종료','time'],['location','장소','text'],['benefit','혜택','text'],['category','혜택 종류','category'],['eligibility','대상','text'],['rule','받는 조건','textarea'],['registrationUrl','신청 링크 (https)','url'],['sourceUrl','원문 링크 (https · 제보할 때 필요)','url']];
 // 제보: GitHub 이슈 양식(.github/ISSUE_TEMPLATE/tip.yml)의 칸을 초안 값으로 채워 연다. 사진·원문 전체는 보내지 않는다.
 const TIP_BASE='https://github.com/Yu-Jusang/kkongbap/issues/new';
-function tipUrl(d){
+function tipFields(d){
   const when=[d.date&&(d.endDate&&d.endDate!==d.date?`${d.date} ~ ${d.endDate}`:d.date),d.start&&(d.end?`${d.start}~${d.end}`:`${d.start}부터`)].filter(Boolean).join(' ');
-  const cond=[d.eligibility&&`대상: ${d.eligibility}`,d.rule&&d.rule!=='지급 조건 미기재'&&`조건: ${d.rule}`,d.deadline&&`신청 마감: ${d.deadline}`,d.registrationUrl&&`신청: ${d.registrationUrl}`].filter(Boolean).join('\n');
-  const q=new URLSearchParams({template:'tip.yml',title:`[제보] ${d.title||''}`.slice(0,120),source:safeUrl(d.sourceUrl||'')||'',event:d.title||'',when,where:d.location||'',benefit:d.benefit||'',conditions:cond});
+  const conditions=[d.eligibility&&`대상: ${d.eligibility}`,d.rule&&d.rule!=='지급 조건 미기재'&&`조건: ${d.rule}`,d.deadline&&`신청 마감: ${d.deadline}${d.deadlineTime?' '+d.deadlineTime:''}`].filter(Boolean).join(' / ');
+  return {source:safeUrl(d.sourceUrl||'')||'',event:d.title||'',when,where:d.location||'',benefit:d.benefit||'',conditions,registration:safeUrl(d.registrationUrl||'')||''};
+}
+function tipUrl(d){
+  const f=tipFields(d);
+  const q=new URLSearchParams({template:'tip.yml',title:`[제보] ${d.title||''}`.slice(0,120),source:f.source,event:f.event,when:f.when,where:f.where,benefit:f.benefit,conditions:[f.conditions,f.registration&&`신청: ${f.registration}`].filter(Boolean).join('\n')});
   return `${TIP_BASE}?${q}`;
+}
+// 구글 폼(로그인 없이 제출) 미리 채우기 주소. 값이 있는 칸만 넣는다.
+function formUrl(d){
+  const f=tipFields(d),q=new URLSearchParams({usp:'pp_url'});
+  for(const [k,entry] of Object.entries(TIP_FORM.entries))if(f[k])q.set(entry,f[k].slice(0,1000));
+  return `${TIP_FORM.url}?${q}`;
 }
 function updateTipLink(){
   if(!draft)return;
   const d={...draft,...Object.fromEntries([...new FormData($('#draft-form'))].map(([k,v])=>[k,String(v).trim()]))};
+  $('#tip-form').href=formUrl(d);
   $('#tip-link').href=tipUrl(d);
-  $('#tip-link').title=safeUrl(d.sourceUrl||'')?'GitHub 제보 양식을 이 내용으로 채워 엽니다':'원문 링크를 넣으면 운영자가 더 빨리 확인할 수 있습니다';
 }
 function showDraft(next){
   draft=next;$('#draft-form').hidden=!draft;if(!draft)return;

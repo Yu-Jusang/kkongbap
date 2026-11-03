@@ -41,6 +41,11 @@ export const CAFETERIAS=[
   {name:'버거운버거',meals:[['운영','09:00','20:00','학기 중 평일·주말 · 라스트오더 19:40']],weekend:true},
   {name:'공대간이식당',meals:[['운영','11:00','18:30']]},
 ];
+// 제보 구글 폼(로그인 없이 응답, 응답은 운영자만 본다). 미리 채우기용 질문 번호.
+export const TIP_FORM={
+  url:'https://docs.google.com/forms/d/e/1FAIpQLScQERykaPcm0gTkBKBiFoXujGY8-f011gSyMnaSuJy8mPWR5g/viewform',
+  entries:{source:'entry.1784636216',event:'entry.1698881833',when:'entry.828020470',where:'entry.529625629',benefit:'entry.897347585',conditions:'entry.1454505297',registration:'entry.2132672893',notes:'entry.828285216'},
+};
 export const SOURCE_LABEL={notice:'학교 공지',instagram:'학생회 인스타',manual:'직접 추가',gmail:'메일'};
 export const CHECK_LABEL={ok:'본문 접근 확인',browser_only:'브라우저 확인 · 자동수집 제한',blocked:'접근 제한',pending:'확인 대기',error:'수집 오류'};
 export const CATEGORY={food:'음식·음료',gift:'기프티콘·경품',experience:'체험·기타'};
