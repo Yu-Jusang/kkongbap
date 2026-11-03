@@ -507,24 +507,73 @@
    "endDate": "2026-11-06",
    "start": null,
    "end": null,
-   "location": "행정관 앞 잔디광장 및 관악캠퍼스 일대 등",
-   "benefit": "건강체험 부스 · 잔디 위 운동 프로그램(맨몸 필라테스, 건강댄스, 태극권) · 건강샤인 2080 걷기 및 폐막식(경품행사)",
+   "location": "서울대학교 잔디광장, 건강걷기 코스 일대",
+   "benefit": "건강체험부스 · 잔디 위 운동 프로그램(맨몸 필라테스, 건강댄스, 태극권) · 건강특식 · 건강샤인 2080 걷기",
    "category": "gift",
-   "rule": "원문에 미기재 (경품행사 방식·품목 미공개)",
-   "eligibility": "원문에 미기재 (학내 구성원 참여 권장)",
+   "rule": "프로그램별로 다름 · 운동 프로그램과 걷기는 사전 신청(마감), 체험부스·건강특식의 참여 방법은 원문에 미기재",
+   "eligibility": "원문에 미기재",
    "registration": "unknown",
    "deadline": null,
    "deadlineTime": null,
    "sourceUrl": "https://eng.snu.ac.kr/communication/notice/notice?md=v&bbsidx=8493",
    "source": "notice",
    "publicVerified": true,
-   "evidence": "건강샤인 2080 걷기 및 폐막식(경품행사)",
+   "evidence": "포스터: 일시 2026. 11.4.(수) ~ 11.6.(금) · 프로그램 건강체험부스 … 건강특식, 건강샤인 2080 걷기",
    "verifiedAt": "2026-11-03",
    "uncertain": [
-    "세부 시간표·폐막식 일시는 포스터/첨부파일에만 있어 텍스트로 확인 불가",
-    "경품 품목·수량·선착순/추첨 여부 원문 본문에 미기재",
-    "신청 필요 여부 원문 본문에 미기재",
-    "공과대학 게시판(서무행정실 게시) 전재 · 주최 부서 원문에 미기재"
+    "건강체험부스·건강특식의 시간·장소·대상은 포스터에 미기재",
+    "주최: 학생처 장학복지과(포스터 표기)"
+   ]
+  },
+  {
+   "id": "eng-health-week-lawn-20261104",
+   "title": "건강주간 · 잔디 위 운동 프로그램",
+   "date": "2026-11-04",
+   "endDate": "2026-11-05",
+   "start": null,
+   "end": null,
+   "location": "행정관 앞 잔디광장 야외무대",
+   "benefit": "참여 시 간단한 점심 제공",
+   "category": "food",
+   "rule": "맨몸 필라테스 11:40~12:40 · 건강댄스 13:30~14:30 · 태극권 15:30~16:30 · 한 타임 당 50명 선착순",
+   "eligibility": "원문에 미기재",
+   "registration": "required",
+   "deadline": "2026-10-28",
+   "deadlineTime": null,
+   "sourceUrl": "https://eng.snu.ac.kr/communication/notice/notice?md=v&bbsidx=8493",
+   "source": "notice",
+   "publicVerified": true,
+   "evidence": "포스터: ※ 참여 시 간단한 점심 제공 · ※ 한 타임 당 50명 선착순",
+   "verifiedAt": "2026-11-03",
+   "uncertain": [
+    "참가신청 2026. 10. 21.(수) ~ 10. 28.(수), SNU 비교과 사이트 · 마감 후 현장 참여 가능 여부 원문에 미기재",
+    "하루 세 타임으로 나뉘어 행사 시간은 받는 조건 칸에 적음"
+   ]
+  },
+  {
+   "id": "eng-health-week-walk-20261106",
+   "title": "건강주간 · 건강샤인 2080 걷기 (폐막식·경품행사)",
+   "date": "2026-11-06",
+   "endDate": null,
+   "start": "15:00",
+   "end": null,
+   "location": "잔디광장 야외무대 출발 · 관악캠퍼스 순환도로 3km · 야구장 도착",
+   "benefit": "걷기 신청자 선착순 기념 티셔츠 · 800m 지점 급수대 및 간식 · 1800m 지점 경품 추첨권 배부 · 도착지(야구장) 폐막식 경품행사",
+   "category": "gift",
+   "rule": "기념 티셔츠는 걷기 신청자에게 선착순 · 경품은 추첨권 배부 후 경품행사(방식·품목 미기재)",
+   "eligibility": "원문에 미기재",
+   "registration": "required",
+   "deadline": "2026-11-02",
+   "deadlineTime": null,
+   "sourceUrl": "https://eng.snu.ac.kr/communication/notice/notice?md=v&bbsidx=8493",
+   "source": "notice",
+   "publicVerified": true,
+   "evidence": "포스터: 급수대 및 간식 제공 · 경품 추첨권 배부 및 포토존 · 야구장(행사 폐막식 및 경품행사)",
+   "verifiedAt": "2026-11-03",
+   "uncertain": [
+    "등록확인 및 티셔츠 수령 오후 2시 반부터",
+    "참가신청 2026. 10. 27.(화) ~ 11. 2.(월), 사전 QR코드 · 마감 후 현장 참여 가능 여부 원문에 미기재",
+    "종료시간 미기재"
    ]
   },
   {
@@ -696,5 +745,5 @@
    }
   ]
  },
- "revision": 7
+ "revision": 8
 }

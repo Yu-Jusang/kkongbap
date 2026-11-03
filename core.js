@@ -60,7 +60,7 @@ export function parseICS(text){
 // 여러 날 이어지는 행사는 그 주에 처음 걸치는 날 한 번만 싣는다(기간은 화면에서 함께 표시).
 export function weekStart(date){const d=new Date(date+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));return d.toISOString().slice(0,10);}
 export function addDays(date,n){const d=new Date(date+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);}
-export function weekGroups(events,start){
+export function weekGroups(events,start,from=start){// from: 이 날짜 이전에 지난 신청 마감은 싣지 않는다
   const end=addDays(start,6);
   const days=Array.from({length:7},(_,i)=>({date:addDays(start,i),events:[]}));
   for(const e of events){
@@ -69,7 +69,7 @@ export function weekGroups(events,start){
     days.find(day=>day.date===first).events.push(e);
   }
   for(const day of days)day.events.sort((a,b)=>(a.start||'99').localeCompare(b.start||'99'));
-  const deadlines=events.filter(e=>!e.cancelled&&e.deadline&&e.deadline>=start&&e.deadline<=end).sort((a,b)=>a.deadline.localeCompare(b.deadline));
+  const deadlines=events.filter(e=>!e.cancelled&&e.deadline&&e.deadline>=(from>start?from:start)&&e.deadline<=end).sort((a,b)=>a.deadline.localeCompare(b.deadline));
   return {start,end,days,deadlines,count:new Set(days.flatMap(d=>d.events.map(e=>e.id))).size};
 }
 
@@ -84,47 +84,67 @@ export function sanitizePersonal(raw){
 
 // 공지문 → 행사 초안 (붙여넣은 글자, 또는 사진에서 읽은 글자)
 const clean=s=>s.replace(/(?:\+82[-\s]?)?0?1[016789][-\s]?\d{3,4}[-\s]?\d{4}/g,'').replace(/[\w.+-]+@[\w.-]+\.[a-z]{2,}/gi,'').replace(/^[\s✔✅☑📌📍📅⏰•*·ㆍ▶►■□○●◆◇※>-]+/u,'').trim();
-const line=(text,names)=>text.match(new RegExp('(?:'+names+')\\s*[:：]\\s*([^\\n]+)'))?.[1]?.trim()||'';
+// 항목 찾기: '일시: …'처럼 콜론이 있으면 어디서든, 포스터처럼 콜론이 없으면 줄 맨 앞의 항목명만 본다.
+// 항목명만 있고 값이 다음 줄에 있으면(사진에서 읽은 포스터) 다음 줄을 값으로 쓴다.
+const LABEL=/^(?:일시|일정|장소|대상|품목|메뉴|혜택|참가\s*신청|신청\s*방법|신청\s*기간|문의)(?:\s|:|$)/;
+function field(lines,names){
+  const colon=new RegExp(String.raw`(?:${names})\s*:\s*(.*)$`);
+  for(const [i,l] of lines.entries()){const m=l.match(colon);if(m)return (m[1].trim()||(lines[i+1]&&!LABEL.test(lines[i+1])?lines[i+1]:'')).trim();}
+  const bare=new RegExp(String.raw`^[*※]?\s*(?:${names})(?:\s+(.*))?$`);
+  for(const [i,l] of lines.entries()){const m=l.match(bare);if(m)return (m[1]?.trim()||(lines[i+1]&&!LABEL.test(lines[i+1])?lines[i+1]:'')).trim();}
+  return '';
+}
 const dateParts=s=>[...s.matchAll(/(?:(20\d{2})\s*[.\/년-]\s*)?(\d{1,2})\s*[.\/월-]\s*(\d{1,2})(?:\s*일)?/g)];
 const validDate=(year,month,day)=>{const s=`${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;const d=new Date(s+'T12:00:00Z');if(d.getUTCFullYear()!==year||d.getUTCMonth()+1!==month||d.getUTCDate()!==day)throw Error('공지의 날짜를 확인해 주세요.');return s;};
-export function parseNotice(text,year){
-  text=text.replace(/일\s+시/g,'일시').replace(/장\s+소/g,'장소').replace(/대\s+상/g,'대상').replace(/품\s+목/g,'품목').replace(/혜\s+택/g,'혜택').replace(/메\s+뉴/g,'메뉴').replace(/[：]/g,':');
+const BENEFIT=/제공|증정|경품|기프티콘|상품권|간식|점심|저녁|식사|도시락|커피|음료/;
+export function parseNotice(text,year,{image=false}={}){
+  text=text.replace(/일\s+시/g,'일시').replace(/일\s+정/g,'일정').replace(/장\s+소/g,'장소').replace(/대\s+상/g,'대상').replace(/품\s+목/g,'품목').replace(/혜\s+택/g,'혜택').replace(/메\s+뉴/g,'메뉴').replace(/[：]/g,':').replace(/[∼〜～]/g,'~');
   for(const word of ['학생증','학생회원','중복수령','소진','선착순','간식','중간고사','학기','과방','배부'])text=text.replace(new RegExp([...word].join('[ \\t]*'),'g'),word);
   text=text.replace(/소진[ \t]*시[ \t]*까[ \t]*지/g,'소진 시까지').replace(/(\d)[ \t]+(동|호|인)/g,'$1$2');
   if(text.length>16000)throw Error('공지문은 16,000자 이내로 붙여넣어 주세요.');
   const lines=text.trim().split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
   if(!lines.length)throw Error('공지문을 붙여넣어 주세요.');
-  const title=clean(lines[0]).replace(/^\[(.*)\]$/,'$1').slice(0,150);
-  let schedule=line(text,'일시|행사 일시|행사일|일자|날짜');
+  // 포스터 제목은 두 줄인 경우가 많다. 사진에서 읽은 글이고 둘째 줄이 항목·날짜가 아니면 이어 붙인다.
+  const second=lines[1]||'';
+  const twoLine=image&&second&&second.length<=40&&!LABEL.test(second)&&!/:/.test(second)&&!dateParts(second).length;
+  const title=clean(twoLine?lines[0]+' '+second:lines[0]).replace(/^\[(.*)\]$/,'$1').slice(0,150);
+  let schedule=field(lines,'일시|행사 일시|행사일|일자|날짜|일정');
   if(!schedule){const at=lines.findIndex(s=>dateParts(s).length&&!/신청|마감|학기/.test(s));if(at>=0)schedule=lines[at]+(lines[at+1]&&/\d{1,2}[:시]/.test(lines[at+1])?' '+lines[at+1]:'');}
   const dates=dateParts(schedule);
-  if(dates.length>1)throw Error('여러 날짜가 있는 공지는 날짜별로 나누어 추가해 주세요.');
+  // 'A ~ B'처럼 물결표로 이은 두 날짜는 기간으로 읽는다. 그 밖의 여러 날짜는 나누어 추가하도록 한다.
+  const range=dates.length===2&&/~/.test(schedule.slice(dates[0].index+dates[0][0].length,dates[1].index));
+  if(dates.length>1&&!range)throw Error('여러 날짜가 있는 공지는 날짜별로 나누어 추가해 주세요.');
   const explicitYear=Number(text.match(/\b(20\d{2})\b/)?.[1]||year);
   const date=dates[0]?validDate(Number(dates[0][1]||explicitYear),Number(dates[0][2]),Number(dates[0][3])):null;
-  const times=[...schedule.matchAll(/(?:([오전후]{2})\s*)?(\d{1,2})\s*[:시]\s*(\d{2})?(?:분)?/g)].map(m=>{let h=Number(m[2]),min=Number(m[3]||0);if(m[1]==='오후'&&h<12)h+=12;if(m[1]==='오전'&&h===12)h=0;if(h>23||min>59)throw Error('공지의 시간을 확인해 주세요.');return String(h).padStart(2,'0')+':'+String(min).padStart(2,'0');});
+  const endDate=range?validDate(Number(dates[1][1]||dates[0][1]||explicitYear),Number(dates[1][2]),Number(dates[1][3])):null;
+  if(endDate&&endDate<=date)throw Error('기간의 끝 날짜를 확인해 주세요.');
+  const timeText=dates.reduceRight((s,m)=>s.slice(0,m.index)+' '.repeat(m[0].length)+s.slice(m.index+m[0].length),schedule);
+  const times=[...timeText.matchAll(/(?:([오전후]{2})\s*)?(\d{1,2})\s*[:시]\s*(\d{2})?(?:분)?/g)].map(m=>{let h=Number(m[2]),min=Number(m[3]||0);if(m[1]==='오후'&&h<12)h+=12;if(m[1]==='오전'&&h===12)h=0;if(h>23||min>59)throw Error('공지의 시간을 확인해 주세요.');return String(h).padStart(2,'0')+':'+String(min).padStart(2,'0');});
   const start=times[0]||null,end=times[1]||null;
   if(start&&end&&end<=start)throw Error('종료시간은 시작시간 이후여야 합니다.');
-  const location=clean(line(text,'장소|배부 장소|진행 장소'));
-  const eligibility=clean(line(text,'대상|참여 대상|참가 대상'));
-  const benefitIndex=lines.findIndex(s=>/(?:품목|메뉴|혜택|제공 품목|제공 메뉴|간식)\s*[:：]/.test(s));
+  const location=clean(field(lines,'장소|배부 장소|진행 장소'));
+  const eligibility=clean(field(lines,'대상|참여 대상|참가 대상'));
+  const benefitIndex=lines.findIndex(s=>/(?:품목|메뉴|혜택|제공 품목|제공 메뉴|간식)\s*:/.test(s));
   const benefits=[];
   if(benefitIndex>=0){
-    const first=lines[benefitIndex].split(/[:：]/).slice(1).join(':').trim();if(first)benefits.push(first);
+    const first=lines[benefitIndex].split(':').slice(1).join(':').trim();if(first)benefits.push(first);
     for(let i=benefitIndex+1;i<lines.length&&benefits.length<6;i++){if(/안녕|감사|문의|담당|일시|장소|대상|신청|주의|학생증|우선|후순위|중복|\[/.test(lines[i]))break;benefits.push(lines[i]);}
-  }
+  }else benefits.push(...lines.slice(1).filter(s=>BENEFIT.test(s)&&!LABEL.test(s)).slice(0,3));
   const benefit=benefits.map(clean).filter(Boolean).join(' · ')||'';
-  const conditions=lines.filter(s=>/^\*/.test(s)||/선착순|소진 시|추첨|학생증|우선|후순위|중복수령|중복 수령/.test(s)).map(clean);
+  // 사진에서는 로고·장식이 '*'로 읽히는 일이 잦아 '*'로 시작하는 줄을 조건으로 보지 않는다.
+  const conditions=lines.filter(s=>!image&&/^\*/.test(s)||/선착순|소진 시|추첨|학생증|우선|후순위|중복수령|중복 수령/.test(s)).map(clean);
   const rule=conditions.join(' · ').slice(0,1200)||'지급 조건 미기재';
-  const deadlineLine=line(text,'신청 마감|마감일|마감|신청 기간|신청기간');const dl=dateParts(deadlineLine).at(-1);
-  const deadline=dl?validDate(Number(dl[1]||explicitYear),Number(dl[2]),Number(dl[3])):null;
-  const registrationUrl=text.match(/(?:신청\s*링크|신청\s*주소)\s*[:：]\s*(https:\/\/[^\s<>]+)/)?.[1]||'';
-  const registration=/사전\s*신청\s*(?:불필요|없이)|신청\s*없이/.test(text)?'none':registrationUrl||/사전\s*신청\s*(?:필수|필요)|신청\s*필수/.test(text)?'required':'unknown';
+  const deadlineLine=field(lines,'신청 마감|마감일|마감|신청 기간|신청기간|참가 신청|참가신청|접수 기간|접수기간|모집 기간');const dl=dateParts(deadlineLine).at(-1);
+  const deadline=dl?validDate(Number(dl[1]||dateParts(deadlineLine)[0]?.[1]||explicitYear),Number(dl[2]),Number(dl[3])):null;
+  const registrationUrl=text.match(/(?:신청\s*링크|신청\s*주소)\s*:\s*(https:\/\/[^\s<>]+)/)?.[1]||'';
+  const registration=/사전\s*신청\s*(?:불필요|없이)|신청\s*없이/.test(text)?'none':registrationUrl||/사전\s*신청\s*(?:필수|필요)|신청\s*필수|참가\s*신청|신청\s*방법/.test(text)?'required':'unknown';
   const uncertain=[];
   if(!date)uncertain.push('행사 날짜 미기재');if(!start)uncertain.push('시작시간 미기재');
   if(!end)uncertain.push(/소진/.test(schedule)?'수량 소진 시 종료':'종료시간 미기재');
   const wd=schedule.match(/\(([일월화수목금토])\)/)?.[1];
   if(date&&wd&&'일월화수목금토'[new Date(date+'T12:00:00Z').getUTCDay()]!==wd)uncertain.push('원문 요일과 날짜가 일치하지 않음 · 날짜를 확인해 주세요');
-  return {id:'',title,date,start,end,location,eligibility,benefit,category:/기프티콘|상품권|경품/.test(benefit)?'gift':/간식|음식|도시락|덮밥|버거|콜라|식사|메뉴/.test(title+' '+benefit)?'food':'experience',rule,registration,registrationUrl,deadline,source:'manual',sourceUrl:'',publicVerified:false,evidence:benefit,verifiedAt:koreaDate(),uncertain};
+  if(image)uncertain.push('사진에서 읽은 내용 · 숫자와 글자를 원문과 대조해 주세요');
+  return {id:'',title,date,endDate,start,end,location,eligibility,benefit,category:/기프티콘|상품권|경품/.test(benefit)?'gift':/간식|음식|도시락|덮밥|버거|콜라|식사|메뉴|점심|저녁|커피|음료/.test(title+' '+benefit)?'food':'experience',rule,registration,registrationUrl,deadline,source:'manual',sourceUrl:'',publicVerified:false,evidence:benefit,verifiedAt:koreaDate(),uncertain};
 }
 export function noticeId(e){let h=2166136261;for(const c of `${e.title}|${e.date}|${e.start}`)h=Math.imul(h^c.charCodeAt(0),16777619);return 'manual-'+(h>>>0).toString(16);}
 

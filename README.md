@@ -33,7 +33,21 @@
 
 ## 개인 기록
 
-시간표(`gonggang-slots`)와 직접 추가한 행사(`gonggang-personal-events`)는 브라우저 localStorage에만 저장한다. 사진 글자 인식은 브라우저 안에서 실행한다(tesseract.js 6.0.1, 엔진·한국어/영어 언어 파일은 `ocr/`에 자체 보관). 서버 전송은 없다.
+시간표(`gonggang-slots`)와 직접 추가한 행사(`gonggang-personal-events`)는 브라우저 localStorage에만 저장한다. 서버 전송은 없다.
+
+## 사진 글자 인식
+
+브라우저 안에서 PaddleOCR PP-OCRv5(글자 영역 검출 `ocr/paddle/det.onnx` + 한국어 인식 `ocr/paddle/rec.onnx`, Apache-2.0)를 onnxruntime-web 1.22.0으로 실행한다(`ocr-paddle.js`). 첫 사용 때 모델 약 18MB를 내려받아 Cache Storage(`kkongbap-ocr-v1`)에 둔다. 불러오지 못하면 원본의 tesseract.js 6.0.1(`ocr/`)로 읽는다.
+
+2026-11-03 실제 학교 공지 포스터 4장과 사진처럼 기울이고 흐리게 만든 1장, 카드뉴스·메신저 화면 2장의 핵심 문장 90개로 비교했다(공백 무시 편집거리 기준).
+
+| 방식 | 핵심 문장 정확도 | 완전 일치 |
+| --- | --- | --- |
+| PaddleOCR, 검출 1280px (채택) | 0.989 | 82/90 |
+| tesseract.js (이전 방식) | 0.858 | 56/90 |
+| tesseract.js + 적응 이진화 | 0.745 | 36/90 |
+
+읽은 글은 `parseNotice(text, year, {image:true})`가 포스터 형식으로 해석한다: 콜론 없는 항목명, 다음 줄의 값, `A ~ B` 기간, 두 줄 제목, ‘제공·증정·간식’ 같은 혜택 문장, ‘참가신청’ 기간의 마지막 날을 신청 마감으로.
 
 ## 파일
 
@@ -47,7 +61,9 @@
 | `content.js` | 확인 출처 목록과 표시 문구 |
 | `data/events.json` | 공개 행사 자료와 출처 확인 기록 |
 | `core.test.mjs` | 주요 로직 테스트 |
-| `ocr/` | tesseract 엔진(wasm)·언어 파일·라이선스 |
+| `ocr-paddle.js` | PaddleOCR 검출·인식·줄 정렬 |
+| `ocr/paddle/` | PP-OCRv5 모델·사전·라이선스(`NOTICE.md`) |
+| `ocr/` | tesseract 엔진(wasm)·언어 파일·라이선스(대체 인식기) |
 | `legacy/` | 2026-10 공개본의 원본 소스(React/Vite)와 당시 자료 |
 
 ## 확인 및 배포
@@ -68,6 +84,6 @@ GitHub Pages는 `main` 브랜치 루트를 그대로 배포한다. `main`에 푸
 - 바꾼 것: React 빌드 대신 빌드 없는 정적 파일, 장학 한눈에 디자인, 상태·출처 필터, 이번 주 카드, 행사별 주소.
 - 되살리지 않은 것: 메일 행사 수집, 서버 저장 API, 학생회 인스타그램 자동 확인.
 - 2026-11-03 이름을 ‘꽁밥’으로, 저장소를 `Yu-Jusang/gonggang`에서 `Yu-Jusang/kkongbap`으로 바꿨다. 주소도 `/gonggang/`에서 `/kkongbap/`으로 바뀌었다.
-- 2026-11-03 자료 갱신: 공식 공지 12곳 첫 페이지 재확인, 행사 5건 추가, 진행 중 4건 원문 재대조.
+- 2026-11-03 자료 갱신: 공식 공지 12곳 첫 페이지 재확인, 행사 5건 추가, 진행 중 4건 원문 재대조. 건강주간 포스터로 세부(시간·장소·점심·간식·경품)를 확인해 프로그램 2건 추가.
 
 서울대학교와 무관한 개인 프로젝트다. 신청·지급은 각 주최 측에서 진행한다.

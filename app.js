@@ -1,5 +1,5 @@
-import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,demoEvents} from './core.js?v=1';
-import {SOURCES,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION} from './content.js?v=1';
+import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,demoEvents} from './core.js?v=2';
+import {SOURCES,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION} from './content.js?v=2';
 
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -72,7 +72,7 @@ function setView(next,{scroll=true}={}){
 function render(){
   const all=data(),today=koreaDate();
   const active=all.filter(e=>!['ended','cancelled'].includes(phase(e)));
-  const week=weekGroups(all,weekStart(today));
+  const week=weekGroups(all,weekStart(today),today);
   $('#m-upcoming').textContent=loaded?active.length:'—';
   $('#m-week').textContent=loaded?week.count:'—';
   $('#m-deadline').textContent=loaded?active.filter(e=>e.deadline&&e.deadline>=today).length:'—';
@@ -164,7 +164,7 @@ function showDetail(id){
 }
 
 function renderWeek(){
-  const start=addDays(weekStart(koreaDate()),weekOffset*7),w=weekGroups(data(),start);
+  const start=addDays(weekStart(koreaDate()),weekOffset*7),w=weekGroups(data(),start,koreaDate());
   $('#week-range').textContent=`${dotDate(w.start)} – ${dotDate(w.end)}`;
   document.querySelectorAll('[data-week]').forEach(b=>b.classList.toggle('selected',Number(b.dataset.week)===weekOffset));
   const days=w.days.filter(d=>d.events.length);
@@ -265,7 +265,7 @@ function renderSources(){
 }
 
 // 공지 붙여넣기
-const DRAFT_FIELDS=[['title','행사명','text'],['date','행사 날짜','date'],['deadline','신청 마감','date'],['start','시작','time'],['end','종료','time'],['location','장소','text'],['benefit','혜택','text'],['category','혜택 종류','category'],['eligibility','대상','text'],['rule','받는 조건','textarea'],['registrationUrl','신청 링크 (https)','url']];
+const DRAFT_FIELDS=[['title','행사명','text'],['date','행사 날짜','date'],['endDate','끝 날짜 (기간 행사)','date'],['deadline','신청 마감','date'],['start','시작','time'],['end','종료','time'],['location','장소','text'],['benefit','혜택','text'],['category','혜택 종류','category'],['eligibility','대상','text'],['rule','받는 조건','textarea'],['registrationUrl','신청 링크 (https)','url']];
 function showDraft(next){
   draft=next;$('#draft-form').hidden=!draft;if(!draft)return;
   $('#draft-fields').innerHTML=DRAFT_FIELDS.map(([key,label,type])=>{
@@ -274,8 +274,9 @@ function showDraft(next){
     return `<label class="field${['date','time'].includes(type)?'':' full'}">${label}${input}</label>`;
   }).join('')+(draft.uncertain.length?`<p class="detail-note"><b>확인 필요</b><br>${draft.uncertain.map(esc).join('<br>')}</p>`:'');
 }
+let textFromImage=false;// 사진에서 읽은 글이면 포스터 형식(두 줄 제목 등)을 함께 고려한다.
 function readNotice(){
-  try{showDraft(parseNotice($('#notice-text').value,Number($('#notice-year').value)||Number(koreaDate().slice(0,4))));$('#notice-error').textContent='';}
+  try{showDraft(parseNotice($('#notice-text').value,Number($('#notice-year').value)||Number(koreaDate().slice(0,4)),{image:textFromImage}));$('#notice-error').textContent='';}
   catch(err){$('#notice-error').textContent=err.message;showDraft(null);}
 }
 function saveDraft(form){
@@ -285,6 +286,8 @@ function saveDraft(form){
   const missing=[!e.title&&'행사명',!e.date&&'행사 날짜',!e.location&&'장소',!e.benefit&&'혜택'].filter(Boolean);
   if(missing.length)return $('#notice-error').textContent=missing.join(', ')+'을 입력해 주세요.';
   if(e.start&&e.end&&e.end<=e.start)return $('#notice-error').textContent='종료시간은 시작시간 이후여야 합니다.';
+  if(e.endDate===e.date)e.endDate=null;
+  if(e.endDate&&e.endDate<e.date)return $('#notice-error').textContent='끝 날짜는 행사 날짜 이후여야 합니다.';
   if(e.registrationUrl&&!safeUrl(e.registrationUrl))return $('#notice-error').textContent='신청 링크는 https://로 시작해야 합니다.';
   if(events.some(x=>x.title.replace(/\s/g,'')===e.title.replace(/\s/g,'')&&x.date===e.date&&x.start===e.start))return toast('이미 행사 목록에 있는 일정입니다.');
   e.id=noticeId(e);e.evidence=e.benefit;e.uncertain=e.end?[]:[/소진/.test(e.rule)?'수량 소진 시 종료':'종료시간 미기재'];
@@ -296,8 +299,9 @@ function saveDraft(form){
   history.replaceState(null,'','#events');setView('events');setListView('calendar');picked=e.date;renderEvents();toast('내 캘린더에 추가했습니다. 이 브라우저에 저장됩니다.');
 }
 
-// 사진 글자 인식: 원본과 같은 tesseract.js 6.0.1 + 이 저장소의 ocr/ 파일. 사진은 브라우저 밖으로 나가지 않는다.
-let ocrJob=0,ocrWorker=null,imageUrl='';
+// 사진 글자 인식: PaddleOCR(ocr-paddle.js, 모델 ocr/paddle/)을 먼저 쓰고, 불러오지 못하면 원본의 tesseract.js(ocr/)로 읽는다.
+// 어느 쪽이든 사진은 브라우저 밖으로 나가지 않는다.
+let ocrJob=0,ocrAbort=null,paddle=null,imageUrl='';
 function ocrStatus(text,busy=false){$('#ocr-status').hidden=!text;$('#ocr-status span').textContent=text;$('#ocr-cancel').hidden=!busy;}
 function clearImage(){if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl='';$('#image-preview').hidden=true;ocrStatus('');$('#ocr-hint').textContent='';}
 async function prepareImage(file){
@@ -316,24 +320,37 @@ function loadTesseract(){
   if(window.Tesseract)return Promise.resolve(window.Tesseract);
   return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@6.0.1/dist/tesseract.min.js';s.onload=()=>resolve(window.Tesseract);s.onerror=()=>reject(Error('글자 인식기를 불러오지 못했습니다.'));document.head.append(s);});
 }
+async function readWithTesseract(blob,job){
+  const Tesseract=await loadTesseract(),root=new URL('./ocr/',document.baseURI).href;
+  const worker=await Tesseract.createWorker(['kor','eng'],1,{workerPath:root+'worker.min.js',corePath:root+'core',langPath:root+'lang',workerBlobURL:false,logger:m=>{if(job===ocrJob)ocrStatus(m.status==='recognizing text'?'기본 인식기로 읽는 중 · '+Math.round(m.progress*100)+'%':'기본 인식기 준비 중',true);}});
+  try{const {data}=await worker.recognize(blob);return {text:data.text,confidence:data.confidence};}
+  finally{await worker.terminate().catch(()=>{});}
+}
 async function readImage(file){
-  const job=++ocrJob;$('#notice-error').textContent='';showDraft(null);ocrStatus('사진을 준비하는 중…',true);
-  let worker=null;
+  const job=++ocrJob;ocrAbort?.abort();const abort=ocrAbort=new AbortController();
+  $('#notice-error').textContent='';showDraft(null);ocrStatus('사진을 준비하는 중…',true);
   try{
     const blob=await prepareImage(file);if(job!==ocrJob)return;
     clearImage();imageUrl=URL.createObjectURL(blob);$('#image-preview img').src=imageUrl;$('#image-name').textContent=file.name||'붙여넣은 사진';$('#image-preview').hidden=false;
-    const Tesseract=await loadTesseract(),root=new URL('./ocr/',document.baseURI).href;
-    worker=ocrWorker=await Tesseract.createWorker(['kor','eng'],1,{workerPath:root+'worker.min.js',corePath:root+'core',langPath:root+'lang',workerBlobURL:false,logger:m=>{if(job===ocrJob)ocrStatus(m.status==='recognizing text'?'사진 글자 읽는 중 · '+Math.round(m.progress*100)+'%':'한국어 인식기 준비 중 · 처음에는 조금 걸릴 수 있어요.',true);}});
+    ocrStatus('한국어 인식 모델 준비 중 · 처음 한 번 약 18MB를 내려받아요.',true);
+    let result;
+    try{
+      paddle??=import('./ocr-paddle.js?v=2').then(m=>m.createPaddleReader({modelBase:new URL('./ocr/paddle/',document.baseURI).href,onProgress:m=>{if(!abort.signal.aborted)ocrStatus(m,true);}}));
+      const reader=await paddle;if(job!==ocrJob)return;
+      result=await reader.recognize(blob,{signal:abort.signal});
+    }catch(err){
+      if(err?.name==='AbortError'||job!==ocrJob)return;
+      paddle=null;console.warn('PaddleOCR 실패, tesseract로 전환',err);
+      result=await readWithTesseract(blob,job);
+    }
     if(job!==ocrJob)return;
-    const {data:result}=await worker.recognize(blob);if(job!==ocrJob)return;
     const text=result.text.trim();
     if(!text)throw Error('사진에서 글자를 찾지 못했습니다. 공지 글자 부분을 선명하게 잘라서 다시 시도해 주세요.');
     if(text.length>16000)throw Error('읽힌 내용이 너무 깁니다. 행사 공지 부분만 잘라서 올려 주세요.');
-    $('#notice-text').value=text;ocrStatus('사진 읽기 완료');
-    $('#ocr-hint').textContent=result.confidence<60?'일부 글자가 흐리거나 작습니다. 날짜·시간·장소와 혜택을 꼭 확인해 주세요.':'사진에서 읽은 내용입니다. 숫자와 지급 조건을 확인한 뒤 추가해 주세요.';
+    $('#notice-text').value=text;textFromImage=true;ocrStatus('사진 읽기 완료');
+    $('#ocr-hint').textContent=result.confidence<80?'일부 글자가 흐리거나 작습니다. 날짜·시간·장소와 혜택을 꼭 확인해 주세요.':'사진에서 읽은 내용입니다. 숫자와 지급 조건을 원문과 대조한 뒤 추가해 주세요.';
     readNotice();
   }catch(err){if(job===ocrJob){$('#notice-error').textContent=err.message||'사진을 읽지 못했습니다.';ocrStatus('사진 읽기 실패');}}
-  finally{if(worker)await worker.terminate().catch(()=>{});if(ocrWorker===worker)ocrWorker=null;}
 }
 
 function resetFilters({keepPick=false}={}){
@@ -398,11 +415,12 @@ function initialize(){
     catch(err){toast(err.message);}
   };
   $('#read-notice').onclick=readNotice;
-  $('#notice-example').onclick=()=>{$('#notice-text').value=noticeExample;readNotice();};
+  $('#notice-example').onclick=()=>{$('#notice-text').value=noticeExample;textFromImage=false;readNotice();};
   $('#draft-form').onsubmit=e=>{e.preventDefault();saveDraft(e.target);};
   $('#image-file').onchange=e=>{const f=e.target.files?.[0];e.target.value='';if(f)readImage(f);};
   $('#image-clear').onclick=clearImage;
-  $('#ocr-cancel').onclick=()=>{ocrJob++;ocrWorker?.terminate().catch(()=>{});ocrWorker=null;ocrStatus('사진 읽기를 취소했습니다.');};
+  $('#ocr-cancel').onclick=()=>{ocrJob++;ocrAbort?.abort();ocrStatus('사진 읽기를 취소했습니다.');};
+  $('#notice-text').addEventListener('input',e=>{if(!e.target.value.trim())textFromImage=false;});
   const zone=$('#import-zone');
   zone.addEventListener('paste',e=>{const item=[...e.clipboardData.items].find(i=>i.kind==='file'&&i.type.startsWith('image/'));if(item){e.preventDefault();const f=item.getAsFile();if(f)readImage(f);}});
   zone.addEventListener('dragover',e=>{if(e.dataTransfer.types.includes('Files'))e.preventDefault();});
