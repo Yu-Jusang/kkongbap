@@ -1,5 +1,5 @@
 import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf} from './core.js?v=5';
-import {SOURCES,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION,BUNDLES,CAFETERIAS,MENU_URL,MENU_CHECKED,TIP_FORM} from './content.js?v=5';
+import {SOURCES,SOURCE_GROUPS,KIND_LABEL,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION,BUNDLES,CAFETERIAS,MENU_URL,MENU_CHECKED,TIP_FORM} from './content.js?v=6';
 
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -318,7 +318,15 @@ function renderFood(){
 function renderSources(){
   const checks=status.sourceChecks||[];
   $('#source-updated').textContent=status.verifiedAt?`자료 확인 ${status.verifiedAt}`:'';
-  $('#source-rows').innerHTML=SOURCES.map(s=>{const c=checks.find(x=>x.key===s.key);return `<tr><td><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.name)}</a>${s.priority?' <span class="tag tag-both">우선</span>':''}</td><td class="desc">${s.kind==='instagram'?'학생회 인스타 @'+esc(s.url.split('/')[3]):'공식 공지'}</td><td class="desc">${c?`${esc(CHECK_LABEL[c.state]||c.state)} · <span class="mono">${new Date(c.checkedAt).toLocaleDateString('ko-KR',{timeZone:'Asia/Seoul'})}</span>${c.detail?`<br><span class="small">${esc(c.detail)}</span>`:''}`:'확인 대기'}</td></tr>`;}).join('');
+  const day=iso=>new Date(iso).toLocaleDateString('ko-KR',{timeZone:'Asia/Seoul'});
+  const ig=SOURCES.filter(s=>s.kind==='instagram').length;
+  $('#source-count').textContent=`공식 공지·행사 일정 ${SOURCES.length-ig}곳과 단체 공개 인스타그램 ${ig}곳`;
+  const row=s=>{const c=checks.find(x=>x.key===s.key);return `<tr><td><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.name)}</a></td><td class="desc">${esc(KIND_LABEL[s.kind]||'')}${s.kind==='instagram'?' @'+esc(s.url.split('/')[3]):''}</td><td class="desc">${c?`${esc(CHECK_LABEL[c.state]||c.state)} · <span class="mono">${day(c.checkedAt)}</span>${c.detail?`<br><span class="small">${esc(c.detail)}</span>`:''}`:'확인 대기'}</td></tr>`;};
+  $('#source-groups').innerHTML=SOURCE_GROUPS.map(g=>{
+    const list=SOURCES.filter(s=>s.group===g);if(!list.length)return '';
+    const last=list.map(s=>checks.find(c=>c.key===s.key)?.checkedAt).filter(Boolean).sort().at(-1);
+    return `<details class="src-group"><summary><b>${esc(g)}</b> <span class="muted">${list.length}곳${last?` · 최근 확인 ${day(last)}`:''}</span></summary><div class="table-wrap"><table class="directory"><thead><tr><th scope="col">출처</th><th scope="col">종류</th><th scope="col">마지막 확인</th></tr></thead><tbody>${list.map(row).join('')}</tbody></table></div></details>`;
+  }).join('');
 }
 
 // 공지 붙여넣기

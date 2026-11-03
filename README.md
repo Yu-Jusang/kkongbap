@@ -31,7 +31,7 @@
 
 `id, title, date, endDate, start, end, location, benefit, category(food|gift|experience), rule, eligibility, registration(required|none|unknown), registrationUrl, deadline, deadlineTime, sourceUrl, source(notice|instagram), publicVerified, evidence, verifiedAt, uncertain[], cancelled`
 
-`status.sourceChecks`에는 출처별 마지막 확인 시각과 방법을 적는다.
+`status.sourceChecks`에는 출처별 마지막 확인 시각과 방법을 적는다. 출처는 `content.js`의 `SOURCES`에 묶음(`SOURCE_GROUPS`: 본부·기관, 단과대학, 대학원, 학과·학부, 커리어·창업, 학생자치, 문화·생활)과 종류(공지·행사 일정·공개 인스타)를 붙여 적고, 안내 탭은 묶음별로 접어 보여 준다.
 
 ## 학식 메뉴
 
@@ -114,5 +114,6 @@ GitHub Pages는 `main` 브랜치 루트를 그대로 배포한다. `main`에 푸
 - 2026-11-03 이름을 ‘꽁밥’으로, 저장소를 `Yu-Jusang/gonggang`에서 `Yu-Jusang/kkongbap`으로 바꿨다. 주소도 `/gonggang/`에서 `/kkongbap/`으로 바뀌었다.
 - 2026-11-03 예전 주소 `/gonggang/`는 안내 저장소 [Yu-Jusang/gonggang](https://github.com/Yu-Jusang/gonggang)이 경로·해시를 붙여 `/kkongbap/`으로 넘긴다.
 - 2026-11-03 자료 갱신: 공식 공지 12곳 첫 페이지 재확인, 행사 5건 추가, 진행 중 4건 원문 재대조. 건강주간 포스터로 세부(시간·장소·점심·간식·경품)를 확인해 프로그램 2건 추가.
+- 2026-11-03 출처 확대: 본부·기관, 17개 단과대학과 대학원, 학과·협동과정, 경력개발센터·창업지원단, 총학생회·단과대 학생회·관악사 자치회까지 공개 공지처 245곳을 훑었다. 로그인해야 보이는 게시판·없어진 주소·자체 공지가 없는 학과 홈페이지를 빼고 213곳(공지·행사 일정 191, 공개 인스타 22)을 출처로 올렸다. 행사 후보 54건은 원문을 다시 받아 근거 문장·날짜·시각을 대조하고, 첨부 포스터·PDF에만 있는 것은 이미지를 직접 열어 확인했다. 중복·신청 마감·혜택 불분명·지원금 성격 24건을 빼고 31건을 추가했고, 건강주간 3건은 주최 측 학생처 원문 주소로 바꿨다(잔디 위 운동 혜택: 샌드위치).
 
 서울대학교와 무관한 개인 프로젝트다. 신청·지급은 각 주최 측에서 진행한다.

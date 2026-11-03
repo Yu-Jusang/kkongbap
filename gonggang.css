@@ -248,3 +248,11 @@
   .slot-when { grid-column: 1 / -1; }
   .notice-banner .wrap { flex-direction: column; align-items: flex-start; }
 }
+
+/* 확인 출처 묶음 */
+.src-group { border-top: 1px solid var(--rule); }
+.src-group:last-child { border-bottom: 1px solid var(--rule); }
+.src-group > summary { cursor: pointer; padding: 10px 2px; font-size: 15px; }
+.src-group > summary .muted { font-size: 14px; margin-left: 4px; }
+.src-group[open] > summary { margin-bottom: 2px; }
+.src-group .table-wrap { margin-bottom: 14px; }
