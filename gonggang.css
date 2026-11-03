@@ -256,3 +256,11 @@
 .src-group > summary .muted { font-size: 14px; margin-left: 4px; }
 .src-group[open] > summary { margin-bottom: 2px; }
 .src-group .table-wrap { margin-bottom: 14px; }
+
+/* 날짜를 고른 목록 */
+.day-head { font-size: 15px; font-weight: 650; margin: 10px 0 -2px; padding-top: 12px; border-top: 1px solid var(--rule); }
+.day-head .muted, .day-more summary .muted { font-weight: 400; font-size: 14px; }
+.day-none { margin: 0; padding: 14px 16px; border: 1px dashed var(--rule-strong); border-radius: 8px; color: var(--text-3); font-size: 14px; }
+.day-more { border-top: 1px solid var(--rule); padding-top: 12px; }
+.day-more > summary { cursor: pointer; font-size: 15px; font-weight: 650; }
+.day-more[open] > summary { margin-bottom: 14px; }

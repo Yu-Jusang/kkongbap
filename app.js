@@ -87,17 +87,24 @@ function render(){
   renderTimetable();renderSources();renderFood();
 }
 
-function filtered(){
+// 날짜 보기: 8일 이상 이어지는 공모전·설문 기간은 그날의 행사와 따로 보여 준다.
+const LONG_DAYS=7;
+const onDay=(e,d)=>!!e.date&&d>=e.date&&d<=(e.endDate||e.date);
+const isLong=e=>!!e.date&&(new Date((e.endDate||e.date)+'T12:00:00+09:00')-new Date(e.date+'T12:00:00+09:00'))/864e5>=LONG_DAYS;
+const byTime=(a,b)=>(a.start||'99').localeCompare(b.start||'99')||a.title.localeCompare(b.title,'ko');
+// 달력과 날짜 선택은 지난 행사도 보여 준다(취소된 행사는 ‘지난 행사 보기’를 켰을 때만).
+function filtered({forCalendar=false}={}){
   const query=$('#search').value.trim().toLowerCase(),category=$('#category-filter').value,selectedPhase=$('#phase-filter').value,source=$('#source-filter').value,fit=$('#fit-filter').value,bundle=$('#bundle-filter').value,past=$('#show-past').checked;
+  const dayMode=forCalendar||!!picked;
   return data().filter(e=>{
     const p=phase(e);
-    if(selectedPhase?p!==selectedPhase:!past&&['ended','cancelled'].includes(p))return false;
+    if(selectedPhase?p!==selectedPhase:!past&&(dayMode?p==='cancelled':['ended','cancelled'].includes(p)))return false;
     if(category&&e.category!==category)return false;
     if(source&&e.source!==source)return false;
     if(fit&&conflict(e,slots)!==fit)return false;
     if(bundle&&bundleOf(e,BUNDLES)!==bundle)return false;
     if(query&&![e.title,e.location,e.benefit,e.rule,e.eligibility].join(' ').toLowerCase().includes(query))return false;
-    if(picked&&!(e.date&&picked>=e.date&&picked<=(e.endDate||e.date))&&e.deadline!==picked)return false;
+    if(!forCalendar&&picked&&!onDay(e,picked)&&e.deadline!==picked)return false;
     return true;
   }).sort((a,b)=>(a.date||a.deadline||'9999').localeCompare(b.date||b.deadline||'9999')||(a.start||'').localeCompare(b.start||''));
 }
@@ -115,23 +122,38 @@ function card(e){
 }
 function renderEvents(){
   const list=filtered();
-  $('#cards').innerHTML=list.map(card).join('');
-  $('#empty').hidden=list.length>0;
-  $('#result-count').textContent=`${list.length}건`;
-  $('#result-note').textContent=picked?`${fmt(picked)} 행사만 표시 중 · `:'';
-  if(picked)$('#result-note').insertAdjacentHTML('beforeend','<button type="button" class="text-button" id="unpick">날짜 선택 해제</button>');
-  else $('#result-note').textContent='날짜순 · 원문에서 확인한 내용만 표시합니다.';
+  if(picked){
+    // 그날 열리는 행사 → 그날 마감 → 그날에도 걸쳐 있는 긴 기간 행사 순서로 나눈다.
+    const day=list.filter(e=>onDay(e,picked)&&!isLong(e)).sort(byTime);
+    const due=list.filter(e=>e.deadline===picked&&!day.includes(e));
+    const span=list.filter(e=>onDay(e,picked)&&isLong(e)&&!due.includes(e));
+    const head=(text,n)=>`<h3 class="day-head">${text} <span class="muted">${n}건</span></h3>`;
+    $('#cards').innerHTML=(day.length?day.map(card).join(''):`<p class="day-none">${fmt(picked)}에 열리는 행사는 없습니다.</p>`)
+      +(due.length?head(`${fmt(picked)} 신청·참여 마감`,due.length)+due.map(card).join(''):'')
+      +(span.length?`<details class="day-more"><summary>이 날도 참여할 수 있는 공모전·기간 행사 <span class="muted">${span.length}건</span></summary><div class="results">${span.map(card).join('')}</div></details>`:'');
+    $('#empty').hidden=true;
+    $('#result-count').textContent=`${day.length}건`;
+    $('#result-note').textContent=`${fmt(picked)}에 열리는 행사 ${day.length}건 · `;
+    $('#result-note').insertAdjacentHTML('beforeend','<button type="button" class="text-button" id="unpick">날짜 선택 해제</button>');
+  }else{
+    $('#cards').innerHTML=list.map(card).join('');
+    $('#empty').hidden=list.length>0;
+    $('#result-count').textContent=`${list.length}건`;
+    $('#result-note').textContent='날짜순 · 원문에서 확인한 내용만 표시합니다.';
+  }
   $('#calendar').hidden=listView!=='calendar';
   if(listView==='calendar')renderCalendar();
 }
 function renderCalendar(){
   const first=new Date(month+'-01T12:00:00+09:00').getDay(),count=new Date(Number(month.slice(0,4)),Number(month.slice(5)),0).getDate(),today=koreaDate();
-  const all=data().filter(e=>!e.cancelled);
+  // 칸에는 목록과 같은 필터를 적용하고, 긴 기간 행사는 제목 대신 개수만 적는다.
+  const all=filtered({forCalendar:true});
   const cells=Array.from({length:first},()=>'<span class="cal-cell blank"></span>');
   for(let d=1;d<=count;d++){
     const date=`${month}-${String(d).padStart(2,'0')}`;
-    const on=all.filter(e=>e.date&&date>=e.date&&date<=(e.endDate||e.date)),due=all.filter(e=>e.deadline===date&&!e.date);
-    cells.push(`<button type="button" class="cal-cell${date===today?' today':''}${date===picked?' picked':''}${on.length||due.length?' has':''}" data-pick="${date}" aria-label="${fmt(date)} 행사 ${on.length}건"><span class="cal-d">${d}</span>${on.slice(0,2).map(e=>`<span class="cal-ev ${esc(e.category)}">${esc(e.title)}</span>`).join('')}${on.length>2?`<span class="cal-more">+${on.length-2}</span>`:''}${due.length?`<span class="cal-due">마감 ${due.length}</span>`:''}</button>`);
+    const on=all.filter(e=>onDay(e,date)&&!isLong(e)).sort(byTime),span=all.filter(e=>onDay(e,date)&&isLong(e)).length,due=all.filter(e=>e.deadline===date&&!e.date);
+    const note=[span?`기간 ${span}`:'',due.length?`마감 ${due.length}`:''].filter(Boolean).join(' · ');
+    cells.push(`<button type="button" class="cal-cell${date===today?' today':''}${date===picked?' picked':''}${on.length||due.length?' has':''}" data-pick="${date}" aria-pressed="${date===picked}" aria-label="${fmt(date)} 행사 ${on.length}건${note?' · '+note:''}"><span class="cal-d">${d}</span>${on.slice(0,2).map(e=>`<span class="cal-ev ${esc(e.category)}">${esc(e.title)}</span>`).join('')}${on.length>2?`<span class="cal-more">+${on.length-2}</span>`:''}${note?`<span class="cal-due">${note}</span>`:''}</button>`);
   }
   $('#calendar').innerHTML=`<div class="cal-head"><button type="button" class="text-button" data-month="-1" aria-label="이전 달">←</button><h3>${month.slice(0,4)}년 ${Number(month.slice(5))}월</h3><button type="button" class="text-button" data-month="1" aria-label="다음 달">→</button><button type="button" class="text-button" data-month="0">이번 달</button></div><div class="cal-grid">${DAYS.map(d=>`<span class="cal-label">${d}</span>`).join('')}${cells.join('')}</div>`;
 }
