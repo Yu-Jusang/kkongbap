@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="서울대 학교 공지와 학생회 공개 게시물에서 확인한 무료 음식·기프티콘·경품·체험 행사를 공강 시간에 맞춰 찾아보는 사이트입니다.">
+<title>공강에 뭐먹지</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/500.css">
+<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="gonggang.css?v=1">
+<script type="module" src="app.js?v=1"></script>
+</head>
+<body data-project="gonggang" class="has-tabs">
+<a class="skip" href="#main">본문 바로가기</a>
+<nav class="topbar" aria-label="주 메뉴"><div class="wrap wide"><a class="brand" href="./"><span class="mark" aria-hidden="true"></span><span class="brand-name">공강에 뭐먹지</span></a><div class="nav-links"><a href="#timetable">내 시간표</a><a href="https://github.com/Yu-Jusang/gonggang" target="_blank" rel="noopener">코드</a></div></div></nav>
+
+<header class="hero"><div class="hero-art"><svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" fill="currentColor" aria-hidden="true" id="hero-svg"></svg></div><div class="wrap wide"><div class="hero-text">
+<nav class="crumbs" aria-label="경로"><span>공강에 뭐먹지</span><span aria-hidden="true"> / </span><span aria-current="page">서울대 무료 음식·행사</span></nav>
+<div class="meta-row"><p class="eyebrow">음식 · 기프티콘·경품 · 체험</p><span class="status" id="verified-pill">자료 확인 —</span></div>
+<h1>공강에 뭐먹지</h1>
+<p class="summary">서울대 학교 공지와 학생회 공개 게시물에서 확인한 간식·식사·기프티콘·경품 행사를 모았습니다. 내 시간표를 넣으면 공강에 갈 수 있는 행사만 골라 봅니다.</p>
+<dl class="metrics"><div><dt>진행·예정</dt><dd id="m-upcoming">—</dd></div><div><dt>이번 주</dt><dd id="m-week">—</dd></div><div><dt>신청 마감 있음</dt><dd id="m-deadline">—</dd></div><div><dt>내 공강에 가능</dt><dd id="m-free">—</dd></div></dl>
+<p class="note">원문에 없는 시간과 지급 조건은 추측하지 않습니다. 수량 소진·변경 여부는 주최 측 안내를 확인하세요.</p>
+</div></div></header>
+
+<div class="tabbar" role="tablist" aria-label="화면"><div class="wrap wide">
+<a href="#events" class="tab" data-tab="events" role="tab">행사 찾기</a>
+<a href="#week" class="tab" data-tab="week" role="tab">이번 주 카드</a>
+<a href="#timetable" class="tab" data-tab="timetable" role="tab">내 시간표 <span class="count" id="slot-count">0</span></a>
+<a href="#import" class="tab" data-tab="import" role="tab">공지 붙여넣기</a>
+<a href="#guide" class="tab" data-tab="guide" role="tab">출처·운영</a>
+</div></div>
+
+<main id="main">
+<div class="notice-banner" id="demo-banner" hidden><div class="wrap wide"><span>체험 모드입니다. 행사명·장소·혜택은 모두 가상이며 실제 신청은 할 수 없습니다.</span><button type="button" class="text-button" id="demo-off">실제 행사 보기</button></div></div>
+
+<!-- 01 행사 찾기 -->
+<div id="events-view" class="view wrap wide layout">
+<aside class="filters" aria-label="탐색 조건">
+<details open id="filter-details"><summary>나에게 맞게 보기</summary><div class="filter-body">
+<label class="field">혜택<select id="category-filter"><option value="">모든 혜택</option><option value="food">음식·음료</option><option value="gift">기프티콘·경품</option><option value="experience">체험·기타</option></select></label>
+<label class="field">상태<select id="phase-filter"><option value="">진행·예정 전체</option><option value="today">오늘</option><option value="open">신청 중</option><option value="upcoming">예정</option><option value="full">신청 마감</option><option value="tbd">일정 미정</option><option value="ended">종료</option></select></label>
+<label class="field">출처<select id="source-filter"><option value="">모든 출처</option><option value="notice">학교 공지</option><option value="instagram">학생회 인스타</option><option value="manual">직접 추가</option></select></label>
+<label class="field">내 시간표와 비교<select id="fit-filter"><option value="">모든 시간</option><option value="free">공강에 갈 수 있어요</option><option value="clash">수업과 겹쳐요</option><option value="unknown">시간 미확인</option></select><small id="fit-hint">시간표를 추가하면 비교합니다.</small></label>
+<label class="checkbox"><input id="show-past" type="checkbox">지난 행사도 보기</label>
+<button type="button" id="reset-filters" class="text-button">필터 초기화</button>
+</div></details>
+<div class="side-note"><p class="side-title">‘추첨’과 ‘선착순’은 달라요</p><p>받는 조건은 원문 그대로 옮깁니다. 전원 지급인지, 선착순인지, 추첨인지 상세에서 확인하세요.</p><a href="#guide" data-jump="g-principles">확인 원칙</a></div>
+</aside>
+<div class="content">
+<section id="s-find" aria-labelledby="s-find-h"><div class="sec-head"><span class="n">01</span><h2 id="s-find-h">이번 공강엔, 뭐 할까?</h2><span class="sec-aside" id="result-count" aria-live="polite">불러오는 중</span></div>
+<div class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" id="search" aria-label="행사 검색" placeholder="행사, 혜택, 장소 검색"><kbd>/</kbd></div>
+<div class="result-toolbar"><div class="segments" role="group" aria-label="보기 방식"><button type="button" data-view="list" class="selected" aria-pressed="true">목록</button><button type="button" data-view="calendar" aria-pressed="false">캘린더</button></div><div class="sync"><span id="sync-text" class="muted small"></span><button type="button" class="text-button" id="reload">새로 불러오기</button></div></div>
+<div id="calendar" class="cal" hidden></div>
+<p class="result-note" id="result-note"></p>
+<div id="cards" class="results" aria-live="polite"></div>
+<div class="empty" id="empty" hidden><p class="empty-title">지금 조건에 맞는 행사가 없어요.</p><p id="empty-text">필터를 바꾸거나 지난 행사도 확인해 보세요.</p><div class="actions"><button type="button" id="clear-filters" class="btn btn-secondary">필터 초기화</button><button type="button" id="show-past-button" class="btn btn-secondary">지난 행사 살펴보기</button><button type="button" id="demo-on" class="btn btn-secondary">체험 행사 보기</button></div></div>
+</section>
+</div>
+</div>
+
+<!-- 02 이번 주 카드 -->
+<div id="week-view" class="view wrap wide" hidden>
+<div class="content solo">
+<section aria-labelledby="s-week-h"><div class="sec-head"><span class="n">02</span><h2 id="s-week-h">이번 주 카드</h2><span class="sec-aside" id="week-range"></span></div>
+<p class="lead">한 주의 행사를 카드 한 장으로 묶었습니다. 카드의 각 줄은 사이트의 행사 상세로 이어지고, 상세에는 원문 링크가 붙어 있습니다.</p>
+<div class="week-toolbar"><div class="segments" role="group" aria-label="주 이동"><button type="button" data-week="-1">← 지난주</button><button type="button" data-week="0" class="selected">이번 주</button><button type="button" data-week="1">다음 주 →</button></div><div class="actions"><button type="button" class="btn btn-secondary btn-sm" id="copy-week">카드 문구 복사</button><button type="button" class="btn btn-primary btn-sm" id="save-week">카드 이미지 저장</button></div></div>
+<article class="week-card" id="week-card" aria-live="polite"></article>
+<p class="detail-foot">카드 문구와 이미지(1080×1350)는 날짜·시간·장소·혜택을 자료 그대로 옮깁니다. 게시 전 원문을 다시 확인하세요. 이 사이트는 인스타그램에 자동으로 게시하지 않습니다.</p>
+</section>
+</div>
+</div>
+
+<!-- 03 내 시간표 -->
+<div id="timetable-view" class="view wrap wide" hidden>
+<div class="content solo">
+<section aria-labelledby="s-tt-h"><div class="sec-head"><span class="n">03</span><h2 id="s-tt-h">시간표 한 번, 공강은 알아서</h2><label class="btn btn-secondary btn-sm file-label">시간표 .ics 가져오기<input id="ics-file" type="file" accept=".ics,text/calendar"></label></div>
+<p class="lead">매주 반복되는 수업을 입력하세요. 시간표는 이 브라우저에만 저장됩니다. 행사 시작·종료 시간이 원문에 모두 있을 때만 겹침을 판정합니다.</p>
+<div class="tt-layout">
+<div><div class="week-grid" id="week-grid"></div><p class="detail-foot">주간 표는 월~금 09~21시를 표시합니다. 그 외 수업도 아래 목록에서 확인하고 겹침 계산에 반영합니다.</p><div id="slot-list" class="slot-list"></div></div>
+<form id="class-form" class="panel-box"><h3>수업 추가</h3>
+<label class="field">수업 이름<input name="title" maxlength="80" placeholder="예: 통계학" required></label>
+<label class="field">요일<select name="day"><option value="1">월요일</option><option value="2">화요일</option><option value="3">수요일</option><option value="4">목요일</option><option value="5">금요일</option><option value="6">토요일</option><option value="0">일요일</option></select></label>
+<div class="two"><label class="field">시작<input name="start" type="time" value="09:00" required></label><label class="field">종료<input name="end" type="time" value="10:30" required></label></div>
+<button class="btn btn-primary" type="submit">추가하기</button>
+</form>
+</div>
+</section>
+</div>
+</div>
+
+<!-- 04 공지 붙여넣기 -->
+<div id="import-view" class="view wrap wide" hidden>
+<div class="content solo">
+<section aria-labelledby="s-import-h" id="import-zone"><div class="sec-head"><span class="n">04</span><h2 id="s-import-h">공지 붙여넣고, 내 캘린더에</h2></div>
+<p class="lead">공지문이나 포스터 사진을 Ctrl+V로 붙여넣으세요. 사진 글자는 이 브라우저 안에서 읽고 서버로 보내지 않습니다. 확인한 행사는 이 브라우저의 행사 목록과 캘린더에만 추가됩니다.</p>
+<div class="import-grid">
+<div>
+<div class="drop"><strong>사진도 바로 Ctrl+V</strong><p>스크린샷·포스터를 붙여넣거나 파일을 골라 주세요.</p><label class="btn btn-secondary btn-sm file-label">사진 파일 선택<input id="image-file" type="file" accept="image/png,image/jpeg,image/webp,image/bmp" aria-label="공지 사진 선택"></label><small>PNG·JPG·WebP·BMP · 최대 12MB · 한 번에 한 장</small></div>
+<div id="image-preview" class="image-preview" hidden><img alt="글자 인식에 사용한 공지 사진"><div><span id="image-name"></span><button type="button" class="text-button" id="image-clear">지우기</button></div></div>
+<div id="ocr-status" class="ocr-status" role="status" aria-live="polite" hidden><span></span><button type="button" class="text-button" id="ocr-cancel" hidden>취소</button></div>
+<p class="detail-foot" id="ocr-hint"></p>
+<label class="field" for="notice-text">공지문 · 사진에서 읽은 글자<textarea id="notice-text" maxlength="16000" rows="12" placeholder="행사 공지를 붙여넣으세요."></textarea></label>
+<div class="actions"><button type="button" class="btn btn-primary" id="read-notice">내용 읽기</button><button type="button" class="btn btn-secondary" id="notice-example">예시 넣기</button><label class="field inline">기준 연도<input id="notice-year" type="number" min="2020" max="2100"></label></div>
+<p class="form-error" id="notice-error" role="alert"></p>
+</div>
+<form id="draft-form" class="panel-box" hidden><h3>읽어낸 내용 확인</h3><p class="small muted">원문과 다르면 고친 뒤 추가하세요. 빈칸은 미확인으로 남습니다.</p><div id="draft-fields"></div><button class="btn btn-primary" type="submit">내 캘린더에 추가</button></form>
+</div>
+</section>
+<section aria-labelledby="s-mine-h"><div class="sec-head"><span class="n">05</span><h2 id="s-mine-h">직접 추가한 행사</h2><span class="sec-aside" id="mine-count"></span></div><div id="mine" class="results"></div></section>
+</div>
+</div>
+
+<!-- 05 출처·운영 -->
+<div id="guide-view" class="view wrap wide layout" hidden>
+<nav class="toc" aria-label="이 화면의 목차"><ol>
+<li><a href="#g-principles" data-jump="g-principles"><span class="n">01</span>확인 원칙</a></li>
+<li><a href="#g-sources" data-jump="g-sources"><span class="n">02</span>확인 출처</a></li>
+<li><a href="#g-reference" data-jump="g-reference"><span class="n">03</span>운영 참고 사례</a></li>
+<li><a href="#g-plan" data-jump="g-plan"><span class="n">04</span>서울대 운영안 (제안)</a></li>
+<li><a href="#g-privacy" data-jump="g-privacy"><span class="n">05</span>내 기록과 개인정보</a></li>
+<li><a href="#g-restore" data-jump="g-restore"><span class="n">06</span>복구 기록</a></li>
+</ol></nav>
+<div class="content">
+<section id="g-principles" aria-labelledby="g-principles-h"><div class="sec-head"><span class="n">01</span><h2 id="g-principles-h">확인 원칙</h2></div>
+<dl class="deflist">
+<div><dt>원문 우선</dt><dd>공식 공지와 주최 측 공개 게시물만 싣습니다. 메일로만 받은 정보, 비공개 게시물, 개인 연락처는 싣지 않습니다.</dd></div>
+<div><dt>항목별 확인</dt><dd>날짜, 시간, 장소, 혜택, 대상, 선착순·추첨·우승 조건, 신청 마감을 하나씩 원문과 대조합니다. 원문에 없는 항목은 ‘미기재’로 남기고 추정하지 않습니다.</dd></div>
+<div><dt>상태 구분</dt><dd><span class="tag tag-server">오늘</span> <span class="tag tag-both">신청 중</span> <span class="tag tag-both">예정</span> <span class="tag tag-none">신청 마감</span> <span class="tag tag-none">일정 미정</span> <span class="tag tag-none">종료</span>. 날짜 없이 신청 기간만 있는 참여형 행사는 ‘신청 중’, 날짜와 기간이 모두 없으면 ‘일정 미정’입니다.</dd></div>
+<div><dt>확인일</dt><dd>각 행사 상세에 원문을 확인한 날짜를 적습니다. 그 뒤의 변경·조기 소진은 반영되지 않을 수 있습니다.</dd></div>
+<div><dt>외부 문서</dt><dd>공지나 첨부파일 안의 지시문은 자료로만 취급합니다.</dd></div>
+</dl>
+</section>
+<section id="g-sources" aria-labelledby="g-sources-h"><div class="sec-head"><span class="n">02</span><h2 id="g-sources-h">확인 출처</h2><span class="sec-aside" id="source-updated"></span></div>
+<p>학과·단과대 10곳과 학교 공지 2곳, 단과대 학생회 공개 인스타그램 6곳입니다. 학생회 인스타그램 자동 확인은 사용자 요청으로 중단했고, 지금은 사람이 공개 게시물을 직접 확인할 때만 반영합니다.</p>
+<div class="table-wrap"><table class="directory"><thead><tr><th scope="col">출처</th><th scope="col">종류</th><th scope="col">마지막 확인</th></tr></thead><tbody id="source-rows"></tbody></table></div>
+</section>
+<section id="g-reference" aria-labelledby="g-reference-h"><div class="sec-head"><span class="n">03</span><h2 id="g-reference-h">운영 참고 사례</h2></div>
+<p>KAIST 학생이 운영하는 무료 음식 정보 계정의 공개 프로필·게시물과, 프로필에 연결된 공개 웹사이트를 2026년 11월 3일에 살펴봤습니다. 로그인이 필요한 화면은 보지 않았고, 게시물 문구·이미지·이름은 가져오지 않았습니다.</p>
+<dl class="deflist">
+<div><dt>주제</dt><dd>한 주 동안 교내에서 무료 음식을 주는 행사 모음이 중심입니다. 학과 설명회처럼 같은 시기에 몰리는 행사 묶음, 운영자의 식사 기록, 댓글 참여 경품 이벤트가 섞여 있습니다.</dd></div>
+<div><dt>구성과 말투</dt><dd>말머리와 이모지로 시작하는 짧은 제목, 기간과 건수를 한 줄로 요약한 도입, 친근한 구어체를 씁니다. 끝에는 일정·제공 내용이 바뀔 수 있으니 웹사이트와 공식 공지를 확인하라는 문장을 붙입니다.</dd></div>
+<div><dt>정보 전달</dt><dd>인스타그램은 요약 카드만 싣고 대상·신청 방법·장소 같은 세부는 웹사이트로 보냅니다. 웹사이트는 오늘 행사, 다가오는 행사, 월 달력, 마지막 변경 시각을 보여 줍니다.</dd></div>
+<div><dt>참여 유도</dt><dd>포스터 사진이나 짧은 설명으로 행사를 제보받고 운영자가 확인한 뒤 공개하는 제보 기능, 댓글 이벤트와 당첨 발표, 매주 정기 발행 예고를 씁니다.</dd></div>
+</dl>
+</section>
+<section id="g-plan" aria-labelledby="g-plan-h"><div class="sec-head"><span class="n">04</span><h2 id="g-plan-h">서울대 운영안</h2><span class="sec-aside">구현 여부 표시</span></div>
+<div class="table-wrap"><table><thead><tr><th scope="col">아이디어</th><th scope="col">내용</th><th scope="col">상태</th></tr></thead><tbody>
+<tr><td>주간 카드</td><td>월~일 한 주의 행사를 요일별로 묶고 건수를 요약합니다. 문구 복사와 세로형 이미지(1080×1350) 저장을 지원하고, 각 줄은 사이트의 행사 상세 주소(<code>#event/행사ID</code>)로 이어집니다.</td><td><span class="tag tag-server">구현</span></td></tr>
+<tr><td>카드와 상세 연결</td><td>모든 행사에 고유 주소가 있어 카드 문구·게시물 링크에서 곧바로 상세를 엽니다. 상세에는 원문 링크와 확인일이 붙습니다.</td><td><span class="tag tag-server">구현</span></td></tr>
+<tr><td>혜택·조건 구분</td><td>음식·음료, 기프티콘·경품, 체험을 원문 내용으로 나누고, 선착순·추첨·전원 지급 문구를 카드에 그대로 표시합니다.</td><td><span class="tag tag-server">구현</span></td></tr>
+<tr><td>시즌 묶음</td><td>중간·기말고사 간식행사(단과대 학생회), 전공 탐색 시기 설명회, 채용설명회처럼 몰리는 시기에 묶음 카드를 따로 만듭니다.</td><td><span class="tag tag-none">제안</span></td></tr>
+<tr><td>공개 제보함</td><td>지금은 개인 브라우저에만 저장되는 ‘공지 붙여넣기’만 있습니다. 여럿이 제보하려면 제출 저장소와 운영자 검수 절차가 필요하고, 연락처 같은 개인정보는 받지 않는 양식이어야 합니다.</td><td><span class="tag tag-none">제안</span></td></tr>
+<tr><td>학식 메뉴</td><td>생협 공개 식단을 함께 보여 주는 기능입니다. 출처 이용 조건을 먼저 확인해야 합니다.</td><td><span class="tag tag-none">제안</span></td></tr>
+<tr><td>인스타그램 계정 운영</td><td>카드 게시, 댓글 이벤트, 예약 게시는 운영 계정과 권한이 필요합니다. 예약·자동 게시에는 비즈니스 계정과 Meta 개발자 앱 승인이 필요하며, 이 사이트는 어떤 계정 활동도 하지 않습니다.</td><td><span class="tag tag-none">제안</span></td></tr>
+</tbody></table></div>
+</section>
+<section id="g-privacy" aria-labelledby="g-privacy-h"><div class="sec-head"><span class="n">05</span><h2 id="g-privacy-h">내 기록과 개인정보</h2></div>
+<p>가입 없이 사용합니다. 시간표와 직접 추가한 행사는 이 브라우저의 저장소에만 남고 서버로 전송되지 않습니다. 사진 글자 인식도 브라우저 안에서 처리합니다. 공용 기기에서는 사용 후 기록을 지워 주세요.</p>
+<div class="actions"><button type="button" id="clear-data" class="btn btn-secondary">내 기록 지우기</button></div>
+</section>
+<section id="g-restore" aria-labelledby="g-restore-h"><div class="sec-head"><span class="n">06</span><h2 id="g-restore-h">복구 기록</h2></div>
+<p>2026년 10월 16–18일 공개했던 사이트를 이전 저장소의 Git 기록에서 되살렸습니다. 원본 소스는 <a href="https://github.com/Yu-Jusang/gonggang/tree/main/legacy" target="_blank" rel="noopener">legacy 폴더</a>에 그대로 두었습니다.</p>
+<dl class="deflist">
+<div><dt>되살린 것</dt><dd>공개 행사 자료 20건과 출처 확인 기록, 목록·월 캘린더, 검색·혜택·상태·시간표 겹침 필터, 행사 상세와 .ics 저장, 시간표 직접 입력·.ics 가져오기, 공지문·사진 붙여넣기(브라우저 안 글자 인식), 체험 모드.</dd></div>
+<div><dt>바뀐 것</dt><dd>React 빌드 대신 빌드 없는 정적 파일로 다시 썼고, 장학 한눈에와 같은 디자인을 적용했습니다. 상태·출처 필터, 이번 주 카드(문구 복사·이미지 저장), 행사별 주소를 더했습니다.</dd></div>
+<div><dt>자료 갱신</dt><dd>2026년 11월 3일 공식 공지 12곳의 첫 페이지를 다시 보고 원문으로 확인되는 행사 5건을 더했습니다. 진행 중이던 4건은 원문을 다시 대조했고, 공개 화면에서 본문을 볼 수 없던 1건은 상세에 ‘재확인 불가’로 적었습니다.</dd></div>
+<div><dt>되살리지 않은 것</dt><dd>메일 행사 수집, 서버 저장 API, 학생회 인스타그램 자동 확인은 개인정보·중단 요청 때문에 복구하지 않았습니다.</dd></div>
+</dl>
+</section>
+</div>
+</div>
+</main>
+
+<footer class="wrap wide"><p class="small muted">공강에 뭐먹지 · 서울대학교와 무관한 개인 프로젝트입니다. 신청·지급은 각 주최 측에서 진행합니다. · <a href="https://github.com/Yu-Jusang/gonggang" target="_blank" rel="noopener">GitHub</a></p></footer>
+
+<dialog id="detail-dialog" aria-labelledby="detail-title"><div id="detail-content"></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
