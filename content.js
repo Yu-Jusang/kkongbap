@@ -46,7 +46,7 @@ export const TIP_FORM={
   url:'https://docs.google.com/forms/d/e/1FAIpQLScQERykaPcm0gTkBKBiFoXujGY8-f011gSyMnaSuJy8mPWR5g/viewform',
   entries:{source:'entry.1784636216',event:'entry.1698881833',when:'entry.828020470',where:'entry.529625629',benefit:'entry.897347585',conditions:'entry.1454505297',registration:'entry.2132672893',notes:'entry.828285216'},
 };
-export const SOURCE_LABEL={notice:'학교 공지',instagram:'학생회 인스타',manual:'직접 추가',gmail:'메일'};
+export const SOURCE_LABEL={notice:'학교 공지',instagram:'학생회 인스타',tip:'제보 확인',manual:'직접 추가',gmail:'메일'};
 export const CHECK_LABEL={ok:'본문 접근 확인',browser_only:'브라우저 확인 · 자동수집 제한',blocked:'접근 제한',pending:'확인 대기',error:'수집 오류'};
 export const CATEGORY={food:'음식·음료',gift:'기프티콘·경품',experience:'체험·기타'};
 export const REGISTRATION={required:'필요',none:'불필요',unknown:'확인 필요'};

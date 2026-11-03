@@ -2,6 +2,8 @@
 // 포스터의 QR은 작고 여러 개인 경우가 많아, 전체 → 겹치는 조각(2배 확대) 순서로 찾고 찾은 자리는 가린 뒤 다시 찾는다.
 // 사진은 브라우저 밖으로 나가지 않는다.
 
+import {linkKind} from './core.js';
+
 const JSQR='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
 let jsqrLoading=null;
 function loadJsQR(){
@@ -76,12 +78,5 @@ export function labelQRCodes(codes,items=[]){
     return {...c,label:(near[0]?.text||'').trim()};
   });
 }
-// 신청 링크로 볼 QR: 이름표에 신청·접수·참가가 있거나, 주소가 신청서 서비스인 것
-const FORM_HOST=/(^|\.)(forms\.gle|docs\.google\.com|form\.naver\.com|naver\.me|tally\.so|typeform\.com|forms\.office\.com|forms\.microsoft\.com)$/;
-export function qrKind(c){
-  let host='';
-  try{const u=new URL(c.text);if(!/^https?:$/.test(u.protocol))return 'text';host=u.hostname;if(host==='docs.google.com'&&!u.pathname.startsWith('/forms'))host='';}catch{return 'text';}
-  if(/신청|접수|참가|등록|응모|예약/.test(c.label))return 'registration';
-  if(/홍보|안내|홈페이지|소개|오픈\s*채팅|카카오|인스타|문의/.test(c.label))return 'info';
-  return FORM_HOST.test(host)?'registration':'info';
-}
+// 신청 링크로 볼 QR인지는 글 속 링크와 같은 기준(core.js linkKind)으로 가린다.
+export const qrKind=c=>linkKind(c.text,c.label);

@@ -182,10 +182,18 @@
 
 /* 제보 상자 */
 .tip-box {
-  position: sticky; top: calc(var(--bar-h) + var(--tab-h) + 16px);
-  padding: 20px 22px; border: 2px solid var(--accent); border-radius: 14px; background: var(--surface);
+  max-width: 760px; margin: 8px 0 0;
+  padding: 22px 24px; border: 2px solid var(--accent); border-radius: 14px; background: var(--surface);
   box-shadow: 0 6px 24px color-mix(in srgb, var(--accent) 12%, transparent);
 }
+.tip-help { margin: -6px 0 12px; font-size: 14.5px; color: var(--text-2); }
+.tip-input { min-height: 220px; font-size: 15px; line-height: 1.6; resize: vertical; }
+.tip-box:focus-within .tip-input { border-color: var(--accent); }
+.tip-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin: 8px 0 10px; font-size: 13.5px; }
+.tip-tools .field.inline { font-size: 13px; color: var(--text-3); }
+.tip-tools .field.inline input { width: 80px; padding: 3px 6px; font-size: 13px; }
+.tip-box .image-preview { margin-top: 4px; }
+.draft-wrap { max-width: 760px; }
 .tip-box .eyebrow { margin: 0 0 4px; color: var(--accent); }
 .tip-box h3 { margin: 0 0 12px; font-size: 20px; line-height: 1.4; letter-spacing: -0.015em; }
 .tip-summary { margin: 0 0 14px; padding: 10px 12px; border-radius: 8px; background: var(--code-bg); font-size: 14px; }

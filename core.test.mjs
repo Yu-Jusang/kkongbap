@@ -3,6 +3,33 @@ import assert from 'node:assert/strict';
 import {conflict,parseICS,calendarText,closed,expired,phase,safeUrl,weekStart,weekGroups,parseNotice,noticeExample,sanitizeSlots,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf} from './core.js';
 import {BUNDLES} from './content.js';
 import {labelQRCodes,qrKind} from './qr.js';
+import {extractLinks} from './core.js';
+
+// 인스타 캡션·홍보 글을 통째로 붙여넣은 경우(링크가 '▶ 이름표' 다음 줄에 오는 형식)
+const SNAAC=`🍕 내가 만든 프로덕트, 투자자 앞에서 데모해볼까? (데모팀 15팀 모집)
+
+11/16(월) 저녁, 카카오벤처스와 함께하는 SNAAC 빌더's 피자파티가 열립니다! 🍕
+
+— 🏆 최종 선발팀에게는 AirPods 5 증정!
+
+시상 이후 1시간 동안 피자를 먹으며 카카오벤처스, 그리고 비슷한 문제를 풀고 있는 학내 빌더들과 자유롭게 이야기 나누고, 못다 한 데모도 마음껏 보여주세요. 🍕
+
+📍 행사 안내
+일시: 11월 16일(월) 18:30
+장소: 서울대학교 해동학술문화관 해동홀 (32-1동 1층 강연장)
+대상: 무언가를 만들고 있는 서울대학교 재학생·휴학생 (개인/팀)
+모집: 데모팀 15팀 내외 (청중 참여도 가능)
+
+▶ 데모팀 신청
+https://forms.gle/MsUoysAe4Li4dNEcA
+
+▶ 참관자 신청
+https://forms.gle/x7JcdouFEgs48avY7
+
+▶ 피자파티 자세히 보기
+https://deadpan-base-e6c.notion.site/SNAAC-X-s-3fac66680fba801b8eeece6e06ad3e81`;
+test('홍보 글 통째로: 이모지 제목, 일시·장소·대상, 혜택 문장',()=>{const e=parseNotice(SNAAC,2026);assert.equal(e.title,'내가 만든 프로덕트, 투자자 앞에서 데모해볼까? (데모팀 15팀 모집)');assert.equal(e.date,'2026-11-16');assert.equal(e.start,'18:30');assert.equal(e.location,'서울대학교 해동학술문화관 해동홀 (32-1동 1층 강연장)');assert.ok(e.eligibility.startsWith('무언가를 만들고 있는'));assert.ok(e.benefit.includes('AirPods 5 증정'));assert.ok(e.benefit.includes('피자를 먹으며'));assert.equal(e.category,'food');});
+test('홍보 글 통째로: 링크 이름표와 신청 링크',()=>{const l=extractLinks(SNAAC);assert.deepEqual(l.map(x=>[x.label,x.kind]),[['데모팀 신청','registration'],['참관자 신청','registration'],['피자파티 자세히 보기','info']]);assert.equal(parseNotice(SNAAC,2026).registrationUrl,'https://forms.gle/MsUoysAe4Li4dNEcA');assert.equal(parseNotice(SNAAC,2026).registration,'required');});
 
 // 사진 속 QR코드: 위에 붙은 글자로 이름표를 달고 신청 링크인지 가린다
 test('QR 이름표와 종류',()=>{

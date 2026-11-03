@@ -108,7 +108,28 @@ export function sanitizePersonal(raw){
 }
 
 // 공지문 → 행사 초안 (붙여넣은 글자, 또는 사진에서 읽은 글자)
-const clean=s=>s.replace(/(?:\+82[-\s]?)?0?1[016789][-\s]?\d{3,4}[-\s]?\d{4}/g,'').replace(/[\w.+-]+@[\w.-]+\.[a-z]{2,}/gi,'').replace(/^[\s✔✅☑📌📍📅⏰•*·ㆍ▶►■□○●◆◇※>-]+/u,'').trim();
+const clean=s=>s.replace(/(?:\+82[-\s]?)?0?1[016789][-\s]?\d{3,4}[-\s]?\d{4}/g,'').replace(/[\w.+-]+@[\w.-]+\.[a-z]{2,}/gi,'').replace(/^[\s✔✅☑📌📍📅⏰•*·ㆍ▶►■□○●◆◇※>—–\p{Extended_Pictographic}️-]+/u,'').trim();
+// 링크 종류: 이름표(같은 줄이나 바로 윗줄의 글)에 신청·접수·참가가 있거나 신청서 주소면 'registration'
+const FORM_HOST=/(^|\.)(forms\.gle|docs\.google\.com|form\.naver\.com|naver\.me|tally\.so|typeform\.com|forms\.office\.com|forms\.microsoft\.com)$/;
+export function linkKind(url,label=''){
+  let host='';
+  try{const u=new URL(url);if(!/^https?:$/.test(u.protocol))return 'text';host=u.hostname;if(host==='docs.google.com'&&!u.pathname.startsWith('/forms'))host='';}catch{return 'text';}
+  if(/신청|접수|참가|등록|응모|예약/.test(label))return 'registration';
+  if(/홍보|안내|홈페이지|소개|자세히|오픈\s*채팅|카카오|인스타|문의/.test(label))return 'info';
+  return FORM_HOST.test(host)?'registration':'info';
+}
+// 글 속 링크와 그 이름표. 이름표는 같은 줄의 앞 글, 없으면 바로 윗줄.
+export function extractLinks(text){
+  const lines=text.split(/\r?\n/),out=[];
+  for(const [i,line] of lines.entries())for(const m of line.matchAll(/https?:\/\/[^\s<>()"']+/g)){
+    const url=m[0].replace(/[.,;:!?)\]]+$/,'');
+    let label=clean(line.slice(0,m.index));
+    for(let k=i-1;!label&&k>=0&&k>=i-2;k--)if(lines[k].trim()&&!/https?:\/\//.test(lines[k]))label=clean(lines[k]);
+    label=label.replace(/[:：]\s*$/,'').slice(0,40);
+    if(!out.some(o=>o.url===url))out.push({url,label,kind:linkKind(url,label)});
+  }
+  return out;
+}
 // 항목 찾기: '일시: …'처럼 콜론이 있으면 어디서든, 포스터처럼 콜론이 없으면 줄 맨 앞의 항목명만 본다.
 // 항목명만 있고 값이 다음 줄에 있으면(사진에서 읽은 포스터) 다음 줄을 값으로 쓴다.
 const LABEL=/^(?:일시|일정|장소|대상|품목|메뉴|혜택|참가\s*신청|신청\s*방법|신청\s*기간|문의)(?:\s|:|$)/;
@@ -121,7 +142,7 @@ function field(lines,names){
 }
 const dateParts=s=>[...s.matchAll(/(?:(20\d{2})\s*[.\/년-]\s*)?(\d{1,2})\s*[.\/월-]\s*(\d{1,2})(?:\s*일)?/g)];
 const validDate=(year,month,day)=>{const s=`${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;const d=new Date(s+'T12:00:00Z');if(d.getUTCFullYear()!==year||d.getUTCMonth()+1!==month||d.getUTCDate()!==day)throw Error('공지의 날짜를 확인해 주세요.');return s;};
-const BENEFIT=/제공|증정|경품|기프티콘|상품권|간식|점심|저녁|식사|도시락|커피|음료/;
+const BENEFIT=/제공|증정|경품|기프티콘|상품권|간식|식사|도시락|커피|음료|피자|치킨|버거|샌드위치|김밥|다과|뷔페/;
 export function parseNotice(text,year,{image=false}={}){
   text=text.replace(/일\s+시/g,'일시').replace(/일\s+정/g,'일정').replace(/장\s+소/g,'장소').replace(/대\s+상/g,'대상').replace(/품\s+목/g,'품목').replace(/혜\s+택/g,'혜택').replace(/메\s+뉴/g,'메뉴').replace(/[：]/g,':').replace(/[∼〜～]/g,'~');
   for(const word of ['학생증','학생회원','중복수령','소진','선착순','간식','중간고사','학기','과방','배부'])text=text.replace(new RegExp([...word].join('[ \\t]*'),'g'),word);
@@ -154,7 +175,7 @@ export function parseNotice(text,year,{image=false}={}){
   if(benefitIndex>=0){
     const first=lines[benefitIndex].split(':').slice(1).join(':').trim();if(first)benefits.push(first);
     for(let i=benefitIndex+1;i<lines.length&&benefits.length<6;i++){if(/안녕|감사|문의|담당|일시|장소|대상|신청|주의|학생증|우선|후순위|중복|\[/.test(lines[i]))break;benefits.push(lines[i]);}
-  }else benefits.push(...lines.slice(twoLine?2:1).filter(s=>BENEFIT.test(s)&&!LABEL.test(s)).slice(0,3));
+  }else benefits.push(...lines.slice(twoLine?2:1).filter(s=>BENEFIT.test(s)&&!LABEL.test(s)&&!/https?:/.test(s)).slice(0,3));
   const benefit=benefits.map(clean).filter(Boolean).join(' · ')||'';
   // 사진에서는 로고·장식이 '*'로 읽히는 일이 잦아 '*'로 시작하는 줄을 조건으로 보지 않는다.
   const conditions=lines.filter(s=>!image&&/^\*/.test(s)||/선착순|소진 시|추첨|학생증|우선|후순위|중복수령|중복 수령/.test(s)).map(clean);
@@ -164,7 +185,9 @@ export function parseNotice(text,year,{image=false}={}){
   // 마감 날짜 뒤에 시각이 있으면(예: ~11월 16일 18:00) 마감 시각으로 쓴다.
   const dlTime=dl&&deadlineLine.slice(dl.index+dl[0].length).match(/^\s*(?:\([일월화수목금토]\))?\s*(?:([오전후]{2})\s*)?(\d{1,2})\s*[:시]\s*(\d{2})?/);
   const deadlineTime=dlTime?(()=>{let h=Number(dlTime[2]);if(dlTime[1]==='오후'&&h<12)h+=12;return h<24&&Number(dlTime[3]||0)<60?String(h).padStart(2,'0')+':'+(dlTime[3]||'00'):null;})():null;
-  const registrationUrl=text.match(/(?:신청\s*링크|신청\s*주소)\s*:\s*(https:\/\/[^\s<>]+)/)?.[1]||'';
+  // 신청 링크: '신청 링크: https://…'가 있으면 그것, 없으면 글 속 링크 중 신청용(이름표·신청서 주소)인 첫 링크
+  const links=extractLinks(text);
+  const registrationUrl=text.match(/(?:신청\s*링크|신청\s*주소)\s*:\s*(https:\/\/[^\s<>]+)/)?.[1]||links.find(l=>l.kind==='registration'&&l.url.startsWith('https://'))?.url||'';
   const registration=/사전\s*신청\s*(?:불필요|없이)|신청\s*없이/.test(text)?'none':registrationUrl||/사전\s*신청\s*(?:필수|필요)|신청\s*필수|참가\s*신청|신청\s*방법/.test(text)?'required':'unknown';
   const uncertain=[];
   if(!date)uncertain.push('행사 날짜 미기재');if(!start)uncertain.push('시작시간 미기재');
@@ -172,7 +195,7 @@ export function parseNotice(text,year,{image=false}={}){
   const wd=schedule.match(/\(([일월화수목금토])\)/)?.[1];
   if(date&&wd&&'일월화수목금토'[new Date(date+'T12:00:00Z').getUTCDay()]!==wd)uncertain.push('원문 요일과 날짜가 일치하지 않음 · 날짜를 확인해 주세요');
   if(image)uncertain.push('사진에서 읽은 내용 · 숫자와 글자를 원문과 대조해 주세요');
-  return {id:'',title,date,endDate,start,end,location,eligibility,benefit,category:/기프티콘|상품권|경품/.test(benefit)?'gift':/간식|음식|도시락|덮밥|버거|콜라|식사|메뉴|점심|저녁|커피|음료/.test(title+' '+benefit)?'food':'experience',rule,registration,registrationUrl,deadline,deadlineTime,source:'manual',sourceUrl:'',publicVerified:false,evidence:benefit,verifiedAt:koreaDate(),uncertain};
+  return {id:'',title,date,endDate,start,end,location,eligibility,benefit,category:/기프티콘|상품권|경품/.test(benefit)?'gift':/간식|음식|도시락|덮밥|버거|콜라|식사|메뉴|점심|저녁|커피|음료|피자|치킨|샌드위치|김밥|다과/.test(title+' '+benefit)?'food':'experience',rule,registration,registrationUrl,links,deadline,deadlineTime,source:'manual',sourceUrl:'',publicVerified:false,evidence:benefit,verifiedAt:koreaDate(),uncertain};
 }
 export function noticeId(e){let h=2166136261;for(const c of `${e.title}|${e.date}|${e.start}`)h=Math.imul(h^c.charCodeAt(0),16777619);return 'manual-'+(h>>>0).toString(16);}
 
