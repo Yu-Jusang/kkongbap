@@ -1,4 +1,4 @@
-// 공강에 뭐먹지 — 화면과 무관한 계산(겹침 판정, 행사 상태, ICS, 공지 읽기).
+// 꽁밥 — 화면과 무관한 계산(겹침 판정, 행사 상태, ICS, 공지 읽기).
 // legacy/source/model.ts, notice-import.ts의 규칙을 그대로 옮기고 상태 구분·주간 묶음만 더했다.
 
 export const DAYS=['일','월','화','수','목','금','토'];
@@ -38,7 +38,7 @@ export function calendarText(e,stamp=new Date()){
   if(!e.date||!e.start||!e.end)throw Error('날짜와 시작·종료 시간이 모두 필요합니다.');
   const at=t=>e.date.replaceAll('-','')+'T'+t.replace(':','')+'00';
   const esc=s=>String(s||'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
-  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Gonggang//SNU Events//KO','CALSCALE:GREGORIAN','BEGIN:VEVENT','UID:'+e.id+'@gonggang','DTSTAMP:'+stamp.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''),'DTSTART;TZID=Asia/Seoul:'+at(e.start),'DTEND;TZID=Asia/Seoul:'+at(e.end),'SUMMARY:'+esc(e.title),'LOCATION:'+esc(e.location),'DESCRIPTION:'+esc(e.benefit+' / '+e.rule+'\n'+(e.sourceUrl||'')),'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Kkongbap//SNU Events//KO','CALSCALE:GREGORIAN','BEGIN:VEVENT','UID:'+e.id+'@kkongbap','DTSTAMP:'+stamp.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''),'DTSTART;TZID=Asia/Seoul:'+at(e.start),'DTEND;TZID=Asia/Seoul:'+at(e.end),'SUMMARY:'+esc(e.title),'LOCATION:'+esc(e.location),'DESCRIPTION:'+esc(e.benefit+' / '+e.rule+'\n'+(e.sourceUrl||'')),'END:VEVENT','END:VCALENDAR'].join('\r\n');
 }
 
 export function parseICS(text){

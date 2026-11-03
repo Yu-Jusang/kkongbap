@@ -1,4 +1,4 @@
-/* 공강에 뭐먹지 전용 구성요소. 색·간격은 style.css 토큰을 그대로 쓴다. */
+/* 꽁밥 전용 구성요소. 색·간격은 style.css 토큰을 그대로 쓴다. */
 
 .notice-banner { background: var(--accent-soft); color: var(--accent); font-size: 14px; font-weight: 600; border-bottom: 1px solid var(--rule); }
 .notice-banner .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 10px; padding-bottom: 10px; }
