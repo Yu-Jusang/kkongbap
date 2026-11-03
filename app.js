@@ -455,27 +455,56 @@ function setDrawMode(on){
   $('#week-grid').classList.toggle('draw',on);
 }
 
-// 학식: 운영시간(content.js CAFETERIAS)과 내 공강을 맞춘다. 메뉴는 생협 공식 페이지로 안내만 한다.
-let foodDay=null;
+// 학식: GitHub Actions가 하루 세 번 생협 식단을 읽어 둔 data/menu.json을 보여 준다(scripts/fetch_menu.py).
+// 그날 식단이 없으면 content.js CAFETERIAS의 운영시간만 보여 준다.
+let menu=null,foodDate=null;
+const MEAL_LABEL={breakfast:'아침',lunch:'점심',dinner:'저녁',allday:'종일'};
+const CHEAP=3000;
+const won=n=>n==null?'':n.toLocaleString('ko-KR')+'원';
+async function loadMenu(){
+  try{const r=await fetch('data/menu.json',{cache:'no-store'});if(r.ok)menu=await r.json();}catch{}
+  renderFood();
+}
+function menuDays(){const today=koreaDate();return Object.keys(menu?.days||{}).filter(d=>d>=today&&menu.days[d].length);}
+function foodCards(date){
+  const list=menu?.days?.[date];
+  if(list?.length)return list.map(r=>({name:r.name,meals:Object.entries(r.meals).map(([k,m])=>({label:MEAL_LABEL[k]||k,...m}))}));
+  return CAFETERIAS.map(c=>({name:c.name,fallback:true,meals:c.meals.map(([label,a,b,note])=>({label,hours:[[a,b]],crowd:[],items:[],notes:note?[note]:[]}))}));
+}
 function renderFood(){
-  const today=weekday(koreaDate());
+  const today=koreaDate(),days=menuDays();
+  if(!foodDate||foodDate<today)foodDate=days[0]||today;
+  const date=days.includes(foodDate)?foodDate:today,day=weekday(date),isToday=date===today;
   const [hour,minute]=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Seoul',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date()).split(':').map(Number),nowMin=hour*60+minute;
-  const day=foodDay??(today===0||today===6?1:today),isToday=day===today,weekend=today===0||today===6;
-  const openNow=c=>isToday&&(!weekend||c.weekend)&&c.meals.some(([,a,b])=>b&&nowMin>=minutes(a)&&nowMin<minutes(b));
-  $('#food-days').innerHTML=[1,2,3,4,5].map(d=>`<button type="button" data-food-day="${d}" class="${d===day?'selected':''}" aria-pressed="${d===day}">${DAYS[d]}${d===today?' · 오늘':''}</button>`).join('');
+  const query=($('#menu-search')?.value||'').trim().toLowerCase(),cheapOnly=$('#cheap-only')?.checked,fitOnly=$('#fit-only')?.checked;
+  const chips=days.length?days:[today];
+  $('#food-days').innerHTML=chips.map(d=>`<button type="button" data-food-date="${d}" class="${d===date?'selected':''}" aria-pressed="${d===date}">${d===today?'오늘 ':''}${Number(d.slice(5,7))}/${Number(d.slice(8))}(${DAYS[weekday(d)]})</button>`).join('');
   const gaps=slots.length?freeGaps(slots,day,'08:00','20:00'):[];
   $('#food-gaps').innerHTML=!slots.length?'시간표를 넣으면 공강에 갈 수 있는 식당을 골라 줍니다. <a href="#timetable">내 시간표</a>':gaps.length?`${DAYS[day]}요일 공강: ${gaps.map(g=>`<span class="mono">${g.start}–${g.end}</span>`).join(' · ')}`:`${DAYS[day]}요일에는 08~20시 사이 공강이 없습니다.`;
-  const cheap=CAFETERIAS.flatMap(c=>c.meals.filter(m=>m[0].includes('천원')).map(m=>({c,m})));
-  $('#cheap-box').innerHTML=cheap.map(({c,m})=>`<strong>${esc(m[0])}</strong> · ${esc(c.name)} · ${esc(m[1])}부터 ${esc(m[3]||'')}`).join('<br>');
+  const cards=foodCards(date).map(c=>{
+    const windows=c.meals.flatMap(m=>(m.hours||[]).filter(([,b])=>b).map(([a,b])=>({label:m.label,a,b})));
+    const fits=slots.length?windows.flatMap(w=>windowsInGaps(gaps,w.a,w.b,20).map(x=>`${w.label} ${x.start}–${x.end}`)):[];
+    const open=isToday&&windows.some(w=>nowMin>=minutes(w.a)&&nowMin<minutes(w.b));
+    const hit=t=>!query||t.toLowerCase().includes(query);
+    const meals=c.meals.map(m=>({...m,items:m.items.filter(i=>(!cheapOnly||i.price!=null&&i.price<=CHEAP)&&(hit(i.name)||hit(c.name)))})).filter(m=>m.items.length||(!query&&!cheapOnly));
+    return {...c,meals,fits:[...new Set(fits)],open};
+  }).filter(c=>c.meals.length&&(!fitOnly||c.fits.length)).sort((x,y)=>(y.open-x.open)||(y.fits.length>0)-(x.fits.length>0));
+  // 천원의 아침밥(식단에 '천원' 머리말이 있는 칸)을 맨 위에 따로 보여 준다.
+  const cheap=foodCards(date).flatMap(c=>c.meals.filter(m=>m.items.some(i=>/천원/.test(i.name))).map(m=>({c,m})));
+  $('#cheap-box').innerHTML=cheap.map(({c,m})=>`<strong>천원의 아침밥</strong> · ${esc(c.name)} · ${m.items.filter(i=>i.price!=null&&i.price<=1000).map(i=>esc(i.name)).join(', ')}${m.notes.length?`<br><span class="muted">${m.notes.map(esc).join(' · ')}</span>`:''}`).join('<br>');
   $('#cheap-box').hidden=!cheap.length;
-  const cards=CAFETERIAS.map(c=>{
-    const fits=slots.length?c.meals.filter(m=>m[2]).flatMap(([label,a,b])=>windowsInGaps(gaps,a,b,20).map(w=>`${label} ${w.start}–${w.end}`)):[];
-    return {c,fits,open:openNow(c)};
-  }).sort((x,y)=>(y.open-x.open)||(y.fits.length>0)-(x.fits.length>0));
-  $('#food-cards').innerHTML=cards.map(({c,fits,open})=>`<article class="food-card${open?' open':''}"><div class="meta-row"><h3>${esc(c.name)}</h3>${open?'<span class="status">지금 운영</span>':''}</div><ul>${c.meals.map(([label,a,b,note])=>`<li><b>${esc(label)}</b> <span class="mono">${esc(a)}${b?'–'+esc(b):'~'}</span>${note?` <span class="muted">${esc(note)}</span>`:''}</li>`).join('')}</ul>${slots.length?`<p class="food-fit${fits.length?' ok':''}">${fits.length?'공강에 가능: '+fits.map(esc).join(' · '):'이 날 공강과 운영시간이 20분 이상 겹치지 않음'}</p>`:''}</article>`).join('');
-  $('#food-now').textContent=weekend?'주말 운영은 생협 식단에서 확인':`지금 운영 ${cards.filter(x=>x.open).length}곳`;
-  $('#food-foot').textContent=`운영시간은 ${MENU_CHECKED} 생협 식단 페이지에 적힌 내용입니다. 요일·학기·방학에 따라 바뀔 수 있습니다. 학생회관식당·제3식당·기숙사식당·302동식당·동원관식당·자하연식당은 비구성원 1,000원 추가(생협 안내).`;
-  $('#menu-link').href=MENU_URL;
+  const mealHTML=m=>{
+    const hours=(m.hours||[]).map(([a,b])=>`${a}${b?'–'+b:'~'}`).join(', '),crowd=(m.crowd||[]).map(([a,b])=>`혼잡 ${a}–${b}`).join(' · ');
+    const notes=(m.notes||[]).filter(n=>!/운영시간|혼잡시간|^\d{1,2}\s*:\s*\d{2}\s*~/.test(n));
+    const li=i=>`<li class="${i.price!=null&&i.price<=CHEAP?'cheap':''}"><span>${esc(i.name)}</span>${i.price!=null?`<span class="mono">${won(i.price)}</span>`:''}</li>`;
+    const items=m.items.length>8?`${m.items.slice(0,6).map(li).join('')}<li class="more"><details><summary>+ ${m.items.length-6}개 더</summary><ul>${m.items.slice(6).map(li).join('')}</ul></details></li>`:m.items.map(li).join('');
+    return `<div class="meal"><p class="meal-head"><b>${esc(m.label)}</b> <span class="mono">${esc(hours)}</span>${crowd?` <span class="muted">${esc(crowd)}</span>`:''}</p>${m.items.length?`<ul class="menu-items">${items}</ul>`:''}${notes.length?`<p class="meal-note">${notes.map(esc).join(' · ')}</p>`:''}</div>`;
+  };
+  $('#food-cards').innerHTML=cards.length?cards.map(c=>`<article class="food-card${c.open?' open':''}"><div class="meta-row"><h3>${esc(c.name)}</h3>${c.open?'<span class="status">지금 운영</span>':''}</div>${c.meals.map(mealHTML).join('')}${slots.length?`<p class="food-fit${c.fits.length?' ok':''}">${c.fits.length?'공강에 가능: '+c.fits.map(esc).join(' · '):'이 날 공강과 운영시간이 20분 이상 겹치지 않음'}</p>`:''}</article>`).join(''):'<p class="tl-empty">조건에 맞는 메뉴가 없습니다.</p>';
+  const hasMenu=!!menu?.days?.[date]?.length;
+  $('#food-now').textContent=isToday?`지금 운영 ${cards.filter(c=>c.open).length}곳`:`${Number(date.slice(5,7))}/${Number(date.slice(8))} 식단`;
+  $('#food-foot').textContent=hasMenu?`메뉴와 운영시간은 생협 식단 페이지에서 ${menu.fetchedAt.replace('T',' ').slice(0,16)}에 가져왔습니다. 품절·변경이 있을 수 있으니 공식 식단에서 다시 확인하세요. 학생회관식당·제3식당·기숙사식당·302동식당·동원관식당·자하연식당은 비구성원 1,000원 추가(생협 안내).`:`이 날 식단을 아직 가져오지 못해 ${MENU_CHECKED} 생협 페이지에 적힌 운영시간만 보여 줍니다. 메뉴는 공식 식단에서 확인하세요.`;
+  $('#menu-link').href=`${MENU_URL}?date=${date}`;
 }
 
 function renderMine(){
@@ -489,7 +518,7 @@ function renderSources(){
 }
 
 // 공지 붙여넣기
-const DRAFT_FIELDS=[['title','행사명','text'],['date','행사 날짜','date'],['endDate','끝 날짜 (기간 행사)','date'],['deadline','신청 마감','date'],['start','시작','time'],['end','종료','time'],['location','장소','text'],['benefit','혜택','text'],['category','혜택 종류','category'],['eligibility','대상','text'],['rule','받는 조건','textarea'],['registrationUrl','신청 링크 (https)','url'],['sourceUrl','원문 링크 (https · 제보할 때 필요)','url']];
+const DRAFT_FIELDS=[['title','행사명','text'],['date','행사 날짜','date'],['endDate','끝 날짜 (기간 행사)','date'],['deadline','신청 마감','date'],['deadlineTime','마감 시각','time'],['start','시작','time'],['end','종료','time'],['location','장소','text'],['benefit','혜택','text'],['category','혜택 종류','category'],['eligibility','대상','text'],['rule','받는 조건','textarea'],['registrationUrl','신청 링크 (https)','url'],['sourceUrl','원문 링크 (https · 제보할 때 필요)','url']];
 // 제보: GitHub 이슈 양식(.github/ISSUE_TEMPLATE/tip.yml)의 칸을 초안 값으로 채워 연다. 사진·원문 전체는 보내지 않는다.
 const TIP_BASE='https://github.com/Yu-Jusang/kkongbap/issues/new';
 function tipUrl(d){
@@ -510,12 +539,18 @@ function showDraft(next){
     const value=draft[key]??'';
     const input=type==='textarea'?`<textarea name="${key}" rows="3">${esc(value)}</textarea>`:type==='category'?`<select name="${key}">${Object.entries(CATEGORY).map(([v,t])=>`<option value="${v}"${v===value?' selected':''}>${t}</option>`).join('')}</select>`:`<input name="${key}" type="${type}" value="${esc(value)}">`;
     return `<label class="field${['date','time'].includes(type)?'':' full'}">${label}${input}</label>`;
-  }).join('')+(draft.uncertain.length?`<p class="detail-note"><b>확인 필요</b><br>${draft.uncertain.map(esc).join('<br>')}</p>`:'');
+  }).join('')+(draft.qr?.length?`<div class="qr-list full"><b>사진 속 QR코드 ${draft.qr.length}개</b><ul>${draft.qr.map((c,i)=>`<li><span class="tag ${c.kind==='registration'?'tag-server':'tag-none'}">${c.kind==='registration'?'신청':c.kind==='info'?'안내':'글자'}</span> <span class="qr-label">${esc(c.label||'이름표 없음')}</span><span class="qr-url">${safeUrl(c.text)?`<a href="${esc(safeUrl(c.text))}" target="_blank" rel="noopener noreferrer">${esc(c.text)}</a>`:esc(c.text)}</span>${safeUrl(c.text)?`<span class="qr-use"><button type="button" class="text-button" data-qr-use="registrationUrl" data-qr-i="${i}">신청 링크로</button><button type="button" class="text-button" data-qr-use="sourceUrl" data-qr-i="${i}">원문 링크로</button></span>`:''}</li>`).join('')}</ul></div>`:'')+(draft.uncertain.length?`<p class="detail-note"><b>확인 필요</b><br>${draft.uncertain.map(esc).join('<br>')}</p>`:'');
   updateTipLink();
 }
-let textFromImage=false;// 사진에서 읽은 글이면 포스터 형식(두 줄 제목 등)을 함께 고려한다.
+let textFromImage=false,imageQR=[];// 사진에서 읽은 글이면 포스터 형식(두 줄 제목 등)과 사진 속 QR코드를 함께 쓴다.
+// 사진 속 QR 중 신청용(이름표에 '신청' 등, 또는 신청서 주소)이 있으면 신청 링크 칸을 채운다.
+function withQR(d){
+  const out={...d,qr:imageQR},reg=imageQR.find(c=>c.kind==='registration'&&safeUrl(c.text));
+  if(reg&&!out.registrationUrl){out.registrationUrl=safeUrl(reg.text);out.registration='required';out.uncertain=[...out.uncertain,`신청 링크는 사진 속 QR코드${reg.label?`(‘${reg.label}’)`:''}에서 읽었습니다 · 주소를 확인해 주세요`];}
+  return out;
+}
 function readNotice(){
-  try{showDraft(parseNotice($('#notice-text').value,Number($('#notice-year').value)||Number(koreaDate().slice(0,4)),{image:textFromImage}));$('#notice-error').textContent='';}
+  try{const d=parseNotice($('#notice-text').value,Number($('#notice-year').value)||Number(koreaDate().slice(0,4)),{image:textFromImage});showDraft(textFromImage&&imageQR.length?withQR(d):d);$('#notice-error').textContent='';}
   catch(err){$('#notice-error').textContent=err.message;showDraft(null);}
 }
 function saveDraft(form){
@@ -531,7 +566,7 @@ function saveDraft(form){
   e.sourceUrl=e.sourceUrl||'';
   if(e.sourceUrl&&!safeUrl(e.sourceUrl))return $('#notice-error').textContent='원문 링크는 https://로 시작해야 합니다.';
   if(events.some(x=>x.title.replace(/\s/g,'')===e.title.replace(/\s/g,'')&&x.date===e.date&&x.start===e.start))return toast('이미 행사 목록에 있는 일정입니다.');
-  e.id=noticeId(e);e.evidence=e.benefit;e.uncertain=e.end?[]:[/소진/.test(e.rule)?'수량 소진 시 종료':'종료시간 미기재'];
+  delete e.qr;e.id=noticeId(e);e.evidence=e.benefit;e.uncertain=e.end?[]:[/소진/.test(e.rule)?'수량 소진 시 종료':'종료시간 미기재'];
   personal=[...personal.filter(x=>x.id!==e.id),e];
   if(!persist())return;
   showDraft(null);$('#notice-text').value='';clearImage();
@@ -544,7 +579,7 @@ function saveDraft(form){
 // 어느 쪽이든 사진은 브라우저 밖으로 나가지 않는다.
 let ocrJob=0,ocrAbort=null,paddle=null,imageUrl='';
 function ocrStatus(text,busy=false){$('#ocr-status').hidden=!text;$('#ocr-status span').textContent=text;$('#ocr-cancel').hidden=!busy;}
-function clearImage(){if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl='';$('#image-preview').hidden=true;ocrStatus('');$('#ocr-hint').textContent='';}
+function clearImage(){if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl='';imageQR=[];$('#image-preview').hidden=true;ocrStatus('');$('#ocr-hint').textContent='';}
 async function prepareImage(file){
   if(!['image/png','image/jpeg','image/webp','image/bmp'].includes(file.type))throw Error('PNG·JPG·WebP·BMP 사진을 사용해 주세요. HEIC·PDF는 PNG나 JPG로 바꿔 주세요.');
   if(file.size>12*1024*1024)throw Error('사진은 12MB 이하로 올려 주세요.');
@@ -584,6 +619,11 @@ async function readImage(file){
       paddle=null;console.warn('PaddleOCR 실패, tesseract로 전환',err);
       result=await readWithTesseract(blob,job);
     }
+    if(job!==ocrJob)return;
+    // 사진 속 QR코드: 위에 붙은 글자(이름표)로 신청 링크인지 가린다. 실패해도 글자 결과는 그대로 쓴다.
+    ocrStatus('QR코드 찾는 중',true);
+    try{const q=await import('./qr.js?v=1');imageQR=q.labelQRCodes(await q.findQRCodes(blob),result.items||[]).map(c=>({...c,kind:q.qrKind(c)}));}
+    catch(err){console.warn('QR 찾기 실패',err);imageQR=[];}
     if(job!==ocrJob)return;
     const text=result.text.trim();
     if(!text)throw Error('사진에서 글자를 찾지 못했습니다. 공지 글자 부분을 선명하게 잘라서 다시 시도해 주세요.');
@@ -635,7 +675,8 @@ function initialize(){
     if(button.dataset.week){weekOffset=Number(button.dataset.week)===0?0:weekOffset+Number(button.dataset.week);renderWeek();}
     if(button.dataset.kind){cardKind=button.dataset.kind;renderWeek();}
     if(button.dataset.bundle){bundleId=button.dataset.bundle;renderWeek();}
-    if(button.dataset.foodDay){foodDay=Number(button.dataset.foodDay);renderFood();}
+    if(button.dataset.foodDate){foodDate=button.dataset.foodDate;renderFood();}
+    if(button.dataset.qrUse&&draft?.qr){const c=draft.qr[Number(button.dataset.qrI)],input=$('#draft-form').elements[button.dataset.qrUse];if(c&&input){input.value=safeUrl(c.text);updateTipLink();toast(button.dataset.qrUse==='sourceUrl'?'원문 링크에 넣었습니다.':'신청 링크에 넣었습니다.');}}
     if(button.dataset.removeSlot){slots=slots.filter(s=>s.id!==button.dataset.removeSlot);persist();render();}
     if(button.dataset.slot&&performance.now()>ttSuppressUntil){const s=slots.find(x=>x.id===button.dataset.slot);if(s)openSlotEditor({...s});}
   });
@@ -673,6 +714,8 @@ function initialize(){
   $('#clear-data').onclick=()=>{if(!confirm('이 브라우저에 저장된 시간표와 직접 추가한 행사를 지울까요?'))return;slots=[];personal=[];try{localStorage.removeItem(SLOT_KEY);localStorage.removeItem(PERSONAL_KEY);}catch{}render();toast('이 사이트의 개인 기록을 지웠습니다.');};
   $('#bundle-filter').insertAdjacentHTML('beforeend',BUNDLES.map(b=>`<option value="${b.id}">${esc(b.short)}</option>`).join(''));
   $('#draft-form').addEventListener('input',updateTipLink);
+  $('#menu-search').addEventListener('input',renderFood);
+  for(const id of ['cheap-only','fit-only'])$(`#${id}`).addEventListener('change',renderFood);
   const grid=$('#week-grid');
   grid.addEventListener('pointerdown',ttStart);
   grid.addEventListener('pointermove',ttMove);
@@ -686,6 +729,6 @@ function initialize(){
   $('#slot-form').addEventListener('input',slotWarning);
   $('#slot-delete').onclick=()=>{const id=slotEditing?.id;if(!id)return;const s=slots.find(x=>x.id===id);slots=slots.filter(x=>x.id!==id);persist();$('#slot-dialog').close();render();toast(`${s?.title||'수업'}을 지웠습니다.`);};
   watchGuideToc();
-  render();followHash();load();
+  render();followHash();load();loadMenu();
 }
 initialize();

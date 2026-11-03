@@ -1,0 +1,41 @@
+name: 학식 메뉴 가져오기
+# 생협 식단 페이지를 하루 세 번(06:00, 10:30, 16:00 KST) 읽어 data/menu.json을 갱신한다.
+# 식단이 바뀌었을 때만 커밋하고, GitHub Pages 빌드를 요청한다.
+on:
+  schedule:
+    - cron: '0 21 * * *'
+    - cron: '30 1 * * *'
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: menu
+  cancel-in-progress: false
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 식단 읽기
+        run: python scripts/fetch_menu.py
+      - name: 바뀐 경우에만 커밋
+        id: commit
+        run: |
+          if git diff --quiet -- data/menu.json; then echo "변경 없음"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/menu.json
+          git commit -m "학식 메뉴 갱신"
+          git push
+          echo "pushed=1" >> "$GITHUB_OUTPUT"
+      - name: Pages 빌드 요청
+        if: steps.commit.outputs.pushed == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"

@@ -2,6 +2,20 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {conflict,parseICS,calendarText,closed,expired,phase,safeUrl,weekStart,weekGroups,parseNotice,noticeExample,sanitizeSlots,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf} from './core.js';
 import {BUNDLES} from './content.js';
+import {labelQRCodes,qrKind} from './qr.js';
+
+// 사진 속 QR코드: 위에 붙은 글자로 이름표를 달고 신청 링크인지 가린다
+test('QR 이름표와 종류',()=>{
+  const codes=[{text:'https://forms.gle/abc',box:{x0:30,y0:636,x1:102,y1:708}},{text:'https://sites.google.com/view/x',box:{x0:118,y0:636,x1:190,y1:708}}];
+  const items=[{text:'사전신청',x0:33,y0:612,x1:97,y1:630},{text:'홍보페이지',x0:118,y0:612,x1:182,y1:630},{text:'주관: 서울대학교 사범대학',x0:20,y0:550,x1:200,y1:568}];
+  const l=labelQRCodes(codes,items);
+  assert.deepEqual(l.map(c=>c.label),['사전신청','홍보페이지']);
+  assert.deepEqual(l.map(qrKind),['registration','info']);
+  assert.equal(qrKind({text:'https://forms.gle/abc',label:''}),'registration');
+  assert.equal(qrKind({text:'https://open.kakao.com/o/x',label:'신청 문의'}),'registration');
+  assert.equal(qrKind({text:'WIFI:T:WPA;S:x;;',label:''}),'text');
+});
+test('사전신청시간의 마감 날짜와 시각',()=>{const e=parseNotice('설명회\n일시: 2026년 11월 23일(월) 12시~13시\n(사전신청시간 : ~11월 16일 18:00)',2026,{image:true});assert.equal(e.deadline,'2026-11-16');assert.equal(e.deadlineTime,'18:00');assert.equal(e.start,'12:00');assert.equal(e.end,'13:00');});
 
 // 시간표 편집·공강·학식
 test('15분 단위 맞춤과 시각 표기',()=>{assert.equal(hhmm(snapMinutes(9*60+37)),'09:30');assert.equal(hhmm(snapMinutes(9*60+38)),'09:45');});

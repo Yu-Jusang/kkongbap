@@ -159,8 +159,11 @@ export function parseNotice(text,year,{image=false}={}){
   // 사진에서는 로고·장식이 '*'로 읽히는 일이 잦아 '*'로 시작하는 줄을 조건으로 보지 않는다.
   const conditions=lines.filter(s=>!image&&/^\*/.test(s)||/선착순|소진 시|추첨|학생증|우선|후순위|중복수령|중복 수령/.test(s)).map(clean);
   const rule=conditions.join(' · ').slice(0,1200)||'지급 조건 미기재';
-  const deadlineLine=field(lines,'신청 마감|마감일|마감|신청 기간|신청기간|참가 신청|참가신청|접수 기간|접수기간|모집 기간');const dl=dateParts(deadlineLine).at(-1);
+  const deadlineLine=field(lines,'사전\\s*신청\\s*(?:시간|기간|마감)|신청 마감|마감일|마감|신청 기간|신청기간|참가 신청|참가신청|접수 기간|접수기간|모집 기간');const dl=dateParts(deadlineLine).at(-1);
   const deadline=dl?validDate(Number(dl[1]||dateParts(deadlineLine)[0]?.[1]||explicitYear),Number(dl[2]),Number(dl[3])):null;
+  // 마감 날짜 뒤에 시각이 있으면(예: ~11월 16일 18:00) 마감 시각으로 쓴다.
+  const dlTime=dl&&deadlineLine.slice(dl.index+dl[0].length).match(/^\s*(?:\([일월화수목금토]\))?\s*(?:([오전후]{2})\s*)?(\d{1,2})\s*[:시]\s*(\d{2})?/);
+  const deadlineTime=dlTime?(()=>{let h=Number(dlTime[2]);if(dlTime[1]==='오후'&&h<12)h+=12;return h<24&&Number(dlTime[3]||0)<60?String(h).padStart(2,'0')+':'+(dlTime[3]||'00'):null;})():null;
   const registrationUrl=text.match(/(?:신청\s*링크|신청\s*주소)\s*:\s*(https:\/\/[^\s<>]+)/)?.[1]||'';
   const registration=/사전\s*신청\s*(?:불필요|없이)|신청\s*없이/.test(text)?'none':registrationUrl||/사전\s*신청\s*(?:필수|필요)|신청\s*필수|참가\s*신청|신청\s*방법/.test(text)?'required':'unknown';
   const uncertain=[];
@@ -169,7 +172,7 @@ export function parseNotice(text,year,{image=false}={}){
   const wd=schedule.match(/\(([일월화수목금토])\)/)?.[1];
   if(date&&wd&&'일월화수목금토'[new Date(date+'T12:00:00Z').getUTCDay()]!==wd)uncertain.push('원문 요일과 날짜가 일치하지 않음 · 날짜를 확인해 주세요');
   if(image)uncertain.push('사진에서 읽은 내용 · 숫자와 글자를 원문과 대조해 주세요');
-  return {id:'',title,date,endDate,start,end,location,eligibility,benefit,category:/기프티콘|상품권|경품/.test(benefit)?'gift':/간식|음식|도시락|덮밥|버거|콜라|식사|메뉴|점심|저녁|커피|음료/.test(title+' '+benefit)?'food':'experience',rule,registration,registrationUrl,deadline,source:'manual',sourceUrl:'',publicVerified:false,evidence:benefit,verifiedAt:koreaDate(),uncertain};
+  return {id:'',title,date,endDate,start,end,location,eligibility,benefit,category:/기프티콘|상품권|경품/.test(benefit)?'gift':/간식|음식|도시락|덮밥|버거|콜라|식사|메뉴|점심|저녁|커피|음료/.test(title+' '+benefit)?'food':'experience',rule,registration,registrationUrl,deadline,deadlineTime,source:'manual',sourceUrl:'',publicVerified:false,evidence:benefit,verifiedAt:koreaDate(),uncertain};
 }
 export function noticeId(e){let h=2166136261;for(const c of `${e.title}|${e.date}|${e.start}`)h=Math.imul(h^c.charCodeAt(0),16777619);return 'manual-'+(h>>>0).toString(16);}
 

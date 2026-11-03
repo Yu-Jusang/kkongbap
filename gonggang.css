@@ -152,8 +152,33 @@
 .food-card li { margin: 0; }
 .food-card li b { display: inline-block; min-width: 3.4em; font-weight: 650; }
 .food-card .mono { font-size: 13px; }
+.food-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin: 14px 0 0; }
+.food-filters .search { flex: 1 1 280px; height: 42px; }
+.food-filters .checkbox { margin: 0; }
+.meal { padding: 8px 0; border-top: 1px solid var(--rule); }
+.meal:first-of-type { border-top: 0; padding-top: 2px; }
+.meal-head { margin: 0 0 4px; font-size: 13.5px; color: var(--text-2); }
+.meal-head b { color: var(--text); margin-right: 4px; }
+.menu-items { list-style: none; margin: 0; padding: 0; font-size: 14px; line-height: 1.55; }
+.menu-items li { display: flex; justify-content: space-between; gap: 10px; }
+.menu-items li .mono { flex: none; color: var(--text-3); font-size: 12.5px; }
+.menu-items li.cheap .mono { color: var(--accent); font-weight: 600; }
+.menu-items li.more { display: block; }
+.menu-items details summary { cursor: pointer; color: var(--text-3); font-size: 13px; }
+.menu-items details ul { list-style: none; margin: 4px 0 0; padding: 0; }
+.menu-items details li { display: flex; justify-content: space-between; gap: 10px; }
+.meal-note { margin: 4px 0 0; font-size: 12.5px; color: var(--text-3); line-height: 1.5; }
 .food-fit { margin: 8px 0 0; padding-top: 8px; border-top: 1px dashed var(--rule-strong); font-size: 13.5px; color: var(--text-3); }
 .food-fit.ok { color: var(--accent); font-weight: 600; }
+
+/* 사진 속 QR코드 */
+.qr-list { margin: 0 0 14px; padding: 10px 14px; border: 1px solid var(--rule); border-radius: 8px; background: var(--code-bg); font-size: 13.5px; }
+.qr-list ul { list-style: none; margin: 6px 0 0; padding: 0; }
+.qr-list li { display: grid; grid-template-columns: auto auto minmax(0, 1fr); align-items: baseline; gap: 4px 8px; padding: 6px 0; border-top: 1px solid var(--rule); }
+.qr-list li:first-child { border-top: 0; }
+.qr-label { font-weight: 600; }
+.qr-url { overflow-wrap: anywhere; color: var(--text-2); }
+.qr-use { grid-column: 1 / -1; display: flex; gap: 14px; }
 
 /* 제보 */
 .draft-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
