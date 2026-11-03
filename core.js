@@ -129,7 +129,7 @@ export function parseNotice(text,year,{image=false}={}){
   if(benefitIndex>=0){
     const first=lines[benefitIndex].split(':').slice(1).join(':').trim();if(first)benefits.push(first);
     for(let i=benefitIndex+1;i<lines.length&&benefits.length<6;i++){if(/안녕|감사|문의|담당|일시|장소|대상|신청|주의|학생증|우선|후순위|중복|\[/.test(lines[i]))break;benefits.push(lines[i]);}
-  }else benefits.push(...lines.slice(1).filter(s=>BENEFIT.test(s)&&!LABEL.test(s)).slice(0,3));
+  }else benefits.push(...lines.slice(twoLine?2:1).filter(s=>BENEFIT.test(s)&&!LABEL.test(s)).slice(0,3));
   const benefit=benefits.map(clean).filter(Boolean).join(' · ')||'';
   // 사진에서는 로고·장식이 '*'로 읽히는 일이 잦아 '*'로 시작하는 줄을 조건으로 보지 않는다.
   const conditions=lines.filter(s=>!image&&/^\*/.test(s)||/선착순|소진 시|추첨|학생증|우선|후순위|중복수령|중복 수령/.test(s)).map(clean);

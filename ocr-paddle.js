@@ -34,13 +34,14 @@ export async function createPaddleReader({modelBase,onProgress=()=>{}}){
   if(!window.ort){onProgress('인식 엔진 준비 중');await loadScript(`${ORT_BASE}ort.wasm.min.js`);}
   const ort=window.ort;
   ort.env.wasm.wasmPaths=ORT_BASE;
+  ort.env.logLevel='error';// 모델 변환에서 남은 미사용 값 경고를 콘솔에 쌓지 않는다
   ort.env.wasm.numThreads=self.crossOriginIsolated?Math.min(4,navigator.hardwareConcurrency||1):1;
   const files={det:'det.onnx',rec:'rec.onnx',dict:'dict.txt'},sizes={det:4826518,rec:13418787,dict:47451};
   const total=Object.values(sizes).reduce((a,b)=>a+b,0);let loaded=0;
   const tick=n=>{loaded+=n;onProgress(`한국어 인식 모델 준비 중 · ${Math.min(99,Math.round(loaded/total*100))}%`);};
   const [detBytes,recBytes,dictBytes]=await Promise.all(['det','rec','dict'].map(k=>fetchBytes(modelBase+files[k],tick)));
   onProgress('한국어 인식 모델 여는 중');
-  const opts={executionProviders:['wasm'],graphOptimizationLevel:'all'};
+  const opts={executionProviders:['wasm'],graphOptimizationLevel:'all',logSeverityLevel:3};
   const det=await ort.InferenceSession.create(detBytes,opts),rec=await ort.InferenceSession.create(recBytes,opts);
   // CTC 사전: 0번은 공백 토큰(blank), 마지막은 띄어쓰기
   const chars=['',...new TextDecoder().decode(dictBytes).split(/\r?\n/).filter((c,i,a)=>c!==''||i<a.length-1),' '];
@@ -139,6 +140,8 @@ export async function createPaddleReader({modelBase,onProgress=()=>{}}){
           if(signal?.aborted)throw new DOMException('취소','AbortError');
           onProgress(`사진 글자 읽는 중 · ${Math.round((i+1)/boxes.length*100)}%`);
           const r=await read(source,box);
+          // 혼자 떨어진 모음 자모(ㅏ·ㅓ…)는 획을 잘못 읽은 것이라 지운다. ㅠㅠ처럼 이어진 자모는 둔다.
+          r.text=r.text.replace(/(^|[^ㄱ-ㆎ])[ㅏ-ㅣ](?![ㄱ-ㆎ])/g,'$1').trim();
           if(r.text&&r.score>=0.5)items.push({...box,...r});
         }
         const confidence=items.length?items.reduce((s,x)=>s+x.score,0)/items.length*100:0;

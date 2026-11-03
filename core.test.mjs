@@ -51,3 +51,4 @@ test('포스터: 오후 3시, 표시 없는 혜택 문장',()=>{const e=parseNot
 test('붙여넣은 글은 첫 줄만 제목',()=>assert.equal(parseNotice(noticeExample,2026).title,'2026-2학기 통계학과 중간고사 간식행사'));
 test('물결표 없는 두 날짜는 거절',()=>assert.throws(()=>parseNotice('행사\n일시: 11/4, 11/6 12:00',2026)));
 test('주간 묶음: 오늘 이전에 지난 신청 마감은 빼기',()=>{const w=weekGroups([{...event,id:'a',date:'2026-11-06',deadline:'2026-11-02'},{...event,id:'b',date:null,deadline:'2026-11-05'}],'2026-11-02','2026-11-03');assert.deepEqual(w.deadlines.map(e=>e.id),['b']);});
+test('포스터: 두 줄 제목의 둘째 줄은 혜택이 아님',()=>{const e=parseNotice('통계학과 기말고사\n간식행사\n일정 2026.12.9.(수)~12.10.(목)17:30\n장소 25동 223호 과방\n※김밥 +컵라면 제공(하루 60명 선착순)',2026,{image:true});assert.equal(e.title,'통계학과 기말고사 간식행사');assert.equal(e.benefit,'김밥 +컵라면 제공(하루 60명 선착순)');assert.equal(e.endDate,'2026-12-10');assert.equal(e.start,'17:30');});

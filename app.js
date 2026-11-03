@@ -1,4 +1,4 @@
-import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,demoEvents} from './core.js?v=2';
+import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,demoEvents} from './core.js?v=3';
 import {SOURCES,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION} from './content.js?v=2';
 
 const $=selector=>document.querySelector(selector);
@@ -335,7 +335,7 @@ async function readImage(file){
     ocrStatus('한국어 인식 모델 준비 중 · 처음 한 번 약 18MB를 내려받아요.',true);
     let result;
     try{
-      paddle??=import('./ocr-paddle.js?v=2').then(m=>m.createPaddleReader({modelBase:new URL('./ocr/paddle/',document.baseURI).href,onProgress:m=>{if(!abort.signal.aborted)ocrStatus(m,true);}}));
+      paddle??=import('./ocr-paddle.js?v=3').then(m=>m.createPaddleReader({modelBase:new URL('./ocr/paddle/',document.baseURI).href,onProgress:m=>{if(!abort.signal.aborted)ocrStatus(m,true);}}));
       const reader=await paddle;if(job!==ocrJob)return;
       result=await reader.recognize(blob,{signal:abort.signal});
     }catch(err){
