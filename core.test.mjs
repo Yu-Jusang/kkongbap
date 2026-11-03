@@ -1,6 +1,14 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {conflict,parseICS,calendarText,closed,expired,phase,safeUrl,weekStart,weekGroups,parseNotice,noticeExample,sanitizeSlots} from './core.js';
+import {conflict,parseICS,calendarText,closed,expired,phase,safeUrl,weekStart,weekGroups,parseNotice,noticeExample,sanitizeSlots,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf} from './core.js';
+import {BUNDLES} from './content.js';
+
+// 시간표 편집·공강·학식
+test('15분 단위 맞춤과 시각 표기',()=>{assert.equal(hhmm(snapMinutes(9*60+37)),'09:30');assert.equal(hhmm(snapMinutes(9*60+38)),'09:45');});
+test('같은 요일 겹치는 수업만',()=>{const s=[{id:'a',title:'A',day:1,start:'09:30',end:'10:45'},{id:'b',title:'B',day:2,start:'09:30',end:'10:45'}];assert.deepEqual(slotOverlaps(s,{day:1,start:'10:30',end:'11:00'}).map(x=>x.id),['a']);assert.equal(slotOverlaps(s,{day:1,start:'10:45',end:'11:00'}).length,0);assert.equal(slotOverlaps(s,{id:'a',day:1,start:'10:00',end:'11:00'},'a').length,0);});
+test('공강 구간',()=>{const s=[{day:1,start:'09:30',end:'10:45'},{day:1,start:'11:00',end:'12:15'},{day:1,start:'14:00',end:'15:15'}];assert.deepEqual(freeGaps(s,1,'08:00','20:00'),[{start:'08:00',end:'09:30'},{start:'10:45',end:'11:00'},{start:'12:15',end:'14:00'},{start:'15:15',end:'20:00'}]);assert.deepEqual(freeGaps(s,2,'08:00','20:00'),[{start:'08:00',end:'20:00'}]);});
+test('운영시간과 공강의 20분 이상 겹침',()=>{const g=[{start:'10:45',end:'11:00'},{start:'12:15',end:'14:00'}];assert.deepEqual(windowsInGaps(g,'11:00','14:30'),[{start:'12:15',end:'14:00'}]);assert.deepEqual(windowsInGaps(g,'13:45','15:00'),[]);});
+test('시즌 묶음: series 우선, 없으면 제목',()=>{assert.equal(bundleOf({title:'2026년 서울대학교 건강주간 행사'},BUNDLES),'health-week');assert.equal(bundleOf({title:'건강주간 · 잔디 위 운동 프로그램'},BUNDLES),'health-week');assert.equal(bundleOf({title:'사회대 중간고사 간식행사'},BUNDLES),'snack');assert.equal(bundleOf({title:'두산DAY with 서울대 · 런치 채용설명회'},BUNDLES),'career');assert.equal(bundleOf({title:'자연대 골든벨'},BUNDLES),'join');assert.equal(bundleOf({title:'영화 단체 관람'},BUNDLES),'');assert.equal(bundleOf({title:'영화 단체 관람',series:'talk'},BUNDLES),'talk');});
 
 // legacy/source 테스트(tests/model.test.mjs)에서 옮긴 것
 const event={id:'event-1',title:'점심, 특강',date:'2026-10-19',start:'12:00',end:'13:00',benefit:'샌드위치',rule:'선착순',location:'학생회관',sourceUrl:'https://snu.ac.kr/'};

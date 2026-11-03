@@ -60,13 +60,43 @@
 
 /* timetable */
 .tt-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr); gap: 28px; align-items: start; margin-top: 8px; }
-.week-grid { display: grid; grid-template-columns: 46px repeat(5, minmax(0, 1fr)); gap: 4px; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 12px; }
-.tt-times { display: flex; flex-direction: column; }
-.tt-times span, .tt-col b { height: 22px; font-size: 12.5px; font-weight: 600; color: var(--text-3); text-align: center; }
-.tt-times small { height: 30px; font-family: var(--mono); font-size: 11px; color: var(--text-3); }
-.tt-body { position: relative; height: 360px; border-radius: 6px; background: repeating-linear-gradient(to bottom, var(--code-bg) 0 29px, var(--rule) 29px 30px); }
+.tt-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 8px; min-height: 36px; }
+@media (pointer: fine) { #draw-mode { display: none; } }
+.week-grid { --tt-times-w: 34px; display: grid; gap: 4px; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 12px; user-select: none; -webkit-user-select: none; }
+.tt-times span, .tt-col b { display: block; height: 22px; font-size: 12.5px; font-weight: 600; color: var(--text-3); text-align: center; }
+.tt-times-body { position: relative; }
+.tt-times small { position: absolute; right: 4px; transform: translateY(-50%); font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+.tt-times small:first-child { transform: none; }
 .tt-col { display: flex; flex-direction: column; min-width: 0; }
-.tt-slot { position: absolute; left: 2px; right: 2px; overflow: hidden; padding: 3px 5px; border-radius: 5px; background: var(--accent); color: var(--on-accent); font-size: 11.5px; font-weight: 600; line-height: 1.3; }
+/* 1시간 = 42px(1분 0.7px). 굵은 선은 정시, 옅은 선은 30분 */
+.tt-body {
+  position: relative; border-radius: 6px; cursor: crosshair; touch-action: pan-y;
+  background-color: var(--code-bg);
+  background-image: linear-gradient(to bottom, var(--rule) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in srgb, var(--rule) 45%, transparent) 1px, transparent 1px);
+  background-size: 100% 42px, 100% 42px; background-position: 0 0, 0 21px;
+}
+.week-grid.draw .tt-body, .week-grid.draw .tt-slot { touch-action: none; }
+.week-grid.draw { outline: 2px solid var(--accent-soft); }
+.tt-slot {
+  position: absolute; left: 2px; right: 2px; z-index: 1;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1px; overflow: hidden;
+  padding: 3px 5px 7px; border: 0; border-radius: 5px; background: var(--accent); color: var(--on-accent);
+  font-size: 11.5px; font-weight: 600; line-height: 1.25; text-align: left; cursor: grab; touch-action: pan-y;
+}
+.tt-slot:active { cursor: grabbing; }
+.tt-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tt-when { font-family: var(--mono); font-size: 10px; font-weight: 500; opacity: .85; white-space: nowrap; }
+.tt-resize { position: absolute; left: 0; right: 0; bottom: 0; height: 8px; cursor: ns-resize; }
+.tt-resize::after { content: ""; position: absolute; left: 50%; bottom: 2px; width: 16px; height: 2px; margin-left: -8px; border-radius: 1px; background: currentColor; opacity: .55; }
+.tt-preview {
+  position: absolute; left: 2px; right: 2px; z-index: 2; overflow: hidden; pointer-events: none;
+  padding: 2px 4px; border: 1.5px dashed var(--accent); border-radius: 5px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent);
+  font: 600 11px/1.3 var(--mono);
+}
+.three { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 12px; }
+.small-dialog { max-width: 460px; }
+.small-dialog .dialog-body { padding-bottom: 8px; }
 .slot-list { margin-top: 14px; border-top: 1px solid var(--rule); }
 .slot { display: grid; grid-template-columns: 120px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--rule); font-size: 14.5px; }
 .slot-when { font-size: 13px; color: var(--text-2); white-space: nowrap; }
@@ -93,6 +123,43 @@
 #draft-form .btn { width: 100%; justify-content: center; margin-top: 4px; }
 #mine { margin-top: 4px; }
 
+/* card kinds (이번 주 · 시즌 묶음 · 행사 한 건) */
+.card-kinds { margin: 4px 0 12px; }
+.card-picker { min-width: 0; }
+.card-picker .segments button .mono { font-size: 12px; opacity: .7; margin-left: 2px; }
+.card-picker .field.inline select { max-width: min(460px, 70vw); }
+.card-actions { justify-content: flex-end; }
+.wc-desc { margin: 4px 0 0; color: rgba(255, 255, 255, .7); font-size: 13.5px; }
+.event-card .ec-body { padding: 18px 24px 8px; }
+.ec-benefit { margin: 0 0 14px; font-size: 19px; font-weight: 700; line-height: 1.45; color: var(--accent); }
+.ec-facts { margin: 0 0 14px; }
+.ec-facts div { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 14.5px; }
+.ec-facts dt { color: var(--text-3); font-weight: 600; }
+.ec-facts dd { margin: 0; }
+.ec-note { font-size: 13.5px; color: var(--accent); margin: 0 0 12px; }
+
+/* 학식 */
+.cheap-box { margin: 16px 0 0; padding: 12px 16px; border-radius: 8px; background: var(--accent-soft); color: var(--text); font-size: 14.5px; line-height: 1.6; }
+.cheap-box strong { color: var(--accent); }
+.food-plan { margin: 20px 0 12px; }
+.food-gaps { margin: 10px 0 0; font-size: 14.5px; color: var(--text-2); }
+.food-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; }
+.food-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.food-card.open { border-color: var(--accent); }
+.food-card .meta-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 6px; }
+.food-card h3 { margin: 0; font-size: 16.5px; }
+.food-card ul { list-style: none; margin: 0; padding: 0; font-size: 14px; line-height: 1.7; }
+.food-card li { margin: 0; }
+.food-card li b { display: inline-block; min-width: 3.4em; font-weight: 650; }
+.food-card .mono { font-size: 13px; }
+.food-fit { margin: 8px 0 0; padding-top: 8px; border-top: 1px dashed var(--rule-strong); font-size: 13.5px; color: var(--text-3); }
+.food-fit.ok { color: var(--accent); font-weight: 600; }
+
+/* 제보 */
+.draft-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.draft-actions .btn { flex: 1; justify-content: center; }
+#draft-form .draft-actions .btn { width: auto; margin-top: 0; }
+
 /* detail */
 .benefit-lead { font-weight: 650; color: var(--text); font-size: 17px; }
 .quote { margin: 0; padding: 12px 16px; border-left: 3px solid var(--accent); background: var(--code-bg); border-radius: 0 6px 6px 0; font-size: 15px; color: var(--text-2); }
@@ -104,7 +171,7 @@
 @media (max-width: 600px) {
   .tabbar .wrap { scrollbar-width: none; }
   .tabbar .wrap::-webkit-scrollbar { display: none; }
-  .week-toolbar .actions { width: 100%; flex-direction: row; }
+  .week-toolbar .actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
   .week-toolbar .actions .btn { flex: 1; justify-content: center; }
   .ev-row { grid-template-columns: 52px minmax(0, 1fr); gap: 12px; }
   .date-block strong { font-size: 21px; }
@@ -117,7 +184,11 @@
   .wc-date { flex-direction: row; gap: 8px; align-items: baseline; }
   .wc-head { padding: 18px 16px; }
   .wc-foot { padding: 12px 16px; }
-  .week-grid { padding: 8px; grid-template-columns: 38px repeat(5, minmax(0, 1fr)); }
+  .week-grid { --tt-times-w: 26px; padding: 8px 6px; gap: 3px; }
+  .tt-slot { padding: 2px 3px 7px; font-size: 11px; }
+  .tt-when { display: none; }
+  .tt-toolbar { flex-wrap: wrap; }
+  .small-dialog { height: auto; max-height: 100dvh; margin: auto 0 0; border-radius: 14px 14px 0 0; }
   .slot { grid-template-columns: 1fr auto; }
   .slot-when { grid-column: 1 / -1; }
   .notice-banner .wrap { flex-direction: column; align-items: flex-start; }

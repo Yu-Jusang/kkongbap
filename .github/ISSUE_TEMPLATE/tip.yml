@@ -1,0 +1,57 @@
+name: 행사 제보
+description: 서울대 학생이 참여할 수 있는 무료 음식·기프티콘·경품 행사를 알려 주세요. 운영자가 원문을 확인한 뒤 사이트에 올립니다.
+title: "[제보] "
+labels: ["제보"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        이 제보는 GitHub에 **공개**됩니다. 학교·학과 공지나 주최 측 공개 게시물만 제보하고, 이름·연락처·학번 같은 개인정보는 적지 마세요.
+        포스터 사진은 맨 아래 ‘추가 설명’ 칸에 끌어다 놓으면 첨부됩니다. 원문에 없는 내용은 비워 두세요.
+  - type: input
+    id: source
+    attributes:
+      label: 원문 링크
+      description: 학교·학과 공지나 주최 측 공개 게시물 주소
+      placeholder: https://
+    validations:
+      required: true
+  - type: input
+    id: event
+    attributes:
+      label: 행사 이름
+    validations:
+      required: true
+  - type: input
+    id: when
+    attributes:
+      label: 날짜·시간
+      placeholder: "예: 2026-12-09 ~ 2026-12-10 17:30부터"
+  - type: input
+    id: where
+    attributes:
+      label: 장소
+  - type: input
+    id: benefit
+    attributes:
+      label: 혜택
+      placeholder: "예: 김밥 + 컵라면"
+    validations:
+      required: true
+  - type: textarea
+    id: conditions
+    attributes:
+      label: 대상·받는 조건·신청
+      description: 선착순·추첨·전원 지급, 신청 마감 등 원문에 적힌 대로
+  - type: textarea
+    id: notes
+    attributes:
+      label: 추가 설명
+      description: 포스터 사진을 여기에 끌어다 놓을 수 있습니다.
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: 확인
+      options:
+        - label: 공개된 원문을 확인했고, 개인정보를 적지 않았습니다.
+          required: true

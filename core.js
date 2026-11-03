@@ -73,6 +73,31 @@ export function weekGroups(events,start,from=start){// from: 이 날짜 이전�
   return {start,end,days,deadlines,count:new Set(days.flatMap(d=>d.events.map(e=>e.id))).size};
 }
 
+// 시즌 묶음 판정: 자료의 series가 우선, 없으면 제목이 처음 맞는 묶음
+export function bundleOf(e,bundles){
+  if(e.series&&bundles.some(b=>b.id===e.series))return e.series;
+  return bundles.find(b=>b.match.test(e.title||''))?.id||'';
+}
+
+// 시간표 편집과 공강 계산
+export const hhmm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+export const snapMinutes=(m,step=15)=>Math.round(m/step)*step;
+export function slotOverlaps(slots,cand,ignoreId){
+  return slots.filter(s=>s.id!==ignoreId&&s.day===cand.day&&minutes(s.start)<minutes(cand.end)&&minutes(cand.start)<minutes(s.end));
+}
+// 하루 중 수업이 없는 구간. from~to 사이에서 수업을 빼고 남은 시간을 돌려준다.
+export function freeGaps(slots,day,from='08:00',to='21:00'){
+  const busy=slots.filter(s=>s.day===day).map(s=>[minutes(s.start),minutes(s.end)]).sort((a,b)=>a[0]-b[0]);
+  const gaps=[];let cur=minutes(from);const end=minutes(to);
+  for(const [a,b] of busy){if(a>cur)gaps.push([cur,Math.min(a,end)]);cur=Math.max(cur,b);if(cur>=end)break;}
+  if(cur<end)gaps.push([cur,end]);
+  return gaps.filter(([a,b])=>b-a>0).map(([a,b])=>({start:hhmm(a),end:hhmm(b)}));
+}
+// 운영시간 [open, close]와 공강의 겹침 중 min분 이상인 것
+export function windowsInGaps(gaps,open,close,min=20){
+  return gaps.map(g=>({start:Math.max(minutes(g.start),minutes(open)),end:Math.min(minutes(g.end),minutes(close))})).filter(w=>w.end-w.start>=min).map(w=>({start:hhmm(w.start),end:hhmm(w.end)}));
+}
+
 // 브라우저 저장값 검증
 const TIME=/^([01]\d|2[0-3]):[0-5]\d$/,DATE=/^20\d{2}-\d{2}-\d{2}$/;
 export function sanitizeSlots(raw){
