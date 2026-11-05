@@ -221,3 +221,66 @@ export function demoEvents(today=koreaDate()){
     {title:'마음 체크인 온라인 특강',start:'17:00',end:null,benefit:'모바일 상품권 추첨',location:'온라인',rule:'참여 후 추첨 · 전원 지급 아님',registration:'unknown',category:'gift'},
   ].map((e,i)=>({...e,id:'demo-'+i,date:addDays(today,i+2),source:'notice',sourceUrl:'',eligibility:'체험용 가상 행사',evidence:'화면 체험용 가상 데이터입니다.',verifiedAt:today,demo:true,uncertain:i===3?['종료시간 미확인']:[],deadline:i<2?addDays(today,i+1):null}));
 }
+
+// ───────── 뭐 먹지: 학식 메뉴 뽑기·월드컵 ─────────
+export const MEALS={breakfast:'아침',lunch:'점심',dinner:'저녁',allday:'종일'};
+// 메뉴 이름에서 코너 머리말(<A코너>)과 표시 기호((#), (*))를 떼어 보기 좋게 만든다.
+export const menuName=name=>String(name||'').replace(/^<[^>]*>\s*/,'').replace(/\(\s*[#*]+\s*\)/g,'').replace(/\s+/g,' ').trim();
+// 값이 매겨진 메뉴만 후보로 쓴다(세미뷔페 곁들임·안내 문구·가격 없는 코너 제목은 뺀다).
+export function menuCandidates(menu,{dates=[],meals=[]}={}){
+  const out=[];
+  for(const date of dates)for(const r of menu?.days?.[date]||[])for(const [meal,m] of Object.entries(r.meals||{})){
+    if(meals.length&&!meals.includes(meal))continue;
+    for(const i of m.items||[]){
+      const name=menuName(i.name);
+      if(!(i.price>0)||!name)continue;
+      out.push({id:`${date}|${r.name}|${meal}|${name}`,name,raw:i.name,price:i.price,cafeteria:r.name,meal,mealLabel:MEALS[meal]||meal,date,hours:(m.hours||[]).filter(h=>h[0])});
+    }
+  }
+  return out;
+}
+// 같은 이름은 한 번만(첫 번째를 남기고 다른 식당·날짜는 servings로 모은다).
+export function uniqueMenus(list){
+  const map=new Map();
+  for(const c of list){const k=c.name.replace(/\s/g,'');if(map.has(k))map.get(k).servings.push(c);else map.set(k,{...c,servings:[c]});}
+  return [...map.values()];
+}
+export function shuffle(list,rand=Math.random){const a=[...list];for(let i=a.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+// 후보 수로 열 수 있는 가장 큰 대진(2의 거듭제곱, 최대 max강).
+export function bracketSize(n,max=32){if(n<2)return 0;let s=2;while(s*2<=Math.min(n,max))s*=2;return s;}
+export const roundName=n=>n===2?'결승':n===4?'4강':`${n}강`;
+export function startCup(items,size,rand=Math.random){return {size,round:size,pool:shuffle(items,rand).slice(0,size),next:[],match:0,log:[],champion:null};}
+export const cupPair=s=>s.champion?null:[s.pool[s.match*2],s.pool[s.match*2+1]];
+export function cupChoose(s,side){
+  const pair=cupPair(s);if(!pair)return s;
+  const winner=pair[side?1:0],loser=pair[side?0:1];
+  const log=[...s.log,{round:s.round,winner,loser}],next=[...s.next,winner];
+  if(s.match+1<s.pool.length/2)return {...s,next,match:s.match+1,log};
+  if(next.length===1)return {...s,next:[],log,champion:winner};
+  return {...s,round:s.round/2,pool:next,next:[],match:0,log};
+}
+// 끼니 기본값: 10:30 전 아침, 15:00 전 점심, 19:30 전 저녁, 그 뒤는 다음 날 점심.
+export function defaultMeal(nowMin){return nowMin<630?'breakfast':nowMin<900?'lunch':nowMin<1170?'dinner':'next-lunch';}
+
+// ───────── 음식 태그: 혜택 문구에 적힌 말만 짧게 뽑는다 ─────────
+const FOOD_WORDS=[['도시락','도시락'],['샌드위치','샌드위치'],['피자','피자'],['치킨','치킨'],['버거','버거'],['김밥','김밥'],['바비큐|바베큐|BBQ','바비큐'],['떡볶이','떡볶이'],['다과','다과'],['간식|새참|쿠키|베이글|팝콘|과일','간식'],['커피|아메리카노','커피'],['음료|주스|콜라','음료'],['식사|점심|저녁|런치|오찬|만찬|[Ll]unch|[Dd]inner|케이터링','식사'],['기프티콘|상품권|쿠폰','기프티콘'],['경품|에어팟|AirPods','경품'],['기념품|굿즈|티셔츠','기념품'],['상금|장려금','상금'],['무료 관람|무료 티켓|무료로 제공|전석 무료','무료 관람'],['책 나눔|책나눔|도서','책']];
+export function foodTags(text,max=3){
+  const s=String(text||''),hits=[];
+  for(const [re,tag] of FOOD_WORDS){const m=s.match(new RegExp(re));if(m&&!hits.some(h=>h.tag===tag))hits.push({tag,at:m.index});}
+  return hits.sort((a,b)=>a.at-b.at).slice(0,max).map(h=>h.tag);
+}
+
+// ───────── 지도: 장소 문구에서 관악캠퍼스 건물 찾기 ─────────
+// 동 번호(301동, Building 152-1)를 먼저 보고, 없으면 첫 구간(· 앞)에서 가장 뒤에 나온 건물 이름을 고른다("행정관 앞 잔디광장" → 잔디광장).
+export function placeOf(location,places){
+  const s=String(location||'');if(!s)return null;
+  const byNo=new Map(places.filter(p=>p.no).map(p=>[p.no,p]));
+  for(const m of s.matchAll(/(?<![\d-])(\d{1,3}(?:-\d)?)\s*동|Building\s+(\d{1,3}(?:-\d)?)/gi)){const p=byNo.get(m[1]||m[2]);if(p)return p;}
+  for(const part of [s.split(/\s·\s|·/)[0],s]){
+    let best=null;
+    for(const p of places)for(const a of p.aliases||[]){const at=part.lastIndexOf(a);if(at>=0&&(!best||at>best.at||at===best.at&&a.length>best.len))best={p,at,len:a.length};}
+    if(best)return best.p;
+  }
+  return null;
+}
+export const project=(proj,lat,lon)=>[(lon-proj.lonMin)*proj.kx,(proj.latMax-lat)*proj.ky];

@@ -280,3 +280,5 @@ export const SOURCE_LABEL={notice:'학교 공지',instagram:'학생회 인스타
 export const CHECK_LABEL={ok:'본문 접근 확인',browser_only:'브라우저 확인 · 자동수집 제한',blocked:'접근 제한',pending:'확인 대기',error:'수집 오류'};
 export const CATEGORY={food:'음식·음료',gift:'기프티콘·경품',experience:'체험·기타'};
 export const REGISTRATION={required:'필요',none:'불필요',unknown:'확인 필요'};
+// 지도에 표시할 식당 위치(서울대 캠퍼스맵에서 확인한 건물 번호). 위치를 확인하지 못한 식당(예술계식당·두레미담·버거운버거)은 넣지 않는다.
+export const CAFETERIA_PLACES={'학생회관식당':'63','자하연식당 2층':'109','자하연식당 3층':'109','301동식당':'301','302동식당':'302','3식당':'75-1','동원관식당':'113','기숙사식당':'919','공대간이식당':'30-2'};

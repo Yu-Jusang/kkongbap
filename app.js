@@ -1,10 +1,10 @@
-import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf} from './core.js?v=5';
-import {SOURCES,SOURCE_GROUPS,KIND_LABEL,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION,BUNDLES,CAFETERIAS,MENU_URL,MENU_CHECKED,TIP_FORM} from './content.js?v=6';
+import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf,menuCandidates,uniqueMenus,bracketSize,roundName,startCup,cupPair,cupChoose,defaultMeal,foodTags,placeOf,project} from './core.js?v=6';
+import {SOURCES,SOURCE_GROUPS,KIND_LABEL,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION,BUNDLES,CAFETERIAS,MENU_URL,MENU_CHECKED,TIP_FORM,CAFETERIA_PLACES} from './content.js?v=7';
 
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const SLOT_KEY='gonggang-slots',PERSONAL_KEY='gonggang-personal-events';
-const VIEWS=['events','food','timetable','import','guide'];
+const VIEWS=['events','food','pick','timetable','import','guide'];
 const read=key=>{try{return JSON.parse(localStorage.getItem(key)||'[]');}catch{return [];}};
 let slots=sanitizeSlots(read(SLOT_KEY)),personal=sanitizePersonal(read(PERSONAL_KEY));
 let events=[],status={},loaded=false,view='events',listView='list',month=koreaDate().slice(0,7),picked='',toastTimer,draft=null;
@@ -83,8 +83,8 @@ function render(){
   $('#sync-text').textContent=status.updatedAt?`최근 갱신 ${new Date(status.updatedAt).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}`:'';
   for(const id of VIEWS)$(`#${id}-view`).hidden=id!==view;
   document.querySelectorAll('[data-tab]').forEach(tab=>tab.setAttribute('aria-selected',String(tab.dataset.tab===view)));
-  if(loaded)renderEvents();
-  renderTimetable();renderSources();renderFood();
+  if(loaded){renderEvents();renderToday();}
+  renderTimetable();renderSources();renderFood();renderPick();
 }
 
 // 날짜 보기: 8일 이상 이어지는 공모전·설문 기간은 그날의 행사와 따로 보여 준다.
@@ -123,8 +123,9 @@ function card(e){
 function renderEvents(){
   const list=filtered();
   if(picked){
-    // 그날 열리는 행사 → 그날 마감 → 그날에도 걸쳐 있는 긴 기간 행사 순서로 나눈다.
-    const day=list.filter(e=>onDay(e,picked)&&!isLong(e)).sort(byTime);
+    // 그날 열리는 행사 → 그날 마감 → 그날에도 걸쳐 있는 긴 기간 행사 순서로 나눈다. 지도에서 건물을 고르면 그 건물 행사만.
+    const atPlace=listView==='map'&&mapPlace?e=>placeKey(placeOf(e.location,places))===mapPlace:()=>true;
+    const day=list.filter(e=>onDay(e,picked)&&!isLong(e)&&atPlace(e)).sort(byTime);
     const due=list.filter(e=>e.deadline===picked&&!day.includes(e));
     const span=list.filter(e=>onDay(e,picked)&&isLong(e)&&!due.includes(e));
     const head=(text,n)=>`<h3 class="day-head">${text} <span class="muted">${n}건</span></h3>`;
@@ -133,8 +134,10 @@ function renderEvents(){
       +(span.length?`<details class="day-more"><summary>이 날도 참여할 수 있는 공모전·기간 행사 <span class="muted">${span.length}건</span></summary><div class="results">${span.map(card).join('')}</div></details>`:'');
     $('#empty').hidden=true;
     $('#result-count').textContent=`${day.length}건`;
-    $('#result-note').textContent=`${fmt(picked)}에 열리는 행사 ${day.length}건 · `;
-    $('#result-note').insertAdjacentHTML('beforeend','<button type="button" class="text-button" id="unpick">날짜 선택 해제</button>');
+    const where=listView==='map'&&mapPlace?places.find(p=>placeKey(p)===mapPlace):null;
+    $('#result-note').textContent=where?`${placeLabel(where)} · ${fmt(picked)} 행사 ${day.length}건 · `:`${fmt(picked)}에 열리는 행사 ${day.length}건${listView==='map'?'':' · '}`;
+    $('#result-note').insertAdjacentHTML('beforeend',where?'<button type="button" class="text-button" id="unplace">건물 선택 해제</button>':listView==='map'?'':'<button type="button" class="text-button" id="unpick">날짜 선택 해제</button>');
+    if(where){$('#cards').innerHTML=day.length?day.map(card).join(''):`<p class="day-none">이 건물에서 ${fmt(picked)}에 열리는 행사는 없습니다.</p>`;}
   }else{
     $('#cards').innerHTML=list.map(card).join('');
     $('#empty').hidden=list.length>0;
@@ -142,7 +145,9 @@ function renderEvents(){
     $('#result-note').textContent='날짜순 · 원문에서 확인한 내용만 표시합니다.';
   }
   $('#calendar').hidden=listView!=='calendar';
+  $('#map').hidden=listView!=='map';
   if(listView==='calendar')renderCalendar();
+  if(listView==='map')renderMap();
 }
 function renderCalendar(){
   const first=new Date(month+'-01T12:00:00+09:00').getDay(),count=new Date(Number(month.slice(0,4)),Number(month.slice(5)),0).getDate(),today=koreaDate();
@@ -156,6 +161,217 @@ function renderCalendar(){
     cells.push(`<button type="button" class="cal-cell${date===today?' today':''}${date===picked?' picked':''}${on.length||due.length?' has':''}" data-pick="${date}" aria-pressed="${date===picked}" aria-label="${fmt(date)} 행사 ${on.length}건${note?' · '+note:''}"><span class="cal-d">${d}</span>${on.slice(0,2).map(e=>`<span class="cal-ev ${esc(e.category)}">${esc(e.title)}</span>`).join('')}${on.length>2?`<span class="cal-more">+${on.length-2}</span>`:''}${note?`<span class="cal-due">${note}</span>`:''}</button>`);
   }
   $('#calendar').innerHTML=`<div class="cal-head"><button type="button" class="text-button" data-month="-1" aria-label="이전 달">←</button><h3>${month.slice(0,4)}년 ${Number(month.slice(5))}월</h3><button type="button" class="text-button" data-month="1" aria-label="다음 달">→</button><button type="button" class="text-button" data-month="0">이번 달</button></div><div class="cal-grid">${DAYS.map(d=>`<span class="cal-label">${d}</span>`).join('')}${cells.join('')}</div>`;
+}
+
+// 오늘의 꽁밥: 오늘(없으면 다음으로 꽁밥이 있는 날) 열리는 행사를 시간순으로 몇 건만.
+const nowMinutes=()=>{const [h,m]=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Seoul',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date()).split(':').map(Number);return h*60+m;};
+const tagHTML=e=>foodTags(e.benefit).map(t=>`<span class="food-tag">${esc(t)}</span>`).join('');
+const shortPlace=e=>{const s=e.location||'';const m=s.match(/(?<![\d-])(\d{1,3}(?:-\d)?)\s*동/);return m?`${m[1]}동`:s.length>18?s.slice(0,17)+'…':s;};
+function renderToday(){
+  const box=$('#today-strip'),today=koreaDate(),now=nowMinutes();
+  const all=data().filter(e=>phase(e)!=='cancelled'&&e.date&&!isLong(e));
+  const on=d=>all.filter(e=>onDay(e,d)).sort(byTime);
+  // 오늘 행사가 모두 끝났으면 다음으로 꽁밥이 있는 날을 보여 준다. 기간 행사는 그날 시간이 지나면 끝난 것으로 본다.
+  const done=e=>!!e.end&&now>=minutes(e.end);
+  let day=today,list=on(today).sort((a,b)=>done(a)-done(b));const over=list.length&&list.every(done);
+  if(!list.length||over){day=all.map(e=>e.date).filter(d=>d>today).sort()[0]||'';list=day?on(day):[];}
+  if(!list.length){box.hidden=true;return;}
+  const isToday=day===today;
+  const row=e=>{const finished=isToday&&done(e);return `<li${finished?' class="done"':''}><span class="ts-time mono">${esc(e.start||'시간 미정')}</span><span class="ts-body"><button type="button" class="ts-title" data-detail="${esc(e.id)}">${esc(e.title)}</button><span class="ts-meta">${tagHTML(e)}${shortPlace(e)?`<span class="muted">${esc(shortPlace(e))}</span>`:''}${finished?'<span class="muted">끝남</span>':''}</span></span></li>`;};
+  box.innerHTML=`<div class="ts-head"><p>${isToday?`<b>오늘의 꽁밥</b> <span class="muted">${fmt(today)} · ${list.length}건</span>`:`<b>${over?'오늘 꽁밥은 끝났어요':'오늘은 꽁밥이 없어요'}</b> <span class="muted">다음 꽁밥 ${fmt(day)} · ${list.length}건</span>`}</p><button type="button" class="text-button" data-pick-day="${day}">그날 전부 보기 →</button></div><ol class="ts-list">${list.slice(0,4).map(row).join('')}</ol>${list.length>4?`<button type="button" class="text-button ts-more" data-pick-day="${day}">+ ${list.length-4}건 더</button>`:''}`;
+  box.hidden=false;
+}
+function pickDay(day){month=day.slice(0,7);if(listView==='list')setListView('calendar');picked=day;mapPlace='';mapVB=null;renderEvents();$('#result-note').scrollIntoView({block:'nearest'});}
+
+// 꽁밥 지도: 고른 날 열리는 행사를 건물 위에 표시한다. 바탕은 OpenStreetMap 건물·길(data/campus.json),
+// 건물 위치는 서울대 캠퍼스맵에서 확인한 좌표(data/places.json). 장소 문구에서 건물을 못 찾으면 지도에 올리지 않는다.
+let campus=null,places=[],campusLoading=false,mapVB=null,mapPlace='',mapDrag=null;
+const placeKey=p=>p?p.no||p.key:'';
+const placeLabel=p=>p.no?`${p.no}동 ${p.name}`:p.name;
+async function loadCampus(){
+  if(campus||campusLoading)return;campusLoading=true;
+  try{const [c,p]=await Promise.all(['data/campus.json','data/places.json'].map(u=>fetch(u).then(r=>{if(!r.ok)throw Error();return r.json();})));campus=c;places=p.places;}
+  catch{$('#map-foot').textContent='지도 자료를 불러오지 못했습니다. 새로 고침해 주세요.';}
+  finally{campusLoading=false;}
+  if(campus)renderEvents();
+}
+const mapDayEvents=day=>filtered({forCalendar:true}).filter(e=>onDay(e,day)&&!isLong(e));
+function mapGroups(day){
+  const groups=new Map(),off=[];
+  for(const e of mapDayEvents(day)){const p=placeOf(e.location,places);if(!p){off.push(e);continue;}const k=placeKey(p);if(!groups.has(k))groups.set(k,{p,events:[]});groups.get(k).events.push(e);}
+  return {groups:[...groups.values()],off};
+}
+// 그날 식단이 있는 식당(위치를 확인한 곳만)과 운영 상태
+function cafeGroups(day){
+  const groups=new Map(),today=koreaDate(),now=nowMinutes();
+  for(const c of foodCards(day)){
+    const p=places.find(x=>x.no===CAFETERIA_PLACES[c.name]);if(!p||c.fallback)continue;
+    const hours=c.meals.flatMap(m=>(m.hours||[]).filter(([a,b])=>a&&b));
+    const open=day===today&&hours.some(([a,b])=>now>=minutes(a)&&now<minutes(b));
+    const g=groups.get(p.no)||{p,names:[],open:false};g.names.push(c.name);g.open||=open;groups.set(p.no,g);
+  }
+  return [...groups.values()];
+}
+function fitMap(points){
+  const box=$('#map-box'),aspect=(box.clientHeight||420)/(box.clientWidth||640);
+  const pts=points.length?points:places.filter(p=>p.no).map(p=>project(campus.proj,p.lat,p.lon));
+  let x0=Math.min(...pts.map(p=>p[0])),x1=Math.max(...pts.map(p=>p[0])),y0=Math.min(...pts.map(p=>p[1])),y1=Math.max(...pts.map(p=>p[1]));
+  const pad=points.length?110:40;x0-=pad;x1+=pad;y0-=pad;y1+=pad;
+  let w=Math.max(x1-x0,320),h=Math.max(y1-y0,320*aspect);
+  if(h/w>aspect)w=h/aspect;else h=w*aspect;
+  mapVB={x:(x0+x1)/2-w/2,y:(y0+y1)/2-h/2,w,h};
+}
+function renderMap(){
+  if(!campus){$('#map-foot').textContent='지도를 불러오는 중…';loadCampus();return;}
+  const today=koreaDate(),days=Array.from({length:7},(_,i)=>addDays(today,i));
+  $('#map-days').innerHTML=days.map(d=>{const n=mapDayEvents(d).length;return `<button type="button" data-map-day="${d}" class="${d===picked?'selected':''}" aria-pressed="${d===picked}">${d===today?'오늘':`${Number(d.slice(5,7))}/${Number(d.slice(8))}(${DAYS[weekday(d)]})`}${n?` <span class="mono">${n}</span>`:''}</button>`;}).join('');
+  const svg=$('#map-svg');
+  if(!svg.dataset.ready){svg.innerHTML=`<path class="m-campus" d="${campus.outline}"/><path class="m-path" d="${campus.minor}"/><path class="m-road" d="${campus.major}"/><path class="m-bld" d="${campus.buildings}"/><g id="m-cafes"></g><g id="m-marks"></g>`;svg.dataset.ready='1';}
+  const {groups,off}=mapGroups(picked),cafes=$('#map-cafes').checked?cafeGroups(picked):[];
+  if(!mapVB)fitMap([...groups,...cafes].map(g=>project(campus.proj,g.p.lat,g.p.lon)));
+  drawMarks(groups,cafes);
+  const mapped=groups.reduce((n,g)=>n+g.events.length,0);
+  $('#map-foot').innerHTML=`${mapped?`건물에 올린 행사 ${mapped}건`:'이 날 건물에 올릴 행사가 없습니다'}${off.length?` · 온라인·캠퍼스 밖·장소 미확인 ${off.length}건은 아래 목록에만 있습니다`:''}. 표시를 누르면 그 건물 행사만 봅니다. <span class="muted">${esc(campus.attribution)}</span>`;
+}
+function drawMarks(groups,cafes){
+  const svg=$('#map-svg'),u=mapVB.w/(svg.clientWidth||640),r=13*u,fs=12*u;
+  svg.setAttribute('viewBox',`${mapVB.x} ${mapVB.y} ${mapVB.w} ${mapVB.h}`);
+  $('#m-cafes').innerHTML=cafes.map(g=>{const [x,y]=project(campus.proj,g.p.lat,g.p.lon),s=9*u;return `<g class="m-cafe${g.open?' open':''}" data-cafe="${esc(g.names[0])}" tabindex="0" role="button" aria-label="${esc(g.names.join(', '))}${g.open?' · 지금 운영':''} · 식단 보기"><title>${esc(g.names.join(' · '))}${g.open?' · 지금 운영':''}</title><rect x="${x-s}" y="${y-s}" width="${2*s}" height="${2*s}" rx="${3*u}"/><text x="${x}" y="${y+fs*.34}" font-size="${fs*.85}">식</text></g>`;}).join('');
+  $('#m-marks').innerHTML=groups.map(g=>{
+    const [x,y]=project(campus.proj,g.p.lat,g.p.lon),k=placeKey(g.p),sel=k===mapPlace,food=g.events.some(e=>e.category==='food');
+    return `<g class="m-mark${food?' food':''}${sel?' sel':''}" data-place="${esc(k)}" tabindex="0" role="button" aria-pressed="${sel}" aria-label="${esc(placeLabel(g.p))} 행사 ${g.events.length}건"><title>${esc(placeLabel(g.p))}\n${g.events.map(e=>`${e.start||''} ${e.title}`.trim()).map(esc).join('\n')}</title><circle cx="${x}" cy="${y}" r="${sel?r*1.25:r}"/><text x="${x}" y="${y+fs*.36}" font-size="${fs}">${g.events.length}</text><text class="m-lbl" x="${x}" y="${y+r*(sel?1.25:1)+fs*1.05}" font-size="${fs*.92}">${esc(g.p.no?g.p.no+'동':g.p.name)}</text></g>`;
+  }).join('');
+}
+function zoomMap(f,cx=mapVB.x+mapVB.w/2,cy=mapVB.y+mapVB.h/2){
+  const w=Math.min(Math.max(mapVB.w*f,140),campus.width*1.15),k=w/mapVB.w;
+  mapVB={x:cx-(cx-mapVB.x)*k,y:cy-(cy-mapVB.y)*k,w,h:mapVB.h*k};renderMap();
+}
+function mapPoint(e){const svg=$('#map-svg'),b=svg.getBoundingClientRect();return [mapVB.x+(e.clientX-b.left)/b.width*mapVB.w,mapVB.y+(e.clientY-b.top)/b.height*mapVB.h];}
+function setupMapGestures(){
+  const svg=$('#map-svg'),pts=new Map();
+  svg.addEventListener('pointerdown',e=>{if(!mapVB)return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});mapDrag={vb:{...mapVB},pts:new Map([...pts].map(([k,v])=>[k,{...v}])),moved:false};});
+  svg.addEventListener('pointermove',e=>{
+    if(!mapDrag||!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    const b=svg.getBoundingClientRect(),[a,c]=[...pts.values()],[a0,c0]=[...mapDrag.pts.values()];
+    if(pts.size>=2&&c&&c0){// 두 손가락: 확대·축소
+      const k=Math.hypot(a0.x-c0.x,a0.y-c0.y)/Math.max(1,Math.hypot(a.x-c.x,a.y-c.y)),v=mapDrag.vb,w=Math.min(Math.max(v.w*k,140),campus.width*1.15),mx=(a0.x+c0.x)/2-b.left,my=(a0.y+c0.y)/2-b.top;
+      const cx=v.x+mx/b.width*v.w,cy=v.y+my/b.height*v.h,s=w/v.w;mapVB={x:cx-(cx-v.x)*s,y:cy-(cy-v.y)*s,w,h:v.h*s};mapDrag.moved=true;renderMap();return;
+    }
+    const dx=a.x-a0.x,dy=a.y-a0.y;if(!mapDrag.moved&&Math.hypot(dx,dy)<5)return;
+    if(!mapDrag.moved){mapDrag.moved=true;svg.setPointerCapture(e.pointerId);svg.classList.add('dragging');}
+    mapVB={...mapVB,x:mapDrag.vb.x-dx/b.width*mapDrag.vb.w,y:mapDrag.vb.y-dy/b.height*mapDrag.vb.h};svg.setAttribute('viewBox',`${mapVB.x} ${mapVB.y} ${mapVB.w} ${mapVB.h}`);
+  });
+  const end=e=>{pts.delete(e.pointerId);svg.classList.remove('dragging');if(mapDrag?.moved)mapSuppressClick=performance.now()+250;if(!pts.size)mapDrag=null;else mapDrag={vb:{...mapVB},pts:new Map([...pts].map(([k,v])=>[k,{...v}])),moved:true};};
+  svg.addEventListener('pointerup',end);svg.addEventListener('pointercancel',end);
+  svg.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey)||!mapVB)return;e.preventDefault();const [cx,cy]=mapPoint(e);zoomMap(e.deltaY>0?1.2:1/1.2,cx,cy);},{passive:false});
+  svg.addEventListener('dblclick',e=>{if(!mapVB)return;e.preventDefault();const [cx,cy]=mapPoint(e);zoomMap(.6,cx,cy);});
+  svg.addEventListener('keydown',e=>{const g=e.target.closest('[data-place],[data-cafe]');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();g.dispatchEvent(new MouseEvent('click',{bubbles:true}));}});
+  window.addEventListener('resize',()=>{if(listView==='map'&&mapVB&&!$('#map').hidden){const box=$('#map-box');mapVB={...mapVB,h:mapVB.w*box.clientHeight/Math.max(1,box.clientWidth)};renderMap();}});
+}
+let mapSuppressClick=0;
+
+// 뭐 먹지: 학식 메뉴 뽑기와 월드컵. 후보는 menu.json의 가격 있는 메뉴(core.js menuCandidates).
+const FOOD_EMOJI=[[/라면|우동|국수|짬뽕|짜장|소바|쌀국수|냉면|칼국수|라멘|면$/,'🍜'],[/카레/,'🍛'],[/찌개|전골|국밥|[국탕죽]$/,'🍲'],[/돈까스|돈가스|까스|커틀릿|튀김/,'🍤'],[/덮밥|비빔밥|볶음밥|컵밥|오므라이스|리조또|밥/,'🍚'],[/치킨|닭/,'🍗'],[/갈비|목살|삼겹|불고기|제육|보쌈|족발|스테이크/,'🍖'],[/파스타|스파게티|까르보나라/,'🍝'],[/피자/,'🍕'],[/버거/,'🍔'],[/샌드위치|토스트/,'🥪'],[/초밥|연어|회덮/,'🍣'],[/생선|고등어|꽁치|동태|가자미|삼치|임연수/,'🐟'],[/오징어|낙지|쭈꾸미|주꾸미/,'🦑'],[/새우/,'🍤'],[/만두/,'🥟'],[/샐러드/,'🥗'],[/김밥|주먹밥/,'🍙'],[/떡볶이|떡/,'🍢'],[/계란|오믈렛|에그/,'🍳'],[/두유|우유/,'🥛']];
+const foodEmoji=name=>FOOD_EMOJI.find(([re])=>re.test(name))?.[1]||'🍽️';
+const shortDay=d=>`${Number(d.slice(5,7))}/${Number(d.slice(8))}(${DAYS[weekday(d)]})`;
+const hoursText=c=>c.hours.map(([a,b])=>`${a}${b?'–'+b:'~'}`).join(', ');
+function openState(c){
+  if(c.date!==koreaDate())return {open:false,label:''};
+  const now=nowMinutes(),h=c.hours.find(([a,b])=>b&&now>=minutes(a)&&now<minutes(b));
+  if(h)return {open:true,label:`지금 운영 · ${h[1]}까지`};
+  const next=c.hours.find(([a])=>minutes(a)>now);return {open:false,label:next?`오늘 ${next[0]}부터`:'오늘은 운영 끝'};
+}
+let drawDate='',drawMeal='',drawTimer=0,drawPicked=null;
+let cupRange='today',cupMeal='',cupSize=16,cup=null,cupStack=[],cupBusy=false;
+const CUP_KEY='gonggang-cup-history';
+function drawPool(){
+  let list=menuCandidates(menu,{dates:[drawDate],meals:drawMeal?[drawMeal]:[]});
+  const max=Number($('#draw-price').value)||0;if(max)list=list.filter(c=>c.price<=max);
+  if($('#draw-open').checked&&drawDate===koreaDate())list=list.filter(c=>openState(c).open);
+  if($('#draw-fit').checked&&slots.length){const gaps=freeGaps(slots,weekday(drawDate),'08:00','21:00');list=list.filter(c=>c.hours.some(([a,b])=>b&&windowsInGaps(gaps,a,b,20).length));}
+  return list;
+}
+function cupDates(){const days=menuDays();return cupRange==='week'?days:days.slice(0,1);}
+const cupPool=()=>uniqueMenus(menuCandidates(menu,{dates:cupDates(),meals:cupMeal?[cupMeal]:[]}));
+function renderPick(){
+  const days=menuDays(),today=koreaDate();
+  if(!days.length){$('#draw-count').textContent=menu?'가져온 식단이 없습니다. 생협 식단 페이지를 확인하세요.':'식단을 불러오는 중…';$('#draw-go').disabled=true;$('#cup-start').disabled=true;$('#pick-aside').textContent='';return;}
+  if(!drawDate||!days.includes(drawDate)){
+    const m=defaultMeal(nowMinutes());
+    drawDate=m==='next-lunch'?days.find(d=>d>today)||days[0]:days[0];drawMeal=m==='next-lunch'?'lunch':m;
+    if(!menuCandidates(menu,{dates:[drawDate],meals:[drawMeal]}).length)drawMeal='';
+  }
+  $('#pick-aside').textContent=`식단 ${shortDay(days[0])}~${shortDay(days.at(-1))}`;
+  $('#draw-days').innerHTML=days.slice(0,5).map(d=>`<button type="button" data-draw-day="${d}" class="${d===drawDate?'selected':''}" aria-pressed="${d===drawDate}">${d===today?'오늘':shortDay(d)}</button>`).join('');
+  $('#draw-meals').innerHTML=[['','전체'],['breakfast','아침'],['lunch','점심'],['dinner','저녁']].map(([k,t])=>{const n=menuCandidates(menu,{dates:[drawDate],meals:k?[k]:[]}).length;return `<button type="button" data-draw-meal="${k}" class="${k===drawMeal?'selected':''}" aria-pressed="${k===drawMeal}"${n?'':' disabled'}>${t} <span class="mono">${n}</span></button>`;}).join('');
+  $('#draw-open').disabled=drawDate!==today;$('#draw-open').closest('label').classList.toggle('off',drawDate!==today);
+  $('#draw-fit').disabled=!slots.length;$('#draw-fit').closest('label').title=slots.length?'':'내 시간표에 수업을 넣으면 쓸 수 있어요';$('#draw-fit').closest('label').classList.toggle('off',!slots.length);
+  const pool=drawPool();
+  $('#draw-count').textContent=pool.length?`후보 ${pool.length}개 · ${new Set(pool.map(c=>c.cafeteria)).size}곳`:'조건에 맞는 메뉴가 없습니다. 조건을 넓혀 보세요.';
+  if(!drawTimer)$('#draw-go').disabled=!pool.length;
+  renderCup();
+}
+function showReel(c,final){
+  $('#draw-emoji').textContent=foodEmoji(c.name);$('#draw-name').textContent=c.name;
+  $('#draw-sub').textContent=final?[c.cafeteria,`${c.date===koreaDate()?'':shortDay(c.date)+' '}${c.mealLabel} ${hoursText(c)}`.trim(),won(c.price),openState(c).label].filter(Boolean).join(' · '):c.cafeteria;
+}
+function runDraw(){
+  const pool=drawPool();if(!pool.length)return;
+  const pick=pool[Math.floor(Math.random()*pool.length)],steps=matchMedia('(prefers-reduced-motion: reduce)').matches?0:14;let n=0;
+  clearTimeout(drawTimer);$('#draw-go').disabled=true;$('#draw-see').hidden=true;$('#draw-reel').classList.add('spinning');
+  const tick=()=>{
+    if(n<steps){showReel(pool[Math.floor(Math.random()*pool.length)],false);n++;drawTimer=setTimeout(tick,28+n*n*1.3);return;}
+    drawTimer=0;drawPicked=pick;showReel(pick,true);$('#draw-reel').classList.remove('spinning');$('#draw-reel').classList.add('landed');setTimeout(()=>$('#draw-reel').classList.remove('landed'),600);
+    $('#draw-go').disabled=false;$('#draw-go').textContent='다시 뽑기';$('#draw-see').hidden=false;
+  };
+  tick();
+}
+function seeInFood(c){foodDate=c.date;$('#menu-search').value=c.cafeteria;location.hash='#food';renderFood();}
+
+// 학식 월드컵
+function renderCup(){
+  const setup=!cup,done=cup?.champion;
+  $('#cup-setup').hidden=!setup;$('#cup-play').hidden=setup||!!done;$('#cup-result').hidden=!done;
+  if(setup){
+    const pool=cupPool(),max=bracketSize(pool.length),today=koreaDate(),days=menuDays();
+    const count=r=>uniqueMenus(menuCandidates(menu,{dates:r==='week'?days:days.slice(0,1),meals:cupMeal?[cupMeal]:[]})).length;
+    $('#cup-range').innerHTML=[['today',days[0]===today?'오늘 메뉴':`${days[0]?shortDay(days[0]):''} 메뉴`],['week','이번 주 메뉴']].map(([k,t])=>`<button type="button" data-cup-range="${k}" class="${k===cupRange?'selected':''}" aria-pressed="${k===cupRange}">${t} <span class="mono">${count(k)}</span></button>`).join('');
+    $('#cup-meal').innerHTML=[['','전체'],['breakfast','아침'],['lunch','점심'],['dinner','저녁']].map(([k,t])=>`<button type="button" data-cup-meal="${k}" class="${k===cupMeal?'selected':''}" aria-pressed="${k===cupMeal}">${t}</button>`).join('');
+    $('#cup-size').innerHTML=[8,16,32].map(n=>`<button type="button" data-cup-size="${n}" class="${n===Math.min(cupSize,max)?'selected':''}" aria-pressed="${n===Math.min(cupSize,max)}"${n>max?' disabled':''}>${n}강</button>`).join('');
+    const size=Math.min(cupSize,max);
+    $('#cup-count').textContent=size>=4?`후보 메뉴 ${pool.length}개 중 ${size}개를 무작위로 뽑아 ${roundName(size)}부터 겨룹니다.`:`후보 메뉴가 ${pool.length}개라 월드컵을 열 수 없습니다. 범위를 ‘이번 주’로 넓히거나 끼니를 ‘전체’로 바꿔 보세요.`;
+    $('#cup-start').disabled=size<4;$('#cup-status').textContent='';
+  }else if(!done){
+    const pair=cupPair(cup),total=cup.size-1,week=cupRange==='week';
+    $('#cup-round').textContent=roundName(cup.round);$('#cup-match').textContent=cup.round===2?'':`${cup.match+1} / ${cup.pool.length/2}`;
+    $('#cup-bar').style.width=`${cup.log.length/total*100}%`;$('#cup-status').textContent=`${roundName(cup.size)} · ${cup.log.length}/${total}경기`;
+    const side=(c,i)=>`<button type="button" class="cup-card" data-cup="${i}" aria-label="${esc(c.name)} 고르기"><span class="cup-emoji" aria-hidden="true">${foodEmoji(c.name)}</span><strong>${esc(c.name)}</strong><span class="cup-meta">${esc(c.cafeteria)} · ${esc(c.mealLabel)}${week?' · '+shortDay(c.date):''}</span><span class="cup-price mono">${won(c.price)}</span>${c.servings.length>1?`<span class="cup-more">다른 ${c.servings.length-1}곳·날에도 나와요</span>`:''}</button>`;
+    $('#cup-pair').innerHTML=`${side(pair[0],0)}<span class="cup-vs-mark" aria-hidden="true">VS</span>${side(pair[1],1)}`;
+    $('#cup-undo').disabled=!cupStack.length;
+  }else{
+    const c=cup.champion,final=cup.log.at(-1),semi=cup.log.filter(l=>l.round===4).map(l=>l.loser);
+    const all=menuCandidates(menu,{dates:menuDays()}).filter(x=>x.name.replace(/\s/g,'')===c.name.replace(/\s/g,''));
+    $('#cup-status').textContent=`${roundName(cup.size)} 끝`;
+    $('#cup-result').innerHTML=`<div class="cup-win"><span class="cup-emoji big" aria-hidden="true">${foodEmoji(c.name)}</span><div><p class="eyebrow">🏆 ${roundName(cup.size)} 우승</p><h4>${esc(c.name)}</h4><p class="muted">결승 상대 ${esc(final.loser.name)}${semi.length?` · 4강 ${semi.map(x=>esc(x.name)).join(', ')}`:''}</p></div></div>
+      <h5 class="cup-sub">이 메뉴, 여기서 먹을 수 있어요</h5><ul class="cup-where">${all.map(x=>{const st=openState(x);return `<li><span class="mono">${x.date===koreaDate()?'오늘':shortDay(x.date)}</span> <b>${esc(x.cafeteria)}</b> ${esc(x.mealLabel)} <span class="mono">${esc(hoursText(x))}</span> · ${won(x.price)}${st.label?` <span class="${st.open?'ok':'muted'}">${esc(st.label)}</span>`:''}</li>`;}).join('')}</ul>
+      <div class="actions"><button type="button" class="btn btn-primary" id="cup-again">한 판 더</button><button type="button" class="btn btn-secondary" id="cup-share">결과 공유</button><button type="button" class="btn btn-secondary" id="cup-see">학식 탭에서 보기</button><button type="button" class="text-button" id="cup-reset">설정 바꾸기</button></div>`;
+  }
+  const hist=read(CUP_KEY).slice(0,8);
+  $('#cup-history').innerHTML=hist.length?`<p class="opt-label">내 우승 기록 <button type="button" class="text-button" id="cup-clear">지우기</button></p><ul class="chips">${hist.map(h=>`<li>${esc(h.name)} <span class="muted">${esc(h.label)}</span></li>`).join('')}</ul>`:'';
+}
+function cupBegin(){const pool=cupPool(),size=Math.min(cupSize,bracketSize(pool.length));if(size<4)return;cup=startCup(pool,size);cupStack=[];renderCup();$('#cup-box').scrollIntoView({block:'nearest'});}
+function cupPick(side){
+  if(!cup||cup.champion||cupBusy)return;
+  const card=document.querySelector(`[data-cup="${side}"]`),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  cupBusy=true;card?.classList.add('chosen');
+  setTimeout(()=>{cupBusy=false;cupStack.push(cup);cup=cupChoose(cup,side);
+    if(cup.champion){const h=read(CUP_KEY);h.unshift({name:cup.champion.name,label:`${shortDay(koreaDate())} ${roundName(cup.size)}`});try{localStorage.setItem(CUP_KEY,JSON.stringify(h.slice(0,20)));}catch{}}
+    renderCup();},reduce?0:170);
+}
+async function shareCup(){
+  const c=cup?.champion;if(!c)return;
+  const text=`꽁밥 학식 월드컵 ${roundName(cup.size)} 우승: ${c.name} (${c.cafeteria} ${c.mealLabel}, ${won(c.price)})`,url=location.href.split('#')[0]+'#pick';
+  try{if(navigator.share){await navigator.share({title:'꽁밥 학식 월드컵',text,url});return;}await navigator.clipboard.writeText(`${text}\n${url}`);toast('결과를 복사했습니다.');}catch{}
 }
 
 function showDetail(id){
@@ -293,7 +509,7 @@ const CHEAP=3000;
 const won=n=>n==null?'':n.toLocaleString('ko-KR')+'원';
 async function loadMenu(){
   try{const r=await fetch('data/menu.json',{cache:'no-store'});if(r.ok)menu=await r.json();}catch{}
-  renderFood();
+  renderFood();renderPick();
 }
 function menuDays(){const today=koreaDate();return Object.keys(menu?.days||{}).filter(d=>d>=today&&menu.days[d].length);}
 function foodCards(date){
@@ -501,7 +717,9 @@ function resetFilters({keepPick=false}={}){
 }
 function setListView(next){
   listView=next;document.querySelectorAll('[data-view]').forEach(b=>{b.classList.toggle('selected',b.dataset.view===next);b.setAttribute('aria-pressed',String(b.dataset.view===next));});
-  if(next==='list')picked='';renderEvents();
+  if(next==='list')picked='';
+  if(next==='map'){picked=picked||koreaDate();mapPlace='';mapVB=null;}
+  renderEvents();
 }
 function followHash(){
   const hash=decodeURIComponent(location.hash.slice(1));
@@ -526,12 +744,38 @@ function initialize(){
   document.addEventListener('click',e=>{
     const jump=e.target.closest('a[data-jump]');
     if(jump){e.preventDefault();history.replaceState(null,'',`#${jump.dataset.jump}`);setView('guide',{scroll:false});document.getElementById(jump.dataset.jump)?.scrollIntoView({block:'start'});return;}
+    // 지도 표시: 행사 건물을 누르면 그 건물 행사만, 식당을 누르면 학식 탭으로
+    const mark=e.target.closest('#map-svg [data-place],#map-svg [data-cafe]');
+    if(mark){
+      if(performance.now()<mapSuppressClick)return;
+      if(mark.dataset.place){mapPlace=mapPlace===mark.dataset.place?'':mark.dataset.place;renderEvents();if(mapPlace&&matchMedia('(max-width:700px)').matches)$('#result-note').scrollIntoView({block:'nearest',behavior:'smooth'});}
+      else{foodDate=picked;$('#menu-search').value=mark.dataset.cafe;location.hash='#food';renderFood();}
+      return;
+    }
     const button=e.target.closest('button');if(!button)return;
     if(button.dataset.close)$(`#${button.dataset.close}`).close();
     if(button.dataset.detail){history.replaceState(null,'',`#event/${encodeURIComponent(button.dataset.detail)}`);showDetail(button.dataset.detail);}
     if(button.dataset.view)setListView(button.dataset.view);
     if(button.dataset.pick){picked=picked===button.dataset.pick?'':button.dataset.pick;renderEvents();if(picked)$('#result-note').scrollIntoView({block:'nearest'});}
     if(button.id==='unpick'){picked='';renderEvents();}
+    if(button.dataset.pickDay)pickDay(button.dataset.pickDay);
+    if(button.dataset.mapDay){picked=button.dataset.mapDay;mapPlace='';mapVB=null;renderEvents();}
+    if(button.dataset.zoom&&mapVB){if(button.dataset.zoom==='fit'){mapVB=null;renderEvents();}else zoomMap(button.dataset.zoom==='in'?.7:1/.7);}
+    if(button.id==='unplace'){mapPlace='';renderEvents();}
+    if(button.dataset.drawDay){drawDate=button.dataset.drawDay;if(!menuCandidates(menu,{dates:[drawDate],meals:drawMeal?[drawMeal]:[]}).length)drawMeal='';renderPick();}
+    if(button.dataset.drawMeal!==undefined){drawMeal=button.dataset.drawMeal;renderPick();}
+    if(button.id==='draw-go')runDraw();
+    if(button.id==='draw-see'&&drawPicked)seeInFood(drawPicked);
+    if(button.dataset.cupRange){cupRange=button.dataset.cupRange;renderCup();}
+    if(button.dataset.cupMeal!==undefined){cupMeal=button.dataset.cupMeal;renderCup();}
+    if(button.dataset.cupSize){cupSize=Number(button.dataset.cupSize);renderCup();}
+    if(button.id==='cup-start'||button.id==='cup-again')cupBegin();
+    if(button.dataset.cup!==undefined)cupPick(Number(button.dataset.cup));
+    if(button.id==='cup-undo'&&cupStack.length){cup=cupStack.pop();renderCup();}
+    if(button.id==='cup-quit'||button.id==='cup-reset'){cup=null;cupStack=[];renderCup();}
+    if(button.id==='cup-share')shareCup();
+    if(button.id==='cup-see'&&cup?.champion)seeInFood(cup.champion);
+    if(button.id==='cup-clear'){try{localStorage.removeItem(CUP_KEY);}catch{}renderCup();}
     if(button.dataset.month){const n=Number(button.dataset.month);if(n){const d=new Date(month+'-15T12:00:00+09:00');d.setMonth(d.getMonth()+n);month=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;}else month=koreaDate().slice(0,7);picked='';renderEvents();}
     if(button.dataset.foodDate){foodDate=button.dataset.foodDate;renderFood();}
     if(button.dataset.qrUse&&draft?.qr){const c=draft.qr[Number(button.dataset.qrI)],input=$('#draft-form').elements[button.dataset.qrUse];if(c&&input){input.value=safeUrl(c.text);updateTipLink();toast(button.dataset.qrUse==='sourceUrl'?'원문 링크에 넣었습니다.':'신청 링크에 넣었습니다.');}}
@@ -576,6 +820,16 @@ function initialize(){
   $('#draft-form').addEventListener('input',updateTipLink);
   $('#menu-search').addEventListener('input',renderFood);
   for(const id of ['cheap-only','fit-only'])$(`#${id}`).addEventListener('change',renderFood);
+  for(const id of ['draw-price','draw-open','draw-fit'])$(`#${id}`).addEventListener('change',renderPick);
+  $('#map-cafes').addEventListener('change',()=>renderEvents());
+  setupMapGestures();
+  // 월드컵: ← → 로 고르고 Backspace로 되돌린다.
+  document.addEventListener('keydown',e=>{
+    if(view!=='pick'||!cup||cup.champion||e.target.closest('input,select,textarea'))return;
+    if(e.key==='ArrowLeft'){e.preventDefault();cupPick(0);}
+    else if(e.key==='ArrowRight'){e.preventDefault();cupPick(1);}
+    else if(e.key==='Backspace'&&cupStack.length){e.preventDefault();cup=cupStack.pop();renderCup();}
+  });
   const grid=$('#week-grid');
   grid.addEventListener('pointerdown',ttStart);
   grid.addEventListener('pointermove',ttMove);

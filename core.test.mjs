@@ -101,3 +101,36 @@ test('붙여넣은 글은 첫 줄만 제목',()=>assert.equal(parseNotice(notice
 test('물결표 없는 두 날짜는 거절',()=>assert.throws(()=>parseNotice('행사\n일시: 11/4, 11/6 12:00',2026)));
 test('주간 묶음: 오늘 이전에 지난 신청 마감은 빼기',()=>{const w=weekGroups([{...event,id:'a',date:'2026-11-06',deadline:'2026-11-02'},{...event,id:'b',date:null,deadline:'2026-11-05'}],'2026-11-02','2026-11-03');assert.deepEqual(w.deadlines.map(e=>e.id),['b']);});
 test('포스터: 두 줄 제목의 둘째 줄은 혜택이 아님',()=>{const e=parseNotice('통계학과 기말고사\n간식행사\n일정 2026.12.9.(수)~12.10.(목)17:30\n장소 25동 223호 과방\n※김밥 +컵라면 제공(하루 60명 선착순)',2026,{image:true});assert.equal(e.title,'통계학과 기말고사 간식행사');assert.equal(e.benefit,'김밥 +컵라면 제공(하루 60명 선착순)');assert.equal(e.endDate,'2026-12-10');assert.equal(e.start,'17:30');});
+
+// 뭐 먹지·지도
+import {menuName,menuCandidates,uniqueMenus,bracketSize,roundName,startCup,cupPair,cupChoose,defaultMeal,foodTags,placeOf,project} from './core.js';
+const MENU={days:{'2026-11-05':[
+  {name:'학생회관식당',meals:{lunch:{items:[{name:'목살김치찌개',price:6000},{name:'꽁치무조림(#)',price:3000}],hours:[['11:00','14:30']]},dinner:{items:[{name:'떡국(#)',price:3000}],hours:[['17:00','19:00']]}}},
+  {name:'자하연식당 3층',meals:{lunch:{items:[{name:'<+세미뷔페>',price:null},{name:'김치전',price:null},{name:'마떡갈비구이',price:14000}],hours:[['11:30','14:00']]}}},
+  {name:'예술계식당',meals:{lunch:{items:[{name:'<C코너>셀프라면, 밥, 김치',price:3000},{name:'<뷔페> 6,500원',price:null}],hours:[]}}}],
+ '2026-11-06':[{name:'학생회관식당',meals:{lunch:{items:[{name:'목살김치찌개',price:6000}],hours:[['11:00','14:30']]}}}]}};
+test('메뉴 이름: 코너 머리말과 표시 기호 떼기',()=>{assert.equal(menuName('꽁치무조림(#)'),'꽁치무조림');assert.equal(menuName('<C코너>셀프라면, 밥, 김치'),'셀프라면, 밥, 김치');});
+test('메뉴 후보: 가격 있는 메뉴만, 끼니 고르기',()=>{
+  const all=menuCandidates(MENU,{dates:['2026-11-05']});assert.deepEqual(all.map(c=>c.name),['목살김치찌개','꽁치무조림','떡국','마떡갈비구이','셀프라면, 밥, 김치']);
+  assert.deepEqual(menuCandidates(MENU,{dates:['2026-11-05'],meals:['dinner']}).map(c=>c.name),['떡국']);
+  const u=uniqueMenus(menuCandidates(MENU,{dates:['2026-11-05','2026-11-06']}));assert.equal(u.length,5);assert.equal(u[0].servings.length,2);});
+test('월드컵: 대진 크기와 라운드 이름',()=>{assert.equal(bracketSize(1),0);assert.equal(bracketSize(5),4);assert.equal(bracketSize(40),32);assert.equal(bracketSize(40,16),16);assert.equal(roundName(2),'결승');assert.equal(roundName(16),'16강');});
+test('월드컵: 8강에서 늘 왼쪽을 고르면 7경기 뒤 우승',()=>{
+  let s=startCup([1,2,3,4,5,6,7,8,9],8,()=>0.5);assert.equal(s.pool.length,8);let n=0;
+  while(!s.champion){const [a]=cupPair(s);s=cupChoose(s,0);n++;assert.ok(s.log.at(-1).winner===a);}
+  assert.equal(n,7);assert.equal(s.log.filter(l=>l.round===8).length,4);assert.equal(s.log.at(-1).round,2);assert.equal(cupPair(s),null);});
+test('끼니 기본값',()=>{assert.equal(defaultMeal(9*60),'breakfast');assert.equal(defaultMeal(12*60),'lunch');assert.equal(defaultMeal(17*60),'dinner');assert.equal(defaultMeal(20*60),'next-lunch');});
+test('음식 태그: 원문에 나온 순서대로 세 개까지',()=>{
+  assert.deepEqual(foodTags('샌드위치와 음료 제공 · 추첨 기프티콘'),['샌드위치','음료','기프티콘']);
+  assert.deepEqual(foodTags('간단한 저녁 식사가 제공됩니다'),['식사']);
+  assert.deepEqual(foodTags('참석자 전원 기념품'),['기념품']);assert.deepEqual(foodTags(''),[]);});
+const PLACES=[{no:'301',name:'제1공학관',lat:37.45016,lon:126.95259},{no:'152-1',name:'롯데국제교육관',lat:37.46657,lon:126.95119,aliases:['롯데국제교육관']},{no:'60',name:'행정관',lat:37.46,lon:126.95,aliases:['행정관','본부']},{no:null,key:'lawn',name:'잔디광장',lat:37.4606,lon:126.95,aliases:['잔디광장','잔디 광장']},{no:'101',name:'아시아연구소',lat:37.46,lon:126.95,aliases:['아시아연구소']}];
+test('지도: 장소 문구에서 건물 찾기',()=>{
+  const at=s=>placeOf(s,PLACES)?.name??null;
+  assert.equal(at('서울대학교 301동 118호 강의실'),'제1공학관');
+  assert.equal(at('Rooms 207 & 208, Lotte International Education Hall (Building 152-1)'),'롯데국제교육관');
+  assert.equal(at('행정관 앞 잔디광장 · 관악캠퍼스 일대 · 야구장(폐막식)'),'잔디광장');
+  assert.equal(at('본부 앞 잔디 광장 인권센터 부스'),'잔디광장');
+  assert.equal(at('아시아연구소 230호'),'아시아연구소');
+  assert.equal(at('비대면 Zoom'),null);assert.equal(at('영등포공원'),null);assert.equal(at('3층 세미나실'),null);});
+test('지도: 위도·경도를 지도 좌표로',()=>{const [x,y]=project({latMax:37.47,lonMin:126.95,kx:1000,ky:2000},37.46,126.951);assert.ok(Math.abs(x-1)<1e-9&&Math.abs(y-20)<1e-6);});
