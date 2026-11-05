@@ -301,14 +301,22 @@ export function chunsikPool(list,mode='top'){
   if(mode==='top')return [...list].sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko')).slice(0,64);
   return list;
 }
-// 구글 시트 gviz 응답(setResponse({...}))에서 [{name,count}]를 꺼낸다.
+// 구글 시트 gviz 응답(setResponse({...}))에서 행마다 칸 값 배열을 꺼낸다.
 export function parseGviz(text){
   const m=String(text||'').match(/setResponse\((\{[\s\S]*\})\);?\s*$/);if(!m)return [];
-  try{return (JSON.parse(m[1]).table?.rows||[]).map(r=>({name:String(r.c?.[0]?.v??'').trim(),count:Number(r.c?.[1]?.v)||0})).filter(r=>r.name&&r.count>0);}catch{return [];}
+  try{return (JSON.parse(m[1]).table?.rows||[]).map(r=>(r.c||[]).map(c=>c?.v??null));}catch{return [];}
 }
-// 모두의 1등: 천식 목록에 있는 이름만 모아(띄어쓰기 차이는 하나로) 많이 뽑힌 순서로.
-export function tallyChampions(rows,list){
+// 점수: 1등 5점, 2등 3점, 3·4등 1점. 시트의 ‘대진’ 칸에 ‘32강 1등’ ‘32강 2등’ ‘32강 4강’처럼 순위를 적어 보낸다.
+// 순위가 적히지 않은 예전 기록(‘32강’)은 1등으로 본다.
+export const CUP_POINTS={win:5,second:3,semi:1};
+export const cupRole=label=>/\s2등$/.test(label)?'second':/\s4강$/.test(label)?'semi':'win';// ‘64강’ 자체는 4강이 아니다
+// rows: [메뉴, 대진, 횟수]. 천식 목록에 있는 이름만 모아(띄어쓰기 차이는 하나로) 점수 순서로.
+export function tallyPoints(rows,list){
   const known=new Map(list.map(m=>[m.id,m.name])),out=new Map();
-  for(const r of rows){const k=chunsikKey(r.name);if(!known.has(k))continue;out.set(k,(out.get(k)||0)+r.count);}
-  return [...out].map(([id,count])=>({id,name:known.get(id),count})).sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko'));
+  for(const [name,label,n] of rows){
+    const k=chunsikKey(name),count=Number(n)||0;if(!known.has(k)||count<=0)continue;
+    const t=out.get(k)||{id:k,name:known.get(k),points:0,win:0,second:0,semi:0},role=cupRole(String(label??''));
+    t[role]+=count;t.points+=count*CUP_POINTS[role];out.set(k,t);
+  }
+  return [...out.values()].sort((a,b)=>b.points-a.points||b.win-a.win||a.name.localeCompare(b.name,'ko'));
 }

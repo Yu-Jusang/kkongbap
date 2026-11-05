@@ -1,4 +1,4 @@
-import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf,menuCandidates,uniqueMenus,bracketSize,chunsikKey,chunsikMenus,chunsikPool,parseGviz,tallyChampions,roundName,startCup,cupPair,cupChoose,defaultMeal,foodTags,placeOf,project} from './core.js?v=8';
+import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf,menuCandidates,uniqueMenus,bracketSize,chunsikKey,chunsikMenus,chunsikPool,parseGviz,tallyPoints,cupRole,CUP_POINTS,roundName,startCup,cupPair,cupChoose,defaultMeal,foodTags,placeOf,project} from './core.js?v=9';
 import {SOURCES,SOURCE_GROUPS,KIND_LABEL,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION,BUNDLES,CAFETERIAS,MENU_URL,MENU_CHECKED,TIP_FORM,CAFETERIA_PLACES,CUP_FORM,CHUNSIK_FROM} from './content.js?v=9';
 
 const $=selector=>document.querySelector(selector);
@@ -336,8 +336,8 @@ async function loadChunsik(){
 }
 async function loadBoard(force=false){
   if(!chunsik||(!force&&Date.now()-boardAt<60000))return;boardAt=Date.now();
-  const q=encodeURIComponent("select B, count(A) where B is not null group by B order by count(A) desc label count(A) ''");
-  try{const r=await fetch(`${CUP_FORM.sheet}?tqx=out:json&headers=1&tq=${q}`,{cache:'no-store'});if(r.ok)board=tallyChampions(parseGviz(await r.text()),chunsik.names);}catch{}
+  const q=encodeURIComponent("select B, C, count(A) where B is not null group by B, C label count(A) ''");
+  try{const r=await fetch(`${CUP_FORM.sheet}?tqx=out:json&headers=1&tq=${q}`,{cache:'no-store'});if(r.ok)board=tallyPoints(parseGviz(await r.text()),chunsik.names);}catch{}
   renderBoard();
 }
 const dotDay=d=>d?d.replaceAll('-','.'):'';
@@ -377,18 +377,22 @@ function renderCup(){
 }
 function renderBoard(){
   const el=$('#cup-board');if(!el)return;
-  if(!board){el.innerHTML=`<h5 class="cup-sub" id="board-h">모두의 천식 1등</h5><p class="muted small">${chunsik?'집계를 불러오는 중…':''}</p>`;return;}
-  const total=board.reduce((n,r)=>n+r.count,0),top=board.slice(0,10),max=top[0]?.count||1,mine=cup?.champion?.id;
+  if(!board){el.innerHTML=`<h5 class="cup-sub" id="board-h">모두의 천식 순위</h5><p class="muted small">${chunsik?'집계를 불러오는 중…':''}</p>`;return;}
+  const total=board.reduce((n,r)=>n+r.win,0),top=board.slice(0,10),max=top[0]?.points||1,mine=cup?.champion?.id;
+  const detail=r=>[r.win&&`1등 ${r.win}`,r.second&&`2등 ${r.second}`,r.semi&&`4강 ${r.semi}`].filter(Boolean).join(' · ');
   const rank=mine?board.findIndex(r=>r.id===mine)+1:0;
-  el.innerHTML=`<h5 class="cup-sub" id="board-h">모두의 천식 1등 <span class="muted">지금까지 ${total}판</span></h5>${top.length?`<ol class="board">${top.map((r,i)=>`<li class="${r.id===mine?'mine':''}"><span class="mono b-rank">${i+1}</span><span class="b-name">${esc(r.name)}</span><span class="b-bar" aria-hidden="true"><span style="width:${r.count/max*100}%"></span></span><span class="mono b-n">${r.count}</span></li>`).join('')}</ol>`:'<p class="muted small">아직 기록이 없어요. 첫 우승 메뉴를 정해 주세요.</p>'}${mine&&rank>10?`<p class="small">내 우승 메뉴 순위: ${rank}위 (${esc(cup.champion.name)})</p>`:''}<p class="muted small">월드컵이 끝나면 우승 메뉴 이름만 익명으로 더해집니다. 1분쯤 늦게 반영될 수 있어요.</p>`;
+  el.innerHTML=`<h5 class="cup-sub" id="board-h">모두의 천식 순위 <span class="muted">지금까지 ${total}판 · 1등 5점, 2등 3점, 3·4등 1점</span></h5>${top.length?`<ol class="board">${top.map((r,i)=>`<li class="${r.id===mine?'mine':''}"><span class="mono b-rank">${i+1}</span><span class="b-name">${esc(r.name)}<small class="b-detail">${esc(detail(r))}</small></span><span class="b-bar" aria-hidden="true"><span style="width:${r.points/max*100}%"></span></span><span class="mono b-n">${r.points}점</span></li>`).join('')}</ol>`:'<p class="muted small">아직 기록이 없어요. 첫 우승 메뉴를 정해 주세요.</p>'}${mine&&rank>10?`<p class="small">내 우승 메뉴 순위: ${rank}위 (${esc(cup.champion.name)})</p>`:''}<p class="muted small">월드컵이 끝나면 1·2등과 4강 메뉴 이름만 익명으로 더해집니다. 1분쯤 늦게 반영될 수 있어요.</p>`;
 }
-// 우승 메뉴만 폼으로 보낸다(로그인·개인정보 없음). 같은 브라우저에서 30초 안에 다시 끝낸 판은 세지 않는다.
-function sendVote(c,size){
+// 1등·2등·4강 메뉴를 한 건씩 폼으로 보낸다(로그인·개인정보 없음). 같은 브라우저에서 30초 안에 다시 끝낸 판은 세지 않는다.
+function sendVote(s){
   if(Date.now()-lastVote<30000)return;lastVote=Date.now();
-  const body=new URLSearchParams({[CUP_FORM.entries.menu]:c.name,[CUP_FORM.entries.size]:`${size}강`});
-  fetch(CUP_FORM.url,{method:'POST',mode:'no-cors',body}).catch(()=>{});
-  if(board){const r=board.find(x=>x.id===c.id);if(r)r.count++;else board.push({id:c.id,name:c.name,count:1});board.sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko'));}
-  setTimeout(()=>loadBoard(true),4000);
+  const final=s.log.at(-1),places=[[s.champion,'1등'],[final.loser,'2등'],...s.log.filter(l=>l.round===4).map(l=>[l.loser,'4강'])];
+  for(const [c,place] of places){
+    fetch(CUP_FORM.url,{method:'POST',mode:'no-cors',body:new URLSearchParams({[CUP_FORM.entries.menu]:c.name,[CUP_FORM.entries.size]:`${s.size}강 ${place}`})}).catch(()=>{});
+    if(board){const role=cupRole(` ${place}`);let r=board.find(x=>x.id===c.id);if(!r)board.push(r={id:c.id,name:c.name,points:0,win:0,second:0,semi:0});r[role]++;r.points+=CUP_POINTS[role];}
+  }
+  board?.sort((a,b)=>b.points-a.points||b.win-a.win||a.name.localeCompare(b.name,'ko'));
+  setTimeout(()=>loadBoard(true),5000);
 }
 function cupBegin(){const pool=cupPool(),size=Math.min(cupSize,bracketSize(pool.length,64));if(size<4)return;cup=startCup(pool,size);cupStack=[];renderCup();$('#cup-box').scrollIntoView({block:'nearest'});}
 function cupPick(side){
@@ -396,7 +400,7 @@ function cupPick(side){
   const card=document.querySelector(`[data-cup="${side}"]`),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   cupBusy=true;card?.classList.add('chosen');
   setTimeout(()=>{cupBusy=false;cupStack.push(cup);cup=cupChoose(cup,side);
-    if(cup.champion){const h=read(CUP_KEY);h.unshift({name:cup.champion.name,label:`${shortDay(koreaDate())} ${roundName(cup.size)}`});try{localStorage.setItem(CUP_KEY,JSON.stringify(h.slice(0,20)));}catch{}sendVote(cup.champion,cup.size);}
+    if(cup.champion){const h=read(CUP_KEY);h.unshift({name:cup.champion.name,label:`${shortDay(koreaDate())} ${roundName(cup.size)}`});try{localStorage.setItem(CUP_KEY,JSON.stringify(h.slice(0,20)));}catch{}sendVote(cup);}
     renderCup();},reduce?0:170);
 }
 async function shareCup(){
