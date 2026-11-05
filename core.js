@@ -288,16 +288,16 @@ export const project=(proj,lat,lon)=>[(lon-proj.lonMin)*proj.kx,(proj.latMax-lat
 // ───────── 천식(학생회관식당 3,000원 메뉴) 월드컵 ─────────
 // data/chunsik.json: {range:[처음,마지막], menus:[{name, served:['YYYY-MM-DD:b|l|d|a', …]}]}
 export const chunsikKey=name=>String(name||'').replace(/\s/g,'');
-export function chunsikMenus(data){
+// from을 주면 그날 이후에 나온 것만 센다(그 뒤로 안 나온 메뉴는 뺀다).
+export function chunsikMenus(data,from=''){
   return (data?.menus||[]).map(m=>{
-    const served=[...m.served].sort(),meals={b:0,l:0,d:0,a:0};
+    const served=m.served.filter(s=>s>=from).sort(),meals={b:0,l:0,d:0,a:0};
     for(const s of served)meals[s.slice(11)||'a']=(meals[s.slice(11)||'a']||0)+1;
     return {id:chunsikKey(m.name),name:m.name,count:served.length,first:served[0]?.slice(0,10)||'',last:served.at(-1)?.slice(0,10)||'',meals};
-  });
+  }).filter(m=>m.count);
 }
-// 후보: top=많이 나온 64개, year=최근 1년 안에 나온 것, all=역대 전체
-export function chunsikPool(list,mode='top',today=''){
-  if(mode==='year'){const from=`${Number(today.slice(0,4))-1}${today.slice(4)}`;return list.filter(m=>m.last>=from);}
+// 후보: top=많이 나온 64개, all=전체
+export function chunsikPool(list,mode='top'){
   if(mode==='top')return [...list].sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko')).slice(0,64);
   return list;
 }

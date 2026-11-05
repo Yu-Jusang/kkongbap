@@ -288,3 +288,5 @@ export const CUP_FORM={
   entries:{menu:'entry.2132672893',size:'entry.828285216'},
   sheet:'https://docs.google.com/spreadsheets/d/1aAnTSvwaowuERI8R1QOg7KOgW8jnFxU6PxfDUqcedds/gviz/tq',
 };
+// 천식 월드컵 후보: 이날 이후 학생회관식당에 3,000원으로 한 번이라도 나온 메뉴만(너무 오래된 메뉴는 뺀다).
+export const CHUNSIK_FROM='2026-01-01';

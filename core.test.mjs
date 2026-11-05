@@ -140,7 +140,7 @@ import {chunsikKey,chunsikMenus,chunsikPool,parseGviz,tallyChampions} from './co
 const CH={range:['2024-02-20','2026-11-05'],menus:[{name:'두부명란찌개',served:['2024-03-05:d','2025-09-02:d','2026-10-01:d']},{name:'단호박카레',served:['2024-03-05:b','2026-03-03:l']},{name:'쇠고기채소죽',served:['2024-02-20:b']}]};
 test('천식 목록: 나온 횟수·처음·마지막·끼니',()=>{
   const l=chunsikMenus(CH);assert.equal(l[0].count,3);assert.equal(l[0].first,'2024-03-05');assert.equal(l[0].last,'2026-10-01');assert.equal(l[0].meals.d,3);assert.equal(l[1].meals.b,1);assert.equal(l[1].meals.l,1);
-  assert.deepEqual(chunsikPool(l,'year','2026-11-06').map(m=>m.name),['두부명란찌개','단호박카레']);
+  const recent=chunsikMenus(CH,'2026-01-01');assert.deepEqual(recent.map(m=>[m.name,m.count,m.first]),[['두부명란찌개',1,'2026-10-01'],['단호박카레',1,'2026-03-03']]);
   assert.deepEqual(chunsikPool(l,'top').map(m=>m.name),['두부명란찌개','단호박카레','쇠고기채소죽']);assert.equal(chunsikPool(l,'all').length,3);});
 test('모두의 1등: 시트 집계를 천식 이름으로만 모으기',()=>{
   const rows=parseGviz(`/*O_o*/\ngoogle.visualization.Query.setResponse({"version":"0.6","status":"ok","table":{"cols":[],"rows":[{"c":[{"v":"두부명란찌개"},{"v":3.0}]},{"c":[{"v":"두부 명란찌개"},{"v":1.0}]},{"c":[{"v":"[테스트] 연결 확인"},{"v":1.0}]},{"c":[{"v":"단호박카레"},{"v":2.0}]}]}});`);

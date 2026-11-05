@@ -1,5 +1,5 @@
-import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf,menuCandidates,uniqueMenus,bracketSize,chunsikKey,chunsikMenus,chunsikPool,parseGviz,tallyChampions,roundName,startCup,cupPair,cupChoose,defaultMeal,foodTags,placeOf,project} from './core.js?v=7';
-import {SOURCES,SOURCE_GROUPS,KIND_LABEL,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION,BUNDLES,CAFETERIAS,MENU_URL,MENU_CHECKED,TIP_FORM,CAFETERIA_PLACES,CUP_FORM} from './content.js?v=8';
+import {DAYS,minutes,koreaDate,weekday,conflict,expired,phase,PHASES,safeUrl,calendarText,parseICS,weekStart,addDays,weekGroups,sanitizeSlots,sanitizePersonal,parseNotice,noticeId,noticeExample,hhmm,snapMinutes,slotOverlaps,freeGaps,windowsInGaps,bundleOf,menuCandidates,uniqueMenus,bracketSize,chunsikKey,chunsikMenus,chunsikPool,parseGviz,tallyChampions,roundName,startCup,cupPair,cupChoose,defaultMeal,foodTags,placeOf,project} from './core.js?v=8';
+import {SOURCES,SOURCE_GROUPS,KIND_LABEL,SOURCE_LABEL,CHECK_LABEL,CATEGORY,REGISTRATION,BUNDLES,CAFETERIAS,MENU_URL,MENU_CHECKED,TIP_FORM,CAFETERIA_PLACES,CUP_FORM,CHUNSIK_FROM} from './content.js?v=9';
 
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -329,15 +329,15 @@ function seeInFood(c){foodDate=c.date;$('#menu-search').value=c.cafeteria;locati
 // 천식 이상형 월드컵: 학생회관식당의 역대 3,000원 메뉴(data/chunsik.json, 생협 식단 2024년 2월부터)만 겨룬다.
 // 우승하면 천식 월드컵 구글 폼(CUP_FORM)에 우승 메뉴만 보내고, 응답 시트의 집계로 ‘모두의 천식 1등’을 보여 준다.
 let chunsik=null,board=null,boardAt=0,lastVote=0;
-const SIZES=[16,32,64],MODES=[['top','많이 나온 64개'],['year','최근 1년'],['all','역대 전체']];
+const SIZES=[16,32,64],MODES=[['top','많이 나온 64개'],['all','전체']];
 async function loadChunsik(){
-  try{const r=await fetch('data/chunsik.json',{cache:'no-store'});if(r.ok){const d=await r.json();chunsik={range:d.range||[],list:chunsikMenus(d)};}}catch{}
+  try{const r=await fetch('data/chunsik.json',{cache:'no-store'});if(r.ok){const d=await r.json();chunsik={range:d.range||[],list:chunsikMenus(d,CHUNSIK_FROM),names:chunsikMenus(d)};}}catch{}
   renderCup();loadBoard();
 }
 async function loadBoard(force=false){
   if(!chunsik||(!force&&Date.now()-boardAt<60000))return;boardAt=Date.now();
   const q=encodeURIComponent("select B, count(A) where B is not null group by B order by count(A) desc label count(A) ''");
-  try{const r=await fetch(`${CUP_FORM.sheet}?tqx=out:json&headers=1&tq=${q}`,{cache:'no-store'});if(r.ok)board=tallyChampions(parseGviz(await r.text()),chunsik.list);}catch{}
+  try{const r=await fetch(`${CUP_FORM.sheet}?tqx=out:json&headers=1&tq=${q}`,{cache:'no-store'});if(r.ok)board=tallyChampions(parseGviz(await r.text()),chunsik.names);}catch{}
   renderBoard();
 }
 const dotDay=d=>d?d.replaceAll('-','.'):'';
@@ -345,15 +345,15 @@ const dotDay=d=>d?d.replaceAll('-','.'):'';
 const upcomingHall=c=>menuCandidates(menu,{dates:menuDays()}).filter(x=>x.cafeteria.startsWith('학생회관')&&x.price===3000&&chunsikKey(x.name)===c.id);
 const MEAL_SHORT={b:'아침',l:'점심',d:'저녁',a:'종일'};
 const mealMix=c=>Object.entries(c.meals).filter(([,n])=>n).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`${MEAL_SHORT[k]} ${n}`).join(' · ');
-const cupPool=()=>chunsik?chunsikPool(chunsik.list,cupMode,koreaDate()):[];
+const cupPool=()=>chunsik?chunsikPool(chunsik.list,cupMode):[];
 function renderCup(){
   const setup=!cup,done=cup?.champion;
   $('#cup-setup').hidden=!setup;$('#cup-play').hidden=setup||!!done;$('#cup-result').hidden=!done;
   if(!chunsik){$('#cup-count').textContent='천식 목록을 불러오는 중…';$('#cup-start').disabled=true;return;}
-  $('#cup-intro').textContent=`학생회관식당의 3,000원 메뉴, 천식만 모아 겨룹니다. 생협 식단 ${dotDay(chunsik.range[0])}~${dotDay(chunsik.range[1])}에 나온 천식 ${chunsik.list.length}개가 후보입니다.`;
+  $('#cup-intro').textContent=`학생회관식당의 3,000원 메뉴, 천식만 모아 겨룹니다. ${CHUNSIK_FROM.slice(0,4)}년에 한 번이라도 나온 천식 ${chunsik.list.length}개가 후보입니다(생협 식단 ${dotDay(chunsik.range[1])}까지).`;
   if(setup){
     const pool=cupPool(),max=bracketSize(pool.length,64),size=Math.min(cupSize,max);
-    $('#cup-mode').innerHTML=MODES.map(([k,t])=>`<button type="button" data-cup-mode="${k}" class="${k===cupMode?'selected':''}" aria-pressed="${k===cupMode}">${t} <span class="mono">${chunsikPool(chunsik.list,k,koreaDate()).length}</span></button>`).join('');
+    $('#cup-mode').innerHTML=MODES.map(([k,t])=>`<button type="button" data-cup-mode="${k}" class="${k===cupMode?'selected':''}" aria-pressed="${k===cupMode}">${t} <span class="mono">${chunsikPool(chunsik.list,k).length}</span></button>`).join('');
     $('#cup-size').innerHTML=SIZES.map(n=>`<button type="button" data-cup-size="${n}" class="${n===size?'selected':''}" aria-pressed="${n===size}"${n>max?' disabled':''}>${n}강</button>`).join('');
     $('#cup-count').textContent=size>=4?`후보 ${pool.length}개 중 ${size}개를 무작위로 뽑아 ${roundName(size)}부터 겨룹니다.`:'후보가 모자라 월드컵을 열 수 없습니다.';
     $('#cup-start').disabled=size<4;$('#cup-status').textContent='';
@@ -361,14 +361,14 @@ function renderCup(){
     const pair=cupPair(cup),total=cup.size-1;
     $('#cup-round').textContent=roundName(cup.round);$('#cup-match').textContent=cup.round===2?'':`${cup.match+1} / ${cup.pool.length/2}`;
     $('#cup-bar').style.width=`${cup.log.length/total*100}%`;$('#cup-status').textContent=`${roundName(cup.size)} · ${cup.log.length}/${total}경기`;
-    const side=(c,i)=>{const next=upcomingHall(c)[0];return `<button type="button" class="cup-card" data-cup="${i}" aria-label="${esc(c.name)} 고르기"><span class="cup-emoji" aria-hidden="true">${foodEmoji(c.name)}</span><strong>${esc(c.name)}</strong><span class="cup-meta">지금까지 ${c.count}번 · 마지막 ${dotDay(c.last)}</span>${next?`<span class="cup-more">${next.date===koreaDate()?'오늘':shortDay(next.date)} ${esc(next.mealLabel)}에 또 나와요</span>`:''}</button>`;};
+    const side=(c,i)=>{const next=upcomingHall(c)[0];return `<button type="button" class="cup-card" data-cup="${i}" aria-label="${esc(c.name)} 고르기"><span class="cup-emoji" aria-hidden="true">${foodEmoji(c.name)}</span><strong>${esc(c.name)}</strong><span class="cup-meta">올해 ${c.count}번 · 마지막 ${dotDay(c.last)}</span>${next?`<span class="cup-more">${next.date===koreaDate()?'오늘':shortDay(next.date)} ${esc(next.mealLabel)}에 또 나와요</span>`:''}</button>`;};
     $('#cup-pair').innerHTML=`${side(pair[0],0)}<span class="cup-vs-mark" aria-hidden="true">VS</span>${side(pair[1],1)}`;
     $('#cup-undo').disabled=!cupStack.length;
   }else{
     const c=cup.champion,final=cup.log.at(-1),semi=cup.log.filter(l=>l.round===4).map(l=>l.loser),next=upcomingHall(c);
     $('#cup-status').textContent=`${roundName(cup.size)} 끝`;
     $('#cup-result').innerHTML=`<div class="cup-win"><span class="cup-emoji big" aria-hidden="true">${foodEmoji(c.name)}</span><div><p class="eyebrow">🏆 천식 ${roundName(cup.size)} 우승</p><h4>${esc(c.name)}</h4><p class="muted">결승 상대 ${esc(final.loser.name)}${semi.length?` · 4강 ${semi.map(x=>esc(x.name)).join(', ')}`:''}</p></div></div>
-      <h5 class="cup-sub">학생회관식당에서</h5><ul class="cup-where">${next.length?next.map(x=>{const st=openState(x);return `<li><span class="mono">${x.date===koreaDate()?'오늘':shortDay(x.date)}</span> <b>${esc(x.mealLabel)}</b> <span class="mono">${esc(hoursText(x))}</span> · 3,000원${st.label?` <span class="${st.open?'ok':'muted'}">${esc(st.label)}</span>`:''}</li>`;}).join(''):`<li>이번 주 식단에는 없어요. 마지막으로 나온 날은 <span class="mono">${dotDay(c.last)}</span>입니다.</li>`}<li class="muted">${dotDay(c.first)}부터 지금까지 ${c.count}번 나왔어요 (${mealMix(c)})</li></ul>
+      <h5 class="cup-sub">학생회관식당에서</h5><ul class="cup-where">${next.length?next.map(x=>{const st=openState(x);return `<li><span class="mono">${x.date===koreaDate()?'오늘':shortDay(x.date)}</span> <b>${esc(x.mealLabel)}</b> <span class="mono">${esc(hoursText(x))}</span> · 3,000원${st.label?` <span class="${st.open?'ok':'muted'}">${esc(st.label)}</span>`:''}</li>`;}).join(''):`<li>이번 주 식단에는 없어요. 마지막으로 나온 날은 <span class="mono">${dotDay(c.last)}</span>입니다.</li>`}<li class="muted">올해 ${c.count}번 나왔어요 (${mealMix(c)}) · 처음 ${dotDay(c.first)}</li></ul>
       <div class="actions"><button type="button" class="btn btn-primary" id="cup-again">한 판 더</button><button type="button" class="btn btn-secondary" id="cup-share">결과 공유</button><button type="button" class="text-button" id="cup-reset">설정 바꾸기</button></div>`;
   }
   const hist=read(CUP_KEY).slice(0,8);
