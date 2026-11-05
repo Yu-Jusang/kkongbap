@@ -12,8 +12,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/400.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/500.css">
 <link rel="stylesheet" href="style.css?v=2">
-<link rel="stylesheet" href="gonggang.css?v=11">
-<script type="module" src="app.js?v=13"></script>
+<link rel="stylesheet" href="gonggang.css?v=12">
+<script type="module" src="app.js?v=15"></script>
 </head>
 <body data-project="gonggang" class="has-tabs">
 <a class="skip" href="#main">본문 바로가기</a>
@@ -86,7 +86,7 @@
 <div id="pick-view" class="view wrap wide" hidden>
 <div class="content solo">
 <section aria-labelledby="s-pick-h"><div class="sec-head"><span class="n">03</span><h2 id="s-pick-h">오늘 뭐 먹지?</h2><span class="sec-aside" id="pick-aside"></span></div>
-<p class="lead">고르기 귀찮으면 뽑기 한 번, 시간이 있으면 학식 월드컵. 후보는 생협 식단에서 가져온 가격 있는 메뉴입니다. 품절·변경이 있을 수 있으니 먹으러 가기 전에 공식 식단을 확인하세요.</p>
+<p class="lead">고르기 귀찮으면 뽑기 한 번, 시간이 있으면 천식 월드컵. 메뉴는 생협 식단에서 가져온 것이고, 품절·변경이 있을 수 있으니 먹으러 가기 전에 공식 식단을 확인하세요.</p>
 <article class="panel-box pick-box" id="draw-box" aria-labelledby="draw-h">
 <div class="pick-row"><div class="pick-opts"><h3 id="draw-h">메뉴 뽑기</h3>
 <div class="segments" role="group" aria-label="뽑기 날짜" id="draw-days"></div>
@@ -97,20 +97,21 @@
 <div class="actions"><button type="button" class="btn btn-primary" id="draw-go">뽑기</button><button type="button" class="btn btn-secondary" id="draw-see" hidden>학식 탭에서 보기</button></div></div></div>
 </article>
 <article class="panel-box pick-box" id="cup-box" aria-labelledby="cup-h">
-<div class="cup-top"><h3 id="cup-h">학식 월드컵</h3><span class="muted small" id="cup-status"></span></div>
+<div class="cup-top"><h3 id="cup-h">천식 이상형 월드컵</h3><span class="muted small" id="cup-status"></span></div>
+<p class="cup-intro" id="cup-intro">학생회관식당의 3,000원 메뉴, 천식만 모아 겨룹니다.</p>
 <div id="cup-setup">
-<div class="cup-opts"><div><p class="opt-label">메뉴 범위</p><div class="segments" role="group" aria-label="메뉴 범위" id="cup-range"></div></div>
-<div><p class="opt-label">끼니</p><div class="segments" role="group" aria-label="끼니" id="cup-meal"></div></div>
+<div class="cup-opts"><div><p class="opt-label">후보</p><div class="segments" role="group" aria-label="후보 메뉴" id="cup-mode"></div></div>
 <div><p class="opt-label">대진</p><div class="segments" role="group" aria-label="대진 크기" id="cup-size"></div></div></div>
 <p class="muted small" id="cup-count"></p>
-<div class="actions"><button type="button" class="btn btn-primary" id="cup-start">월드컵 시작</button></div>
+<div class="actions"><button type="button" class="btn btn-primary" id="cup-start">천식 월드컵 시작</button></div>
 </div>
 <div id="cup-play" hidden>
 <div class="cup-progress"><p><b id="cup-round"></b> <span class="mono" id="cup-match"></span></p><div class="bar" aria-hidden="true"><span id="cup-bar"></span></div></div>
 <div class="cup-vs" id="cup-pair"></div>
-<div class="cup-foot"><span class="muted small">더 끌리는 메뉴를 누르세요 · 키보드 ← → 로도 고를 수 있어요</span><span><button type="button" class="text-button" id="cup-undo">되돌리기</button> · <button type="button" class="text-button" id="cup-quit">그만하기</button></span></div>
+<div class="cup-foot"><span class="muted small">더 끌리는 천식을 누르세요 · 키보드 ← → 로도 고를 수 있어요</span><span><button type="button" class="text-button" id="cup-undo">되돌리기</button> · <button type="button" class="text-button" id="cup-quit">그만하기</button></span></div>
 </div>
 <div id="cup-result" hidden></div>
+<section class="cup-board" id="cup-board" aria-labelledby="board-h"></section>
 <div class="cup-history" id="cup-history"></div>
 </article>
 </section>

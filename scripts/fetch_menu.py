@@ -1,7 +1,8 @@
 """서울대 생협 식단(https://snuco.snu.ac.kr/foodmenu/)을 읽어 data/menu.json으로 정리한다.
 
 GitHub Actions(.github/workflows/menu.yml)가 하루 세 번 실행한다. 오늘부터 7일 치를 1초 간격으로 한 번씩 읽고,
-식단 내용이 바뀌었을 때만 파일을 다시 쓴다. 표준 라이브러리만 쓴다.
+식단 내용이 바뀌었을 때만 파일을 다시 쓴다. 오늘 학생회관식당의 3,000원 메뉴(천식)는 data/chunsik.json에 쌓는다.
+표준 라이브러리만 쓴다.
 
     python scripts/fetch_menu.py                 # 실제 페이지
     python scripts/fetch_menu.py --html page.html --date 2026-11-04   # 저장한 페이지로 시험
@@ -119,6 +120,59 @@ def parse_page(page):
     return out
 
 
+CHUNSIK = OUT.parent / "chunsik.json"
+CHEAP_NAME = re.compile(r"^(.*?)\s*3,?000\s*원?$")  # 2024년 식단은 '쇠고기채소죽 3,000원'처럼 이름 뒤에 값이 붙어 있다
+MEAL_CODE = {"breakfast": "b", "lunch": "l", "dinner": "d", "allday": "a"}
+# 식단 원문에 한두 번 나온 맞춤법 오타. 같은 메뉴로 합친다.
+TYPOS = [("복음", "볶음"), ("찍개", "찌개"), ("스크림블", "스크램블"), ("국백박", "국백반"), ("가지미", "가자미"), ("숙부볶음", "숙주볶음"), ("바칠강정", "바칠리강정")]
+
+
+def chunsik_items(rows):
+    """학생회관식당의 3,000원 메뉴(학생들이 '천식'이라 부르는 메뉴)를 (끼니 코드, 이름)으로 모은다."""
+    out = []
+    for r in rows:
+        if not r["name"].startswith("학생회관"):
+            continue
+        for meal, m in r["meals"].items():
+            for i in m["items"]:
+                name = i["name"]
+                if i["price"] != 3000:
+                    cheap = CHEAP_NAME.match(name)
+                    if i["price"] is not None or not cheap:
+                        continue
+                    name = cheap[1]
+                name = re.sub(r"[(\[]\s*[#*]+\s*[)\]]", "", name).strip()
+                if len(name) >= 3 and name[-1] == name[-2]:  # 식단 원문의 오타('청국장찌개개')
+                    name = name[:-1]
+                for typo, fix in TYPOS:
+                    name = name.replace(typo, fix)
+                if name:
+                    out.append((MEAL_CODE.get(meal, "a"), name))
+    return out
+
+
+def update_chunsik(days, today, path=CHUNSIK):
+    """지난 날짜(오늘 포함)의 천식을 data/chunsik.json에 쌓는다. 같은 날 같은 끼니는 한 번만 센다."""
+    data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"source": SOURCE, "menus": []}
+    menus = {re.sub(r"\s", "", m["name"]): m for m in data["menus"]}
+    changed = False
+    for date, rows in sorted(days.items()):
+        if date > today:
+            continue
+        for meal, name in chunsik_items(rows):
+            m = menus.setdefault(re.sub(r"\s", "", name), {"name": name, "served": []})
+            if f"{date}:{meal}" not in m["served"]:
+                m["served"].append(f"{date}:{meal}")
+                m["served"].sort()
+                changed = True
+    if changed:
+        data["menus"] = sorted(menus.values(), key=lambda m: (-len(m["served"]), m["name"]))
+        served = [s[:10] for m in data["menus"] for s in m["served"]]
+        data["range"] = [min(served), max(served)]
+        path.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+    return changed
+
+
 def fetch(date):
     req = urllib.request.Request(f"{SOURCE}?date={date}", headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=30) as r:
@@ -144,6 +198,8 @@ def main():
         except Exception as e:  # 한 날짜가 실패해도 나머지는 저장한다
             failed.append(f"{date}: {e}")
         time.sleep(1)
+    if update_chunsik(days, today.isoformat()):
+        print("천식 목록 갱신")
     old = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
     if not any(days.values()):
         print("식단을 하나도 읽지 못해 기존 파일을 유지합니다.", *failed, sep="\n", file=sys.stderr)

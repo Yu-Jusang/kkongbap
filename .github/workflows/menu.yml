@@ -1,5 +1,5 @@
 name: 학식 메뉴 가져오기
-# 생협 식단 페이지를 하루 세 번(06:00, 10:30, 16:00 KST) 읽어 data/menu.json을 갱신한다.
+# 생협 식단 페이지를 하루 세 번(06:00, 10:30, 16:00 KST) 읽어 data/menu.json과 천식 목록(data/chunsik.json)을 갱신한다.
 # 식단이 바뀌었을 때만 커밋하고, GitHub Pages 빌드를 요청한다.
 on:
   schedule:
@@ -27,10 +27,10 @@ jobs:
       - name: 바뀐 경우에만 커밋
         id: commit
         run: |
-          if git diff --quiet -- data/menu.json; then echo "변경 없음"; exit 0; fi
+          if git diff --quiet -- data/menu.json data/chunsik.json; then echo "변경 없음"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/menu.json
+          git add data/menu.json data/chunsik.json
           git commit -m "학식 메뉴 갱신"
           git push
           echo "pushed=1" >> "$GITHUB_OUTPUT"

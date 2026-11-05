@@ -377,3 +377,17 @@
 @media (prefers-reduced-motion: reduce) {
   .cup-card, .cup-progress .bar span { transition: none; }
 }
+
+/* 천식 월드컵 */
+.cup-intro { margin: 4px 0 12px; color: var(--text-2); font-size: 14px; }
+.cup-board { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.cup-board .cup-sub { margin-top: 0; }
+.board { list-style: none; margin: 8px 0 10px; padding: 0; }
+.board li { display: grid; grid-template-columns: 26px minmax(0, 1.4fr) minmax(60px, 1fr) 38px; align-items: center; gap: 10px; padding: 5px 0; font-size: 14px; }
+.board li.mine .b-name { color: var(--accent); font-weight: 700; }
+.b-rank { color: var(--text-3); text-align: right; }
+.b-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.b-bar { height: 8px; border-radius: 4px; background: var(--tag-bg); overflow: hidden; }
+.b-bar span { display: block; height: 100%; background: var(--accent); }
+.board li:not(:first-child) .b-bar span { opacity: .55; }
+.b-n { text-align: right; color: var(--text-2); }

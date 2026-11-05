@@ -284,3 +284,31 @@ export function placeOf(location,places){
   return null;
 }
 export const project=(proj,lat,lon)=>[(lon-proj.lonMin)*proj.kx,(proj.latMax-lat)*proj.ky];
+
+// ───────── 천식(학생회관식당 3,000원 메뉴) 월드컵 ─────────
+// data/chunsik.json: {range:[처음,마지막], menus:[{name, served:['YYYY-MM-DD:b|l|d|a', …]}]}
+export const chunsikKey=name=>String(name||'').replace(/\s/g,'');
+export function chunsikMenus(data){
+  return (data?.menus||[]).map(m=>{
+    const served=[...m.served].sort(),meals={b:0,l:0,d:0,a:0};
+    for(const s of served)meals[s.slice(11)||'a']=(meals[s.slice(11)||'a']||0)+1;
+    return {id:chunsikKey(m.name),name:m.name,count:served.length,first:served[0]?.slice(0,10)||'',last:served.at(-1)?.slice(0,10)||'',meals};
+  });
+}
+// 후보: top=많이 나온 64개, year=최근 1년 안에 나온 것, all=역대 전체
+export function chunsikPool(list,mode='top',today=''){
+  if(mode==='year'){const from=`${Number(today.slice(0,4))-1}${today.slice(4)}`;return list.filter(m=>m.last>=from);}
+  if(mode==='top')return [...list].sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko')).slice(0,64);
+  return list;
+}
+// 구글 시트 gviz 응답(setResponse({...}))에서 [{name,count}]를 꺼낸다.
+export function parseGviz(text){
+  const m=String(text||'').match(/setResponse\((\{[\s\S]*\})\);?\s*$/);if(!m)return [];
+  try{return (JSON.parse(m[1]).table?.rows||[]).map(r=>({name:String(r.c?.[0]?.v??'').trim(),count:Number(r.c?.[1]?.v)||0})).filter(r=>r.name&&r.count>0);}catch{return [];}
+}
+// 모두의 1등: 천식 목록에 있는 이름만 모아(띄어쓰기 차이는 하나로) 많이 뽑힌 순서로.
+export function tallyChampions(rows,list){
+  const known=new Map(list.map(m=>[m.id,m.name])),out=new Map();
+  for(const r of rows){const k=chunsikKey(r.name);if(!known.has(k))continue;out.set(k,(out.get(k)||0)+r.count);}
+  return [...out].map(([id,count])=>({id,name:known.get(id),count})).sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko'));
+}
