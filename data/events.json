@@ -135,26 +135,28 @@
   },
   {
    "id": "ig-cns-career-20261113",
-   "title": "자연대 맞춤형 진로행사",
-   "location": "장소 미공지",
-   "benefit": "식사 제공 예정",
-   "rule": "동문 강연·패널 토크·소그룹 멘토링 및 네트워킹 참여",
-   "eligibility": "자연과학대학 구성원 · 복수·부전공 및 자유전공 포함",
-   "evidence": "식사 제공 예정",
+   "title": "자연대 맞춤형 진로행사 「자연대, 진로의 경계를 넘다」",
+   "location": "25-1동 국제회의실(Track 01) · 28동 103호(Track 02)",
+   "benefit": "3부(소그룹 멘토링) 참여자 식사 · 미참여자 와퍼",
+   "rule": "3부는 연사 한 분당 10~12인, 선착순 신청 · 3부 신청 초과 시 자연대 구성원·복수/부전공생·자유전공학부 진입생 우선 선발",
+   "eligibility": "서울대학교 구성원 모두",
+   "evidence": "포스터: 3부 참여자에게는 식사가, 미참여자에게는 와퍼가 제공됩니다. · 캡션: 신청: 11/3(화) 11:00 ~ 11/7(토) 23:59",
    "date": "2026-11-13",
    "start": "17:30",
    "end": "20:20",
    "category": "food",
-   "registration": "unknown",
-   "sourceUrl": "https://www.instagram.com/snu_cns/p/DeN0H2fGKkU/",
+   "registration": "required",
+   "sourceUrl": "https://www.instagram.com/snu_cns/p/DfOaBktGD6_/",
    "source": "instagram",
-   "verifiedAt": "2026-10-17",
+   "verifiedAt": "2026-11-06",
    "uncertain": [
-    "메뉴·장소·신청 링크·신청 마감 미공지",
-    "가수요조사의 후보일이 아닌 확정 일정 반영",
-    "2026-11-03 재확인 불가(게시물 본문이 공개 화면에 표시되지 않음) · 2026-10-17 확인 내용 기준"
+    "와퍼 수량·배부 시점 미기재",
+    "신청 링크는 캡션의 bit.ly 단축 주소"
    ],
-   "publicVerified": true
+   "publicVerified": true,
+   "registrationUrl": "https://bit.ly/자연대진로행사",
+   "deadline": "2026-11-07",
+   "deadlineTime": "23:59"
   },
   {
    "id": "ig-cns-goldenbell-20261118",
@@ -672,17 +674,17 @@
    "eligibility": "공과대학 구성원(교수, 직원, 학생)",
    "registration": "required",
    "registrationUrl": "https://forms.gle/WqEva1khb4BknPDX9",
-   "deadline": "2026-11-06",
+   "deadline": "2026-11-13",
    "deadlineTime": null,
    "sourceUrl": "https://eng.snu.ac.kr/communication/notice/notice?md=v&bbsidx=8463",
    "source": "notice",
    "publicVerified": true,
    "evidence": "포스터: 시상 내역 대상 100만 원(1명) · 최우수상 50만 원(2명) · 우수상 20만 원(5명) · 2차 참가자 5만원 경품(수상자 제외) · 참가상 기프티콘 5천원",
-   "verifiedAt": "2026-11-03",
+   "verifiedAt": "2026-11-06",
    "uncertain": [
     "참가상 지급 기준(1차 제출자 전원인지) 미기재",
-    "1차 접수 마감 시각 미기재",
-    "마감은 1차 접수(10.21~11.6) 기준이며 2차 보고서 제출은 11.23~12.4"
+    "접수 마감 시각 미기재",
+    "접수 마감이 11/6에서 11/13으로 연장됨(본문 접수일정 기준) · 포스터의 2차 보고서 제출 일정은 다시 확인하지 않음"
    ]
   },
   {
@@ -1471,1291 +1473,1614 @@
     "마감 시각 미기재",
     "도서 목록·양식은 구글폼 자료집에 있음"
    ]
+  },
+  {
+   "id": "engineering-gongbusking-nov-20261111",
+   "title": "점심시간 공버스킹 공연 (11월)",
+   "location": "공휴 (37동 앞)",
+   "benefit": "선착순 50분께 샌드위치 및 빼빼로 증정",
+   "rule": "선착순 50분",
+   "eligibility": "별도 신청 없이 누구나 자유롭게 관람 가능",
+   "evidence": "특별 혜택 선착순 50분께 샌드위치 및 빼빼로를 증정해 드립니다!",
+   "date": "2026-11-11",
+   "start": "12:30",
+   "end": "13:30",
+   "category": "food",
+   "registration": "none",
+   "registrationUrl": null,
+   "sourceUrl": "https://eng.snu.ac.kr/communication/notice/notice?md=v&bbsidx=8507",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [],
+   "publicVerified": true
+  },
+  {
+   "id": "nursing-research-seminar-lunch-20261118",
+   "title": "간호과학연구소 11월 겸무연구원 연구동향세미나 「환자안전역량, 무엇을 측정하는가」",
+   "location": "서울대학교 간호대학 본관 408호 (Zoom 병행)",
+   "benefit": "대면 사전등록자에게 간단한 점심 제공",
+   "rule": "대면 사전등록자",
+   "eligibility": null,
+   "evidence": "대면 사전등록자에게는 간단한 점심을 제공합니다.",
+   "date": "2026-11-18",
+   "start": "12:00",
+   "end": "13:00",
+   "deadline": "2026-11-16",
+   "deadlineTime": "17:00",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": "https://forms.gle/zbPkswcEFaoZCuDDA",
+   "sourceUrl": "https://nursing.snu.ac.kr/board/notice?bm=v&bbsidx=157672&page=1",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "참가 대상 범위 원문 미기재",
+    "점심 수량 미기재"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "social-snucommons-chair-lecture-20261120",
+   "title": "SNU Commons (특임)석좌교수 강연 시리즈 제1회 · 장경섭 특임석좌교수 「압축적 근대성 - 문화한류와 학문한류」",
+   "location": "SNU Commons 행정관 1층 렉처홀",
+   "benefit": "참석자에게 행사 종료 후 다과 및 기념품 제공 예정",
+   "rule": "참석자 (행사 종료 후 제공)",
+   "eligibility": null,
+   "evidence": "참석자에게 행사 종료 후 다과 및 기념품 제공 예정",
+   "date": "2026-11-20",
+   "start": "11:30",
+   "end": "13:00",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": null,
+   "sourceUrl": "https://social.snu.ac.kr/%ea%b3%b5%ec%a7%80%ec%82%ac%ed%95%ad/?mod=document&uid=4057",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "주최는 교무처 교무과(본부)로 적혀 있으나 본부 원문 주소는 확인하지 않아 사회대 게시 글을 sourceUrl로 씀",
+    "참가 대상 범위 원문 미기재",
+    "신청은 포털(mySNU) SNU 비교과 플랫폼이며 원문의 신청 링크는 http 주소라 registrationUrl을 비움",
+    "신청 마감일·다과·기념품 수량 미기재"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "whistory-history-monthly-talk-20261118",
+   "title": "역사연구소 제136차 월례집담회 「AI라는 호랑이 등에 올라타기: 소프트웨어를 매개로 한 역사연구의 심화·확대·산학화」",
+   "location": "인문대학 신양관 국제회의실(4동 302호)",
+   "benefit": "간단한 점심식사 제공",
+   "rule": "참석을 미리 알려주신 분들께",
+   "eligibility": "학내 구성원",
+   "evidence": "참석을 미리 알려주신 분들께는 간단한 점심식사를 제공합니다.",
+   "date": "2026-11-18",
+   "start": "12:00",
+   "end": null,
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": null,
+   "sourceUrl": "https://whistory.snu.ac.kr/category/board-260-GN-hnIHZR2L-20240106002336/?board_mode=VIEW&bid=20267",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "종료 시각 미기재",
+    "참석 의사는 역사연구소 메일로 알리는 방식(https 신청 링크 없음) — 알림 마감일 미기재",
+    "점심 제공 인원 한도 미기재",
+    "주최는 인문학연구원 역사연구소·국사학과 BK21 교육연구단(포스터 기재) — 서양사학전공 소식/행사 게시판 사본이며 주최 측 원문 주소 미확인"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "law_event-law-culture-forum526-20261111",
+   "title": "제526회 「법과 문화 포럼」 (Ermal Frasheri 교수, When Reforms Repeat)",
+   "location": "17동 6층 서암홀",
+   "benefit": "간단한 점심 식사",
+   "rule": "11월 9일(월) 오후 1시까지 메일로 사전 신청한 사람에게 제공, 수용 인원에 따라 선착순 마감 가능",
+   "eligibility": "법대 교수님과 일반대학원 법학과 석·박사과정생(수료자 포함), 펠로우",
+   "evidence": "11월 9일(월) 오후 1시까지 신청하신 분께는 간단한 점심 식사를 제공해 드립니다.",
+   "date": "2026-11-11",
+   "start": "12:30",
+   "end": "13:30",
+   "deadline": "2026-11-09",
+   "deadlineTime": "13:00",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": null,
+   "sourceUrl": "https://law.snu.ac.kr/bbs/board.php?bo_table=academic_event&wr_id=1700",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "신청은 법학연구소 연구부 조교실 메일로만 받음(신청 링크 없음)",
+    "진행 언어 영어"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "law_event-foreign-authority-forum-20261117",
+   "title": "Foreign Authority Forum 2026 (Daniel B. Rodriguez 교수, Regulatory Innovation on the Frontier)",
+   "location": "17동 6층 서암홀",
+   "benefit": "간단한 점심 식사(샌드위치, 다과 등)",
+   "rule": "11월 13일(금) 오전 11시까지 메일로 사전 신청한 사람에게 제공, 수용 인원에 따라 선착순 마감 가능",
+   "eligibility": "법대 교수님과 일반대학원·법학전문대학원 학생 등 서울법대 구성원",
+   "evidence": "11월 13일(금) 오전 11시까지 신청하신 분께는 간단한 점심 식사(샌드위치, 다과 등)를 제공해 드립니다.",
+   "date": "2026-11-17",
+   "start": "12:30",
+   "end": "13:30",
+   "deadline": "2026-11-13",
+   "deadlineTime": "11:00",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": null,
+   "sourceUrl": "https://law.snu.ac.kr/bbs/board.php?bo_table=academic_event&wr_id=1699",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "신청은 법학연구소 연구부 조교실 메일로만 받음(신청 링크 없음)",
+    "진행 언어 영어"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "gsis_events-bk21-workshop55-20261113",
+   "title": "[SNU GSIS BK21] Workshop (55) — 석·박사생 연구 발표",
+   "location": "International Conference Room (Offline)",
+   "benefit": "Lunch (점심)",
+   "rule": "Lunch will be provided only to those who register in advance through the Google Form (사전등록자에게만 점심 제공, 등록 후 무단 불참 시 다음 BK21 행사 출석 불인정)",
+   "eligibility": "open to all SNU GSIS students (BK fellows 필수 참석)",
+   "evidence": "Lunch will be provided only to those who register in advance through the Google Form.",
+   "date": "2026-11-13",
+   "start": "12:30",
+   "end": "13:30",
+   "deadline": "2026-11-08",
+   "deadlineTime": "23:59",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": "https://forms.gle/k5eQkriEFfWmsZPr7",
+   "sourceUrl": "https://gsis.snu.ac.kr/upcoming-events/?mod=document&uid=4401",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "장소 건물 번호 미기재(이 글에는 International Conference Room만 적힘)",
+    "국제대학원생 외 참여 가능 여부 미기재",
+    "진행 언어 영어"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "snu_calendar-css-seminar-lunch-20261111",
+   "title": "사회과학연구원 월례세미나 「복지국가와 자산 불평등: 연금제도와 '확장된 자산' 개념을 중심으로」 (이건 교수)",
+   "location": "우석경제관 504호",
+   "benefit": "강연 중 간단한 식사 제공",
+   "rule": "선착순 (원문: 강연 중 (선착순) 간단한 식사가 제공됩니다)",
+   "eligibility": null,
+   "evidence": "※ 강연 중 (선착순) 간단한 식사가 제공됩니다.",
+   "date": "2026-11-11",
+   "start": "12:00",
+   "end": "13:30",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": "https://forms.gle/LbJSqBY44P6wYzSKA",
+   "sourceUrl": "https://www.snu.ac.kr/snunow/events?md=v&bbsidx=177992",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "SNU 캘린더 상세 페이지에 게시일 표시 없음",
+    "대상 미기재(문의처 사회과학연구원)",
+    "신청 마감 미기재",
+    "같은 회차 단독 안내 글(bbsidx=178145)에는 '※ 강연 중 간단한 식사가 제공됩니다.'로 선착순 표기 없음"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "snu_calendar-css-seminar-lunch-20261125",
+   "title": "사회과학연구원 월례세미나 「결혼과 계층 재생산: 부모 자산과 배우자 가족배경에 대한 선호」 (권오재 교수)",
+   "location": "우석경제관 504",
+   "benefit": "강연 중 간단한 식사 제공",
+   "rule": "선착순 (원문: 강연 중 (선착순) 간단한 식사가 제공됩니다)",
+   "eligibility": null,
+   "evidence": "※ 강연 중 (선착순) 간단한 식사가 제공됩니다.",
+   "date": "2026-11-25",
+   "start": "12:00",
+   "end": "13:30",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": "https://forms.gle/LbJSqBY44P6wYzSKA",
+   "sourceUrl": "https://www.snu.ac.kr/snunow/events?md=v&bbsidx=177992",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "SNU 캘린더 상세 페이지에 게시일 표시 없음",
+    "대상 미기재(문의처 사회과학연구원)",
+    "신청 마감 미기재",
+    "이 회차 단독 안내 글은 아직 없음(11/11 회차와 함께 적힌 학기 안내 글 기준)"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "snu_calendar-css-classics-lunch-20261202",
+   "title": "사회과학연구원 고전강좌 「애덤스미스의 『도덕감정론』과 『국부론』에서의 인간과 사회」 (김병연 교수)",
+   "location": "우석경제관 504호 (223동 504호)",
+   "benefit": "강연 중 간단한 식사 제공",
+   "rule": null,
+   "eligibility": null,
+   "evidence": "※ 강연 중 간단한 식사가 제공됩니다.",
+   "date": "2026-12-02",
+   "start": "12:00",
+   "end": "13:30",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": "https://forms.gle/DfrhELLHzfv8wJsJ8",
+   "sourceUrl": "https://www.snu.ac.kr/snunow/events?md=v&bbsidx=176813",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "SNU 캘린더 상세 페이지에 게시일 표시 없음",
+    "대상·식사 수량·신청 마감 미기재",
+    "학기 고전강좌 안내 글(10/28·12/2 두 회차) 기준, 10/28 회차는 종료"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "snu_calendar-shine-ai-8-lunchbox-20261113",
+   "title": "대학원 공통 특강 시리즈 「SHINE AI: 통찰과 성찰」 8회차",
+   "location": "관악캠퍼스 61동 320호",
+   "benefit": "대면 참여 신청자에게 SHINE 런치박스",
+   "rule": "대면 참여 신청자 (회차별 사전 신청)",
+   "eligibility": "전 계열 대학원생 (학부생·교직원은 비대면 참여 가능)",
+   "evidence": "※ 대면 참여 신청자께는 매 회차 SHINE 런치박스를 드립니다.",
+   "date": "2026-11-13",
+   "start": "10:30",
+   "end": "11:45",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": null,
+   "sourceUrl": "https://www.snu.ac.kr/snunow/events?md=v&bbsidx=174239",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "시리즈 개설 안내 글(9/4~11/13 금요일, 총 8회) 기준 – 8회차 연사·주제 안내 글은 아직 없음",
+    "신청은 SNU 비교과 플랫폼(로그인 필요)에서 회차별 접수 – 8회차 신청 기간·주소 미확인",
+    "7회차 글(bbsidx=178472)은 '대면 참여는 좌석 관계로 학부생과 대학원생에 한하며'로 적어 대상 표기가 글마다 다름",
+    "SNU 캘린더 상세 페이지에 게시일 표시 없음"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "snu_calendar-cba-life-respect-gifticon-20261109",
+   "title": "경영대 상담센터 경청 온라인 생명존중교육",
+   "location": "온라인 Zoom",
+   "benefit": "참여자 전원 1만 원 상당 기프티콘",
+   "rule": "참여자 전원 (모집: 선착순 30명)",
+   "eligibility": null,
+   "evidence": "혜택: 참여자 전원 1만 원 상당 기프티콘",
+   "date": "2026-11-09",
+   "start": "16:00",
+   "end": "17:00",
+   "deadline": "2026-11-06",
+   "category": "gift",
+   "registration": "required",
+   "registrationUrl": "https://docs.google.com/forms/d/e/1FAIpQLScmnEJgxFDKtT8XuQ15o9dUcFMb106h1_mup6lQPv03gXduHA/viewform?usp=publish-editor",
+   "sourceUrl": "https://www.snu.ac.kr/snunow/events?md=v&bbsidx=178124",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "대상 미기재(주최: 경영대 상담센터 경청) – 경영대 학생 한정인지 미확인",
+    "신청 마감이 오늘(11월 6일), 마감 시각 미기재",
+    "첨부 포스터는 다운로드 주소가 404라 열지 못함",
+    "SNU 캘린더 상세 페이지에 게시일 표시 없음"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "danbi-awareness-edu-coffee-coupon-20261130",
+   "title": "2026 장애인식개선교육 이수자 대상 커피 쿠폰 증정 이벤트",
+   "location": "온라인 (SNUON <장애인식개선교육(학생)>)",
+   "benefit": "교육 이수 학생 전원에게 모바일 상품권(커피 쿠폰) 증정",
+   "rule": "참여기간 내 교육 이수 후 교육영상 하단 서식에 연락처 제출한 학생 전원(기이수자 포함), 미이수자·연락처 미제출자 제외",
+   "eligibility": "재학생(학부)",
+   "evidence": "라. 내용: 2026년도 참여기간에 교육을 이수한 학생 전원에게 모바일 상품권 증정(기이수자 포함)",
+   "date": null,
+   "start": null,
+   "end": null,
+   "deadline": "2026-11-30",
+   "deadlineTime": "23:59",
+   "category": "gift",
+   "registration": "required",
+   "registrationUrl": null,
+   "sourceUrl": "https://snudanbi.snu.ac.kr/category/board_12_gn_qme0fwyj_20201130132449/?board_mode=VIEW&bid=5166",
+   "source": "notice",
+   "verifiedAt": "2026-11-06",
+   "uncertain": [
+    "상품권 금액·종류 미기재(제목과 본문 문구는 '커피 쿠폰')",
+    "지급 시기 미기재",
+    "SNUON 수강은 로그인 필요",
+    "첨부 포스터 이미지는 JS 다운로드라 열지 않음"
+   ],
+   "publicVerified": true
   }
  ],
  "status": {
-  "updatedAt": "2026-11-03T10:31:13.000Z",
-  "verifiedAt": "2026-11-03",
+  "updatedAt": "2026-11-05T18:25:06.000Z",
+  "verifiedAt": "2026-11-06",
   "sourceChecks": [
    {
     "key": "general",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽(전체 8건, 10/1 이후 4건) 제목 확인, 행사성 글 1건(수의대 동물병원 반려동물 사진 공모) 열람 → '…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽(전체 8건) 확인, 11/2 이후 글 1건(수의대 동물병원 2027 달력 반려동물 사진 공모) 다시 열람 → '…"
    },
    {
     "key": "snu_calendar",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~3쪽 36건 전부 열람·혜택 키워드 확인, 혜택 명시 9건 중 7건 포함(1건 종료, 1건 사례비 프로그램). 상…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "전체 목록 1~30쪽(게시 9월 중순분까지 약 360건) 제목·일정 확인 + 기간 검색(df=2026.11.06, dt=2…"
    },
    {
     "key": "student",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "전체 목록 1쪽 + '행사·모집' 분류 1쪽, 10/1 이후 글 13건 제목 확인, 행사성 4건 열람(건강주간 3건은 이미…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "전체 목록 1쪽, 11/2 이후 글 2건(11/2 견학 운영 변경 안내, 11/3 건강주간 알림 uid=419) 제목 확인…"
    },
    {
     "key": "hrc",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 4건 전부 열람(3건 10/22~10/30 종료), 1건은 본문이 포스터 이미지라 이미지에서 혜…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 10/28('연애의 따뜻한 참견', 기존 행사·11/4~5 종료) · 11/2 이후 0건"
    },
    {
     "key": "hrc_news",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 2건(집담회 후기) 제목 확인 – 행사 안내 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 1건(11/3 제31차 인권연구자 집담회 후기) 제목 확인 – 행사 안내 아님"
    },
    {
     "key": "danbi",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 1건(장애인식개선주간×건강주간) 열람·포스터 확인 → 혜택 미기재로 제외"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 1건(11/5 장애인식개선교육 이수자 대상 커피 쿠폰 증정 이벤트) 열람 → 포함"
    },
    {
     "key": "danbi_campus",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2026-08-18 · 10/1 이후 0건"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2026-08-18 · 11/2 이후 0건"
    },
    {
     "key": "lei",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2026-08-14 · 10/1 이후 0건"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 1건(11/5 IT 강사 모집 공고, 채용) 제목 확인 – 행사 아님"
    },
    {
     "key": "igsr",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 5건(단원 모집·합격 발표) 제목 확인 – 행사 없음. 공개특강(11/9)은 SNU 캘린더에서…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 10/30(찾아가는 멘토링 합격자 발표) · 11/2 이후 0건. 공개특강(11/9)은 SNU 캘린더…"
    },
    {
     "key": "kyu",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 1건(학술지 투고 안내) 확인 – 행사 없음. 11/17 컬로퀴엄은 SNU 캘린더에서 열람, 혜…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 10/06(학술지 투고 안내) · 11/2 이후 0건. 11/17 컬로퀴엄은 SNU 캘린더 글로 재확…"
    },
    {
     "key": "ifs",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "행사 목록 10건 제목 확인, 예정 행사 3건 열람(포스터 포함) – 혜택 미기재. 공지 게시판 10/1 이후 0건"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "행사 목록 1쪽 확인, 예정 행사 3건(11/13 청년패널토크, 11/19 국가전략기술 국제포럼, 11/24 미중패권전쟁…"
    },
    {
     "key": "ipus",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 5건 제목 확인, 3건 열람(통일토론 경연대회 포스터에서 상금 확인)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 1건(11/2 제93차 통일학세미나, 11/13 19:00) 열람·포스터 확인 → 혜택 미기재.…"
    },
    {
     "key": "ist",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 10/1 이후 1건·공모전 게시판 3건 열람, 공모전 결과 페이지(aiplugin.snu.ac.kr) 확인"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공모전 게시판(1건, 10/16 9월 선정 결과)·공지사항 목록 1쪽, 11/2 이후 0건. 기존 ChatGPT Edu 공…"
    },
    {
     "key": "diversity",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽, 10/1 이후 1건(북 콘서트 10/22, 종료) · 행사 게시판 최신 2025-11"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 목록 1쪽, 최신 글 10/14(북 콘서트, 종료) · 11/2 이후 0건"
    },
    {
     "key": "uic",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽 최신 글 2026-08-14 · 10/1 이후 0건 (대학혁신 만족도 조사 10/23 마감은 학부대학 공지로 확인)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2026-08-14 · 11/2 이후 0건"
    },
    {
     "key": "snurnd",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 4건 – 연구자 대상 교육·외부 공모 전달뿐, 학생 대상 행사 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 2건(11/4 교육부 산업계 대학교육 혁신포럼 안내, 11/4 과총 연구현장 AI 활용 설문)…"
    },
    {
     "key": "ieps",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽 최신 글 2026-04-06 · 10/1 이후 0건"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2026-04-06 · 11/2 이후 0건"
    },
    {
     "key": "oga_events",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 10건 제목 확인, 5건 열람(ANCHOR 비자 특강 10/29 샌드위치 – 종료, 외부 기관…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 1건(11/3 K-게이트웨이 이니셔티브 초청 프로그램 유학생 모집, 외부 프로그램) 제목 확인…"
    },
    {
     "key": "oga_general",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 약 9건 제목 확인, 해피아워 2건(11/5 안내, 가을 일정표 이미지) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 1건(11/3 해피아워+Global Alumni Talk, 기존 행사·11/5 종료) 확인. 1…"
    },
    {
     "key": "extra",
     "state": "blocked",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "대기열(netfunnel)·자바스크립트로 내용을 불러와 HTML에 프로그램 정보 없음. 내부 API는 부르지 않음, 신청은…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "이번에는 목록 HTML 1쪽(12건 제목·신청기간)이 열렸으나 상세는 스크립트·POST로 불러와 view.do GET이 빈…"
    },
    {
     "key": "ig_snu_official",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "curl로 받으면 게시물 없는 빈 껍데기(로그인·JS 필요) – 게시물 미확인"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "curl은 빈 껍데기, WebFetch로 공개 프로필 그리드 확인: 11/2 이후 게시물 5건(11/2 건강주간 포스터,…"
    },
    {
     "key": "ig_snuoga",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "국제처 홈페이지 링크로 계정 확인, 게시물은 로그인·JS 필요로 미확인"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "curl은 빈 껍데기, WebFetch 두 번째 시도에 공개 그리드 확인: 최신 게시물 10/31 · 11/2 이후 0건.…"
    },
    {
     "key": "humanities",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 26건 제목 확인, 행사성 글 2건 열람(국정원 채용설명회 등, 혜택 미기재)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 4건 제목 확인(장학·근로·변시 관리원·사례영상 경진대회), 경진대회 1건 열람 → 외부 협…"
    },
    {
     "key": "humanities_events",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 10건 전부 열람·포스터 확인(심포지엄·특강, 혜택 미기재)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 1건(역사연구소 심포지엄 11/19) 본문·포스터 확인 → 혜택 미기재"
    },
    {
     "key": "humanities_council",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2025-07로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2025-07로 11/2 이후 글 없음"
    },
    {
     "key": "social",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 약 30건 제목 확인, 행사성 글 1건 열람(대부분 외부기관 전달)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1~2쪽, 11/2 이후 글 4건 제목 확인, 행사성 1건 열람 → SNU Commons 석좌교수 강연(다과·기념품)…"
    },
    {
     "key": "social_lecture",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2024년으로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2024-08로 11/2 이후 글 없음"
    },
    {
     "key": "science",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 19건 제목 확인, 행사성 글 3건 열람(비자특강 10/29 종료, 설문 10/23 마감)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1~2쪽, 11/2 이후 글 2건 제목 확인(최태원 특강 11/5 종료, 변시 관리원)"
    },
    {
     "key": "science_events",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 행사 후기 기사형이며 10/1 이후 새 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 10/2로 11/2 이후 글 없음"
    },
    {
     "key": "nursing",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 약 50건 제목 확인, 행사성 글 5건 열람(연건캠퍼스 간식 배부 10/29 종료)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1~2쪽, 11/2 이후 글 9건 제목 확인, 행사성 2건 열람(연구동향세미나 점심 1건 추가, 장애인식개선주간 포스…"
    },
    {
     "key": "nursing_events",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 행사 후기형이며 10/1 이후 새 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 9/11로 11/2 이후 글 없음"
    },
    {
     "key": "nursing_job",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 1건(채용 공고)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 10/20으로 11/2 이후 글 없음"
    },
    {
     "key": "cba",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/29 이후 글 19건 제목 확인(게시량이 많아 2쪽까지만), 행사성 글 1건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1~2쪽, 11/2 이후 글 10건 제목 확인, 행사성 2건 열람(마케팅 세미나 11/12 혜택 미기재, TEDxSN…"
    },
    {
     "key": "cba_news",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 기사형이며 10/1 이후 새 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 8/13으로 11/2 이후 글 없음"
    },
    {
     "key": "engineering",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 19건 제목 확인, 행사성 글 4건 열람·포스터 1장 확인"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 기본쪽·page=2·3, 11/2 이후 글 약 18건 제목 확인, 행사성 3건 열람 → 공버스킹 11/11 1건 추가…"
    },
    {
     "key": "eng_dept",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 검색 결과 없음 표시"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, '검색 결과가 없습니다' 표시"
    },
    {
     "key": "cals",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽(30건), 10/1 이후 글 16건 제목 확인, 행사성 글 2건 열람(그린백 세미나 10/29 종료)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 1건(조교 채용), 기존 숏폼 공모전 원문 재확인(마감 11/13 그대로)"
    },
    {
     "key": "cals_event",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2025-06으로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2025-06으로 11/2 이후 글 없음"
    },
    {
     "key": "cals_job",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 2건(채용·인턴)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 1건(팜한농 인턴 모집)"
    },
    {
     "key": "cals_student",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 2건 확인, 1건 열람(해외탐방 지원 프로그램)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 1건(학술대회 참가 지원), 10/28 ERS 글 열람 → 해외탐방 지원금이라 제외"
    },
    {
     "key": "art",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 8건 제목 확인, 1건 열람·포스터 확인(혜택 미기재)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 2건(본부 연구윤리 세미나·SNU Commons 공모전 전달, 둘 다 기존 등록분)"
    },
    {
     "key": "art_events",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2026-05로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/5 글 1건(80주년 기념 신진작가전) 열람 → 무료 관람 등 혜택 미기재"
    },
    {
     "key": "education",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 6건 제목 확인, 1건 RSS로 본문 확인(외부기관 프로그램)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽과 사이트 RSS, 11/2 이후 새 글은 카드뉴스 1건(11/4)뿐"
    },
    {
     "key": "edu_job",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 9/8로 11/2 이후 글 없음"
    },
    {
     "key": "che",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 약 20건 제목 확인, 공모전 글 1건 RSS로 본문 확인"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1~2쪽과 RSS 2쪽, 11/2 이후 글 7건 제목 확인(장학·공모전 전달·연구윤리 등, 행사성 없음)"
    },
    {
     "key": "che_news",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 4건, Academic Festival 글 RSS 본문·포스터 3장 확인(외국인 교류의 밤…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 1건(태재 장학), Academic Festival 글 RSS 재확인(11/6 혜택 없음)"
    },
    {
     "key": "vet",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽(60건), 10/1 이후 글 20건 제목 확인, 행사성 글 2건 RSS로 본문 확인"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽과 RSS 2쪽, 11/2 이후 글 6건 제목 확인(행사성 없음; 10/27 ERD Day 상금은 발표 접수 10…"
    },
    {
     "key": "vet_seminar",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2025-10으로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2025-10으로 11/2 이후 글 없음"
    },
    {
     "key": "vet_job",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 3건(채용 공고)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 10/28로 11/2 이후 글 없음"
    },
    {
     "key": "pharm",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 25건 제목 확인(행사성 글은 건강주간뿐, 본부 행사로 기존 등록분)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 약 12건 제목 확인(장학·행정 위주), CPU 겨울캠프 1건 열람(외부 프로그램)"
    },
    {
     "key": "pharm_seminar",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 5건 제목 확인, 11월 세미나 2건 열람(혜택 미기재)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최근 글 3건 확인(11/3 세미나 종료, 11/10 세미나 혜택 미기재, 조선비즈 포럼은 외부 행사)"
    },
    {
     "key": "pharm_job",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 5건(채용 공고)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 10/23으로 11/2 이후 글 없음"
    },
    {
     "key": "music",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 10건 제목 확인(행사성 글 없음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 3건(장학·강사 채용·셔틀버스), 행사성 없음"
    },
    {
     "key": "music_event",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 4건 중 3건 열람(화요음악회 무료, 정기연주회는 유료)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최근 글 4건 열람(11/6 피아노 특강 혜택 미기재, 정기연주회 유료·종료), 기존 12월 화요음악회 원문…"
    },
    {
     "key": "medicine",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 약 20건 제목 확인(행사성 글은 본부 행사 전달뿐)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 약 10건 제목 확인(행사성은 본부 행사 전달·의대생 실습 안내뿐)"
    },
    {
     "key": "medicine_events",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽 제목 확인(학술 심포지엄·정책세미나뿐)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 SNU Medicine Forum(11/2 개최, 종료) 열람"
    },
    {
     "key": "cls",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 약 23건 제목 확인, 공개특강 1건 열람(10/6 종료)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1~2쪽, 11/2 이후 글 6건 제목 확인(최태원 특강 11/5 종료, 장학·행정)"
    },
    {
     "key": "cls_news",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 1건(동문 소식)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 10/22로 11/2 이후 글 없음"
    },
    {
     "key": "college",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 약 29건 제목 확인, 행사성 글 2건 열람·포스터 확인(글쓰기 특강 혜택 미기재, 만족…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1~2쪽, 11/2 이후 글 약 8건 제목 확인, 행사성 2건 열람(사례영상 경진대회는 외부 협의회 주최, 글쓰기 특…"
    },
    {
     "key": "snuc_major",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 9/30로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 9/30으로 11/2 이후 글 없음"
    },
    {
     "key": "snuc_calendar",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "스크립트 달력이라 받은 HTML에 일정 목록이 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "스크립트 달력이라 받은 HTML에 일정 목록이 없음(달력 데이터 호출은 하지 않음)"
    },
    {
     "key": "snuc_advising",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽과 사이트 RSS, 9/1 이후 글 3건 전부 본문 확인"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽과 사이트 RSS, 11/2 이후 새 글 없음, 기존 2건(AI 실태조사·다전공 수기) 원문 변동 없음"
    },
    {
     "key": "snuti",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 약 50건 제목 확인, 행사성 글 5건 RSS로 본문 확인"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1~2쪽과 RSS 3쪽, 11/2 이후 글 10건 제목 확인, 특별세미나 1건 열람(혜택 미기재), 기존 창업 특강…"
    },
    {
     "key": "snuti_news",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 5건(행사 후기 기사)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽과 RSS, 11/2 글 3건(교외교육·SNUTI in Lounge 후기, 뉴스레터)"
    },
    {
     "key": "cba_jobs",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽(10/30~11/3) 제목 확인: 채용 공고만 있음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1~2쪽, 11/2 이후 글 12건 제목 확인(모두 채용·인턴 공고)"
    },
    {
     "key": "gspa",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록이 스크립트로 그려져 홈 화면 최근 공지 9건 제목만 확인(행사성 글은 본부 AI 연구윤리 세미나뿐)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록이 스크립트 렌더링이라 홈 화면 일반공지 제목 확인, 11/2 이후 5건(채용·AI 연구윤리 세미나·그랜드퀘스트·한국학…"
    },
    {
     "key": "gspa_seminar",
     "state": "blocked",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "홈 화면에서 최근 6건 제목만 확인, 목록·본문이 스크립트 렌더링이라 11월 세미나 3건 본문 열람 불가(우회하지 않음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "홈 화면에서 최근 6건 제목만 확인(11/2 이후 글 2건: 1175회 정책&지식 포럼 11/10, 신진학자 Colloqu…"
    },
    {
     "key": "gsph",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 약 21건 제목 확인(대부분 본부·외부 전달)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1~2쪽, 11/2 이후 글 13건 제목 확인, 행사성 글 2건 열람(장애인식개선주간 포스터·SNU Commons 공…"
    },
    {
     "key": "gsph_academic",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 11건 제목 확인(행사성 글 없음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 3건 제목 확인, 박사학위 논문요지 발표회 열람 → 혜택 미기재"
    },
    {
     "key": "gsph_news",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2026-05로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2026-05로 11/2 이후 글 없음"
    },
    {
     "key": "gses",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 약 34건 제목 확인(커리어데이 10/31 종료)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 8건 제목 확인(학사·본부 전달), 행사성 글은 기존 등재 행사 사본뿐"
    },
    {
     "key": "gses_events",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2026-09로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2026-09로 11/2 이후 글 없음"
    },
    {
     "key": "gses_seminar",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 9건 제목 확인, 11월 2건 열람(혜택 미기재)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 1건(제259차 콜로키움 11/11) 열람 → 혜택 미기재"
    },
    {
     "key": "gsis_general",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽과 사이트 RSS 5쪽, 10/1 이후 글 약 25건 제목 확인, 행사성 글 3건 본문 확인"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽과 사이트 RSS 1~5쪽, 11/2 이후 글 12건 제목 확인, 행사성 글 4건 본문 확인(AfDB 채용설명회·…"
    },
    {
     "key": "gsis_academic",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 6건 제목 확인(학사 안내뿐)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽과 RSS, 11/2 이후 글 1건(동계 계절수업 수강료 안내)"
    },
    {
     "key": "gsis_events",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 11건 제목 확인, 3건 열람(BK21 특강 점심은 10/29 회차까지만 공지)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽 7건 확인, 11/2 이후 새 글 1건(BK21 Workshop 55) 열람 → 점심 제공 1건, 11/11 일…"
    },
    {
     "key": "gsis_careers",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 1건(인턴 채용)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 1건(채용 공고)"
    },
    {
     "key": "gsis_news",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2026-05로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2026-09로 11/2 이후 글 없음"
    },
    {
     "key": "dent",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 14건 제목 확인(행사성 글은 본부 건강주간뿐)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 4건 제목 확인(AI 연구윤리 세미나 사본·통학로·NMT·근로장학) → 새 행사 없음"
    },
    {
     "key": "dent_academic",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 2건(장학·설명회 전달)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 1건(동계 계절수업 수강료 안내)"
    },
    {
     "key": "dent_events",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2023년으로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2023년으로 11/2 이후 글 없음"
    },
    {
     "key": "law",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 약 30건 제목 확인, 행사성 글 3건 열람·포스터 2장 확인(가을맞이 점심 10/26…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 8건 제목 확인, 2건 열람(KJLL 원고 모집은 외부 학술지, 법학도서관 책나눔 원문 재확…"
    },
    {
     "key": "law_event",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 10건 제목 확인, 3건 열람(법과 문화 포럼 도시락은 10/28 회차까지만 공지)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 3건 모두 열람 → 점심 제공 2건(제526회 법과 문화 포럼, Foreign Authori…"
    },
    {
     "key": "law_job",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 2건(채용 공고)"
    },
    {
     "key": "gsds",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록이 스크립트 로딩이라 사이트 공개 RSS 1~2쪽으로 10/1 이후 글 10건 확인(세미나 본문에 다과 언급 없음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록이 ajax 로딩이라 사이트 공개 RSS 1~2쪽 확인, 최신 글 10/29로 11/2 이후 글 없음"
    },
    {
     "key": "gsep",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1~2쪽, 10/1 이후 글 17건 제목 확인, 세미나 글 1건 열람(10/29 종료)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 글 2건 제목 확인(직원 출근시간·통학로), 경영전략세미나 글 재확인(다음 회차 10/29로 종료)"
    },
    {
     "key": "convergence",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 13건 제목 확인(본부 행사 전달뿐)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽과 사이트 RSS, 11/2 이후 글 12건 제목 확인(입학·학사·본부 전달) → 행사성 글 없음"
    },
    {
     "key": "gsiat",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 8/26로 10/1 이후 글 없음(본문은 사이트 확인코드가 있어 열람하지 않음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 8/26로 11/2 이후 글 없음"
    },
    {
     "key": "gsb_notice",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 글 2건(입학·시스템 점검)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 10/21로 11/2 이후 글 없음"
    },
    {
     "key": "gsb",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 최신 글 2025-06으로 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 최신 글 2025-06으로 11/2 이후 글 없음"
    },
    {
     "key": "econ",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "학부·대학원·학외 공지 각 1쪽, 10/1 이후 글 약 45건 제목 확인, 행사성 글 6건 열람(본문 포스터 이미지 3건…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "학부·대학원·학외 공지 각 1쪽, 11/2 이후 글 21건(학부·대학원 중복 포함) 제목 확인, 행사성 3건 열람(석좌교수…"
    },
    {
     "key": "psir",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록이 스크립트로 불러와져 홈 화면의 공지 8건·행사 2건과 세미나 게시판 글 3건(idx 80~82) 열람, 포스터 1건…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록이 스크립트 로드라 홈 화면 공지 8건(11/2 이후 2건, 학사)·세미나 게시판 idx 80~82(83 이후 없음)…"
    },
    {
     "key": "psych",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지(bbs61)·학과소식(bbs65)·행사(bbs63) 1쪽, 10/1 이후 글 13건 제목 확인, 행사 글 1건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지(bbs61)·학과소식(bbs65)·행사(bbs63) 1쪽, 11/2 이후 글 6건(모두 11/3 본부 전달) 제목 확…"
    },
    {
     "key": "sociology",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "4개 게시판 1쪽, 10/1 이후 글 약 12건 제목 확인, 행사 글 2건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1~2쪽(전 게시판), 11/2 이후 글 2건(장학·셔틀) 제목 확인, 기존 제3회 콜로키엄 글(17041) 재확인…"
    },
    {
     "key": "anthropology",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "학과공지·일반공지 1쪽, 10/1 이후 글 12건 제목 확인, 행사 글 1건(포스터) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "학과공지·일반공지·행사안내 1쪽, 11/2 이후 글 9건 제목 확인, 행사성 2건(대학원 신입생 OT·민속학 마스터클래스)…"
    },
    {
     "key": "geog",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항·소식/행사 1쪽, 10/1 이후 글 9건 제목 확인, 혜택 있을 만한 행사 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항(최근 10/23)·소식/행사 1쪽, 11/2 이후 글 1건(아시아연구소 학위논문상 수상자 포럼 11/11) 열람·…"
    },
    {
     "key": "socialwelfare",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 10건 제목 확인, 행사 글 2건(특강·총MT) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 1쪽, 11/2 이후 글 2건 제목 확인, 노인복지세미나 공개 특강(11/11) 열람 → 혜택 미기재"
    },
    {
     "key": "communication",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 13건 제목 확인, 행사성 글 1건 열람(나머지는 외부 행사 전달)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 5건 제목 확인, 4건 열람(우덕 지원 프로그램·SNU Commons 공모전 사본·외부 전…"
    },
    {
     "key": "korean",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 2곳·행사 게시판 1쪽, 10/1 이후 글 14건 제목 확인, 학과 주최 혜택 행사 없음(본부·외부 전달만)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽(전 게시판), 11/2 이후 글 7건 제목 확인, 수강소감 조사 1건 열람 → 해당 없음"
    },
    {
     "key": "snucll",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 10건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1~2쪽, 11/2 이후 글 11건(채용·장학·학사) 제목 확인, 국정원 채용설명회(10/28 글, 11/12) 재…"
    },
    {
     "key": "english",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지·행사 1쪽, 10/1 이후 글 21건 제목 확인, 행사 글 1건(런치스페셜 11/3) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 5건(장학·학사) 제목 확인, 행사성 글 없음"
    },
    {
     "key": "french",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "학부·대학원 공지·행사/소식 1쪽, 10/1 이후 글 8건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 1건(시험관리원 선발) 제목 확인, 행사성 글 없음"
    },
    {
     "key": "german",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 4건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 목록 1쪽(게시판 글이 RSS에 안 나와 목록 HTML로 확인), 최근 글 10/28 — 11/2 이후 글 없음"
    },
    {
     "key": "russian",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지·채용/행사 게시판 1쪽, 10/1 이후 글 20건 제목 확인, 행사성 글 4건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1~2쪽, 11/2 이후 글 12건 제목 확인, 행사성 2건(AI 연구윤리 세미나·SNU Commons 공모전, 모…"
    },
    {
     "key": "spanish",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "학과공지·기타공지 1쪽, 10/1 이후 글 3건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 최근 글 10/20 — 11/2 이후 글 없음"
    },
    {
     "key": "linguist",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 13건 제목 확인, 행사 글 1건(퍼포먼스) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 5건 제목 확인, 장애인식개선주간 안내 열람 → 혜택 미기재"
    },
    {
     "key": "koreanhistory",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지·소식/행사 1쪽, 10/1 이후 글 14건 제목 확인, 행사 글 1건(컬로퀴엄 11/6) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1~2쪽, 11/2 이후 글 13건 제목 확인, 행사성 1건(제108회 컬로퀴엄 11/6) 열람 → 혜택 미기재"
    },
    {
     "key": "asianhistory",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 15건 제목 확인, 행사성 글 없음(주관행사 페이지는 목록 없음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 7건 제목 확인, 학부생 멘토링 '동양사 선배와의 만남'(11/13) 열람 → 식사 제공…"
    },
    {
     "key": "whistory",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지·소식/행사 1쪽, 10/1 이후 글 19건 제목 확인, 행사 글 2건 열람(포스터 1건 확인)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1~3쪽, 11/2 이후 글 20건 제목 확인, 행사성 4건 열람(월례집담회·선교기지 학술회의·공개특강·AI 연구윤…"
    },
    {
     "key": "philosophy",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽, 10/1 이후 글 23건 제목 확인, 행사 글 1건(철사연 AI 강연시리즈, 인문대 학과 소식에서 열람)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽, 11/2 이후 글 12건 제목 확인, 철학 펠로우 공모 열람 → 연구지원금이라 제외"
    },
    {
     "key": "religion",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지·학과소식·학술행사 1쪽, 10/1 이후 글 11건 제목 확인, 행사 글 1건(콜로키움 11/6) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "학사안내·학과소식·모집홍보·학술행사·기타 각 1쪽(RSS 없음), 11/2 이후 글 5건(학사·수강소감 조사) 제목 확인,…"
    },
    {
     "key": "aesthetics",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 9건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 2건(학과배정·부전공) 제목 확인, 행사성 글 없음"
    },
    {
     "key": "asia_lang",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항·학부 행사 1쪽, 10/1 이후 글 14건 제목 확인, 행사성 글 없음(학부 행사 게시판은 9월 이전 글만)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항·학부 행사 목록 1쪽(게시판 글이 RSS에 안 나옴), 11/2 이후 글 2건(근로·시험관리원) 제목 확인, 학부…"
    },
    {
     "key": "agronomy",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "전공공지 1쪽, 최근 글 2026-02 — 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "전공공지 1쪽, 최근 글 2026-02 — 11/2 이후 글 없음"
    },
    {
     "key": "hort",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 3건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 목록 1쪽, 최근 글 10/20 — 11/2 이후 글 없음(RSS에는 세미나실 예약 일정만 나옴)"
    },
    {
     "key": "aged",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 3건 제목 확인, 행사 글 1건(농생대 교육공청회 포스터) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 1쪽, 11/2 이후 글 1건(장학) 제목 확인, 행사성 글 없음"
    },
    {
     "key": "forestry",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 최근 글 2023-12 — 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 목록 1쪽, 최근 글 2023-12 — 11/2 이후 글 없음"
    },
    {
     "key": "forest_env",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항(최근 9/17)·행사안내 1쪽, 10/1 이후 글 1건(동문 추모식 소식) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 1건(임학동문회 가을소풍 10/31 후기) 열람 → 끝난 행사"
    },
    {
     "key": "foodsci",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항·학부생게시판 1쪽, 최근 글 2025-12 — 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 목록 1쪽(RSS 비활성), 최근 글 2025-12 — 11/2 이후 글 없음"
    },
    {
     "key": "alc",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "전공 공지·새소식 1쪽, 10/1 이후 글 2건(학사) 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS·목록 1쪽, 최근 글 10/27 — 11/2 이후 글 없음"
    },
    {
     "key": "bse",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 최근 글 2026-07-29 — 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS·목록 1쪽, 최근 글 7/29 — 11/2 이후 글 없음"
    },
    {
     "key": "aerd",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 최근 글 2026-08-31 — 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 목록 1쪽(RSS 비활성), 최근 글 8/31 — 11/2 이후 글 없음"
    },
    {
     "key": "are",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 3건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 목록 1쪽(RSS 비활성), 최근 글 10/16 — 11/2 이후 글 없음"
    },
    {
     "key": "learning",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 12건 제목 확인, 행사성 글 1건(외부 해커톤) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1~2쪽, 11/2 이후 글 11건 제목 확인, 행사성 3건(IRB 교육·장애인식개선주간·그랜드퀘스트) 열람 → 해…"
    },
    {
     "key": "koredu",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "학부 공지 1쪽, 10/1 이후 글 18건 제목 확인, 학과 주최 혜택 행사 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1~3쪽(학부·대학원), 11/2 이후 글 25건(중복 게시 다수) 제목 확인, Lab 단위 심리검사 열람 → 해당…"
    },
    {
     "key": "engedu",
-    "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "학부 공지 1쪽, 최근 글 2026-09-21 — 10/1 이후 글 없음"
+    "state": "blocked",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "11/6 DNS 조회 실패(curl·WebFetch 모두 호스트 없음, 2회 시도) — 11/3엔 열렸으므로 일시 장애일…"
    },
    {
     "key": "socialedu",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "학과 공지 1쪽, 10/1 이후 글 4건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "학과 공지 1쪽, 11/2 이후 글 4건(장학·학사·SNU Commons 사본) 제목 확인, 행사성 신규 없음"
    },
    {
     "key": "histoedu",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "일반공지 1쪽, 10/1 이후 글 12건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 8건 제목 확인, 행사성 2건(AI 연구윤리 사본·IRB 교육) 열람 → 신규 해당 없음"
    },
    {
     "key": "geoedu",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "학부 게시판 1쪽, 10/1 이후 글 6건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 1건(근로장학) 제목 확인, 행사성 글 없음"
    },
    {
     "key": "ethicsedu",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "학과소식·학부공지 1쪽, 10/1 이후 글 3건 제목 확인, 행사 글 1건(45주년 심포지엄 포스터, 10/14 종료) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "학과소식·학부공지·대학원공지 1쪽, 11/2 이후 글 1건(백암 박은식 학술대회 11/5) 열람 → 끝난 행사"
    },
    {
     "key": "mathed",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 19건 제목 확인, 학과 주최 혜택 행사 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 8건 제목 확인, 행사성 글 없음(SNU Commons 사본·학생 강연 소식)"
    },
    {
     "key": "physed",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항·행사 게시판 1쪽, 10/1 이후 글 12건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS 1쪽, 11/2 이후 글 8건 제목 확인, 행사성 글 없음(SNU Commons 사본·장애인식개선주간·심리검사)"
    },
    {
     "key": "chemedu",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 37건 제목 확인, 행사성 글 2건(회복탄력성 프로그램·홈커밍 페이지) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS(/feed/) + 사이트 전체 RSS 1~2쪽, 11/2 이후 글 13건 제목 확인, 행사성 글 3건(예비…"
    },
    {
     "key": "biologyedu",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 2건 제목 확인, 행사성 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS + 사이트 RSS, 11/2 이후 글 2건(근로장학·실험동물 교육) 제목 확인, 행사성 글 없음"
    },
    {
     "key": "earthedu",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 13건 제목 확인, 학과 주최 혜택 행사 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS + 사이트 RSS, 11/2 이후 글 2건 제목 확인(행사성 없음), 10/30 외부 행사 전달 2건(예비…"
    },
    {
     "key": "consumer",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 10건 제목 확인, 행사 글 1건(아카데믹 페스티벌 심포지엄·동문 특강) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS + 사이트 RSS, 11/2 이후 글 5건 제목 확인, 행사성 글 2건(석사논문 결과발표 세미나·하나증권…"
    },
    {
     "key": "childfamily",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "학사일반 1쪽, 10/1 이후 글 8건 제목 확인, 행사 글 1건(심포지엄·동문 특강, 일정 지남) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS(마지막 글 10/22) + 사이트 RSS, 11/2 이후 학과소식 5건(심포지엄·동문 특강·NTNU 교류…"
    },
    {
     "key": "foodnutrition",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 18건 제목 확인, 행사 글 2건 열람(동문 특강은 10/26 종료)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 1쪽, 11/2 이후 글 4건 제목 확인, 행사성 글 1건(Career Connect 졸업생 진로 특강 11/13…"
    },
    {
     "key": "clothing",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항·학과소식 1쪽, 10/1 이후 글 19건 제목 확인, 행사 글 3건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항·학과소식 각 1쪽, 11/2 이후 글 3건 제목 확인(학과소식은 10/27 이후 새 글 없음), 행사성 글 1건(…"
    },
    {
     "key": "cee",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1~4쪽(1쪽은 고정공지뿐), 10/26 이후 글 약 40건 제목 확인(10/1~10/25 글은 쪽수 제한으로 미…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 1~4쪽(1쪽은 고정공지), 11/2 이후 글 25건 제목 확인, 학생활동 게시판 새 글 없음. 행사성 글은 본부…"
    },
    {
     "key": "me",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공통·학부·대학원 공지 각 1쪽 + 세미나 및 행사 1쪽, 10/1 이후 글 약 45건 제목 확인, 행사성 글 7건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공통·학부·대학원·취업 및 홍보·학부뉴스·세미나 및 행사 각 1쪽, 11/2 이후 글 약 26건 제목 확인, 행사성 글 6…"
    },
    {
     "key": "mse",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽 + 세미나 1쪽, 10/1 이후 글 15건 제목 확인, 학부 행사 기사(재료한마당 10/23, 종료) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지·세미나 각 1쪽, 11/2 이후 공지 7건·세미나/콜로퀴엄 5건 제목 확인, 11/6 이후 회차 4건 열람(본문은 포…"
    },
    {
     "key": "ece",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "구 주소 ee.snu.ac.kr 접속 불가(연결 거부) → ece.snu.ac.kr 학사·대학생활·행사·기타·취업 게시판…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "대학생활·행사·학사·기타·취업 게시판 각 1쪽, 11/2 이후 글 8건 제목 확인(행사 게시판은 10/16 이후 새 글 없…"
    },
    {
     "key": "cse",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1~3쪽, 10/26 이후 글 약 45건 제목 확인(그 이전은 쪽수 제한으로 미확인), 행사성 글 4건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 1~3쪽, 11/2 이후 글 25건(25801~25825) 제목 확인, 행사성 글 2건 열람(LG CNS 산학장학…"
    },
    {
     "key": "cbe",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 전체 1쪽 + 세미나 게시판, 10/1 이후 글 9건 제목 확인, 행사성 글 1건(커리어 데이) 본문·포스터·첨부 P…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽 + 세미나 게시판, 11/2 이후 공지 1건(셔틀버스)·세미나 새 글 없음, 기존 커리어 데이(11/6) 원문…"
    },
    {
     "key": "architecture",
     "state": "blocked",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "누리집이 스크립트(SPA)로만 목록을 그려 정적 HTML에 글이 없음. 공대 '학과부 공지' 피드(dept=architec…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "누리집이 스크립트(SPA)로만 목록을 그려 정적 HTML에 글이 없음(재확인). 공대 학과부 공지 dept=architec…"
    },
    {
     "key": "ie",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1~2쪽, 10/1 이후 글 약 30건 제목 확인, 행사성 글 2건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1~2쪽, 11/2 이후 글 12건 제목 확인, 행사성 글 2건 열람(창업가형 혁신인재 설명회 11/9 — 혜택 미기…"
    },
    {
     "key": "ere",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽 + 홍보 게시판 1쪽, 10/1 이후 글 약 25건 제목 확인, 행사성 글 6건 열람(공버스킹·KBS 열린음…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항 1쪽 + 홍보 게시판 1쪽, 11/2 이후 공지 7건 제목 확인(본부 공지 사본), 홍보 게시판은 10/26 이후…"
    },
    {
     "key": "nucleng",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽 + 행사/세미나 1쪽, 10/1 이후 글 19건 제목 확인, 행사성 글 1건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽 + 행사/세미나 1쪽, 11/2 이후 글 11건 제목 확인(본부 공지 사본·외부 실습 프로그램), 세미나 게시판…"
    },
    {
     "key": "naoe",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽 + 세미나 1쪽, 10/1 이후 글 26건 제목 확인, 행사성 글 2건 열람(포스터 이미지 확인)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽, 11/2 이후 글 10건 제목 확인, 행사성 글 1건(Regatta X 2026, 국립한국해양대 주최) 열람…"
    },
    {
     "key": "aerospace",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽 + 학과소식·세미나 1쪽, 10/1 이후 글 약 30건 제목 확인, 행사성 글 4건 열람(포스터 이미지 확인)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지·학과소식·세미나 각 1쪽, 11/2 이후 글 10건 제목 확인(세미나는 10/12 이후 새 글 없음), SNU Com…"
    },
    {
     "key": "temep",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "일반 공지·소식 및 이벤트 1쪽, 10/1 이후 글 2건, 행사성 글 1건(국제포럼) 본문·포스터 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "일반 공지·소식 및 이벤트 각 1쪽, 11/2 이후 글 1건(국가미래전략원 국제포럼 11/19 — 지난번 혜택 미기재 판정…"
    },
    {
     "key": "bioeng",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 약 28건 제목 확인(대부분 본부 공문 전달), 행사/소식 게시판 10월 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS + 사이트 RSS(행사/소식 포함), 11/2 이후 글 7건 제목 확인, 행사성 글 3건 본문 확인(AI…"
    },
    {
     "key": "esc",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽, 마지막 글 2026-07-28 — 10/1 이후 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽, 마지막 글 2026-07-28 — 11/2 이후 글 없음"
    },
    {
     "key": "gece",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지·소식 1쪽, 2023년 이후 새 글 없음"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지·소식 1쪽, 마지막 글 2024-07 — 새 글 없음"
    },
    {
     "key": "math",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1~2쪽 + 학회 및 특별강연 1쪽, 10/1 이후 글 약 30건 제목 확인, 행사성 글 3건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1~2쪽 + 학회 및 특별강연 1쪽, 11/2 이후 글 약 9건 제목 확인, 행사성 글 2건 열람(자연대 글로벌 홍보…"
    },
    {
     "key": "statistics",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1~2쪽 + 취업정보 1쪽, 10/1 이후 글 약 50건 제목 확인. 글 본문은 스크립트로 로드되어 같은 글의 다…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS + 사이트 RSS 1~2쪽(취업정보 포함), 11/2 이후 글 약 16건 제목 확인, 혜택 문구 있는 글…"
    },
    {
     "key": "physics",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1~2쪽 + 콜로퀴움 목록, 10/1 이후 공지 6건·11~12월 콜로퀴움 5건 제목 확인, 콜로퀴움·공청회 3건 열…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽 + 콜로퀴움 목록, 11/2 이후 공지 2건, 11~12월 콜로퀴움 4건 중 3건 열람(다과 언급 없음), 학부…"
    },
    {
     "key": "astron",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽 + 콜로퀴움 일정, 10/1 이후 글 18건 제목 확인(행사성 글 없음, 콜로퀴움 다과 언급 없음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS + 사이트 RSS, 11/2 이후 글 6건 제목 확인(행사성 없음), 콜로퀴움 일정표(11/12~12/10…"
    },
    {
     "key": "chem",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1~2쪽 + 세미나 목록, 10/1 이후 공지 약 20건·11~12월 세미나 10건 제목 확인, 세미나 2건 열람(다…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1~2쪽 + 세미나 목록, 11/2 이후 공지 8건·11~12월 세미나 10건 제목 확인, 새로 올라온 특별세미나 4…"
    },
    {
     "key": "biosci",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1~2쪽, 10/1 이후 글 약 38건 제목 확인, 행사성 글 2건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1~2쪽, 11/2 이후 글 10건 제목 확인, 행사성 글은 외부 포럼(조선비즈·K-제약바이오)·국립생물자원관 현장실…"
    },
    {
     "key": "sees",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽 + 세미나/이벤트(목록이 스크립트 달력이라 첫 화면 노출분만), 10/1 이후 공지 19건·세미나 3건 확인…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽 + 세미나/이벤트 목록(목록 보기 ?md=l), 11/2 이후 공지 5건·세미나 8건 제목 확인, 11/6 이후…"
    },
    {
     "key": "brainscience",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽, 10/1 이후 글 3건(세미나 초청강연 안내 2건은 10/8·10/22 종료)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽, 마지막 글 10/21 — 11/2 이후 글 없음"
    },
    {
     "key": "cst",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽, 10/1 이후 글 1건(행사성 글 없음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽, 10월 중순 이후 새 글 없음"
    },
    {
     "key": "ipbi",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지·세미나/행사 각 1쪽, 10/1 이후 글 5건, 11/4 세미나 열람(다과 언급 없음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지·세미나/행사·새소식 각 1쪽, 11/2 이후 글 3건(연구윤리 세미나 사본·연구윤리 교육·11/4 세미나) → 신규…"
    },
    {
     "key": "ipge",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽, 10/1 이후 글 1건(행사성 글 없음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽, 마지막 글 10/13 — 11/2 이후 글 없음"
    },
    {
     "key": "ss",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 1쪽, 10/1 이후 글 2건(행사성 글 없음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS + 사이트 RSS, 마지막 글 10/13 — 11/2 이후 글 없음"
    },
    {
     "key": "cnscounsel",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 1쪽, 10/1 이후 글 1건(휴일 공고)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 1쪽, 마지막 글 10/01(휴일 공고) — 11/2 이후 글 없음"
    },
    {
     "key": "gsai",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "채용/행사/세미나·대학원 소식·연구/대학생활 각 1쪽, 10/1 이후 글 4건. 창업경진대회(접수 ~11/13) 글은 본문…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS + 사이트 RSS, 11/2 이후 글 4건 제목 확인(행사성 없음). 지난번 본문 미확인이던 창업경진대회(…"
    },
    {
     "key": "imai",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항·행사/채용 각 1쪽, 10/1 이후 글 3건(외부 교육 모집·연구활동지원금 — 제외 대상)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS + 사이트 RSS, 마지막 글 10/28(KAIST 몰입캠프 전달) — 11/2 이후 글 없음"
    },
    {
     "key": "ssai",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항·행사 공지 각 1쪽, 10/1 이후 글 1건(행사성 글 없음)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "카테고리 RSS + 사이트 RSS, 마지막 글 10/20 — 11/2 이후 글 없음"
    },
    {
     "key": "aiis",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항·행사안내 각 1쪽, 10/1 이후 글 1건(채용 공고)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지사항·행사안내 각 1쪽, 마지막 글 9/7(공지)·4/28(행사) — 새 글 없음"
    },
    {
     "key": "cse_jobs",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "채용정보 목록 1~2쪽(10/14~11/3 글 약 40건) 제목 확인, 캠퍼스 설명회 글(BCG) 열람. 나머지는 채용 공…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "채용정보 태그 1쪽, 11/2 이후 글 11건 제목 확인(채용·외부 교육·외부 공모전·외부 세미나), AI on Edge(…"
    },
    {
     "key": "econ_external",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽(10/12~11/3 글 25건) 제목 확인. 캠퍼스 행사는 BCG·필립모리스(다른 원문과 중복)뿐"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "외부공지 1쪽, 11/2 이후 글 7건 제목 확인, 행사성 글 1건(디딤돌소득 성과보고회, 서울시청) 열람 → 외부 주최.…"
    },
    {
     "key": "career_notice",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽 확인, 10/1 이후 글 6건 전부 열람 + 포스터 이미지 3장(11월 프로그램 안내·Career Camp·버크…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 1건(11/4 취업역량강화특강 노션 포트폴리오 작성법 모집) 열람·포스터 확인 → 혜택 미기재.…"
    },
    {
     "key": "career_recruit",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "2026년 11월 달력 확인: 11/4 필립모리스 설명회·상담, 11/5 BCG 설명회뿐. 상세 링크가 없어 학과 게시판…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "11월 달력(11/4 필립모리스, 11/5 BCG뿐, 새 일정 없음)·12월 달력(일정 없음) 확인. 목록 주소가 /stu…"
    },
    {
     "key": "career_events",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "2026년 11월 달력 확인(생애 포트폴리오 11/3, 취업역량강화특강 11/4·11/18, 기업탐방 11/6, 유학생 취…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "11월 달력(생애 포트폴리오 11/3, 취업역량강화특강 11/4·11/18, 기업탐방 11/6, 유학생 취업캠프 11/9~…"
    },
    {
     "key": "startup_notice",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽 확인, 10/1 이후 글 6건(기후테크 참관자, Pitcher's Day, 도전의 IR, Global Camp,…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 1건(11/3 기후테크 창업 경진대회 참관자 모집, 기존 행사) 재열람 → 11/3 사본과 본문…"
    },
    {
     "key": "startup_calendar",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "2026년 11월 일정 리스트 확인, 바이오 창업 교육(생명공학공동연구원) 일정 글 1건 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "11월·12월 일정 리스트 확인: 새 일정은 CES 2027 참가 기업 마케팅 지원 모집(기업 대상) 1건뿐"
    },
    {
     "key": "startup_program",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽 확인: 상시 멘토링 외 모두 신청 마감된 상반기·여름 프로그램"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 상시 창업멘토링 외 새 글 없음 · 11/2 이후 0건"
    },
    {
     "key": "ig_snucdc",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 career.snu.ac.kr 하단 SNS 링크로 확인. 공개 프로필 그리드 표지 3장(10/21~10/29) 확인…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "curl은 빈 껍데기, WebFetch로 공개 그리드 확인: 11/2 이후 게시물 9건(모두 11/3: 노션 포트폴리오 특…"
    },
    {
     "key": "ig_snu_eni_official",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 startup.snu.ac.kr 홈 링크로 확인. 그리드 표지 확인: 10/1 이후 게시물은 11/3 기후테크 경진…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "curl은 빈 껍데기, WebFetch로 공개 그리드 확인: 11/2 이후 게시물 1건(11/3 기후테크 경진대회, 기존…"
    },
    {
     "key": "we_snu",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "snu.ac.kr 학생기구 안내에서 주소 확인. 홈 최근 글(10/11~10/24 회의록 7건), '진행 중 설문조사'·'…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "홈 '지금 학생회는' 11/2 이후 글 5건(11/3 제19차 운영위 결과지, 11/4 연석회의 운영위 71~74차) 제목…"
    },
    {
     "key": "sgc",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "snu.ac.kr 학생기구 안내에서 주소 확인. 공지·회의록·학생회사업·위원회 게시판 7곳 확인: 10/1 이후 글은 회의…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지(최신 9/28)·회의록(최신 10/06)·설문(9/03)·활동보고·학생회 사업·환경문화복지위원회(9/11) 목록 확인…"
    },
    {
     "key": "dongari",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "snu.ac.kr 학생기구 안내에서 주소 확인. 목록 1쪽: 10/1 이후 글 3건(동아리방 반환·가등록 심의·징계 공고)…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽 확인: 최신 글 10/29(동아리방 반환 요구 공고), 11/2 이후 글 0건"
    },
    {
     "key": "ig_we_snu_2026",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 we.snu.ac.kr 하단 인스타그램 아이콘으로 확인. 그리드 10/27~11/2 표지 9장 확인. 캡션·카드뉴스…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 중 11/2 이후 6건(11/4 게시판 관리, 11/2 신한·하나 국제학생증, 뮤지컬 단체 할인, 독서…"
    },
    {
     "key": "ig_snu_graduate_council",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 sgc.snu.ac.kr 공지 본문의 '인스타그램: https://www.instagram.com/snu_gradu…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 확인: 최신 게시물 10/09(총학생회 공동 게시), 자체 게시물 최신 9/29. 11/2 이후 0건"
    },
    {
     "key": "ig_snu_ari",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 dongari.snu.ac.kr 하단 인스타그램 링크로 확인(표시명 '서울대학교 총동아리연합회'). 10/1 이후…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 확인: 최신 10/31(11월 동아리 행사 달력), 11/2 이후 0건. 달력 캡션 열람(천체사진전 11/3~…"
    },
    {
     "key": "ig_snu_dsc_official",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 웹 검색 결과 '서울대학교 관악학생생활관 학부생 자치운영위원회 (@snu_dsc_official)'와 포스터 내 '…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 중 11/2 이후 2건(한울제 캔배지 스탬프 릴스, 타임테이블) 확인 → 모두 11/3 한울제(종료)"
    },
    {
     "key": "ig_snucbasc",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 웹 검색 결과 '서울대학교 경영대학 학생회 (@snucbasc)'로 확인(현재 표시명 '제40대 서울대학교 경영대학…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 중 11/2 이후 2건(대여사업 온라인 신청, 공동선본발족식 릴스) 표지 확인 + 단서 Business…"
    },
    {
     "key": "ig_snuart_official",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 웹 검색 결과 '서울대학교 미술대학 학생회 (@snuart.official)'로 확인. 10/19~10/30 표지…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 중 11/2 이후 1건(11/3 제42대 선거 무산 공고) 캡션·이미지 확인 → 행사 아님"
    },
    {
     "key": "ig_snupharm_official",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 웹 검색 결과 '서울대학교 약학대학 제45대 학생회 [여울] (@snupharm_official)'로 확인. 10/…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 확인: 최신 11/1, 11/2 이후 0건. 단서 11/1 게시물(11월 안내) 캡션 열람 → '한정선…"
    },
    {
     "key": "ig_snuvet_official",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 웹 검색 결과 '서울대학교 수의과대학 제41대 학생회 (@snuvet_official)'로 확인(현재 표시명 제42…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 확인: 최신 게시물 2026-07-31"
    },
    {
     "key": "ig_snucls_community",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 웹 검색 결과 '제17대 서울대학교 자유전공학부 학생회 (@snucls_community)'로 확인. 11/1~11…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 중 11/2 이후 1건(학부대학 킹덤 좀비 서바이벌 11/19 사전예약) 캡션 열람 → 혜택 미기재"
    },
    {
     "key": "ig_snu_eng_und",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "핸들은 웹 검색 결과 '서울대학교 공과대학 광역반 학생회 (@snu.eng.und)'로 확인. 10/1 이후 게시물 1건(…"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 확인: 11/2 이후 0건. 단서 10/25 중간고사 간식행사 캡션 열람 → 배부일 10/28(종료)"
    },
    {
     "key": "ig_snu_eng_official",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "기존 공지처 재확인. 10/26~11/2 표지 6장 확인(선거 정책간담회·사전질문 설문·휴게실 설문 등)"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 중 11/2 이후 3건(11/5 정책간담회 1·2부 릴스, 11/2 후보자 정책간담회 11/5 안내)…"
    },
    {
     "key": "ig_snucss_official",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "기존 공지처 재확인. 10/26~11/2 표지 6장 확인(11월 달력·아고라 11/6 등, 혜택 표기 없음)"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 확인: 최신 10/31(11월 캘린더), 11/2 이후 0건. 캘린더 캡션 열람 → 일정은 둘째 장 이…"
    },
    {
     "key": "ig_humanities_snu",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "기존 공지처 재확인. 10/28~11/1 표지 6장 확인(반방 청소 콘테스트·선거 정책간담회 등, 표지에 혜택 표기 없음)"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 중 11/2 이후 4건(11/5·11/3 정책간담회 릴스, 선관위 공동 게시 2건) 캡션 확인 + 단서…"
    },
    {
     "key": "ig_ed_u_snu",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "기존 공지처 재확인. 10/30~11/2 표지 4장 확인(유세·학사력·활동보고·서명운동)"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 중 11/2 이후 3건(11/4 인권국 강연 11/19, 11/4 학장단과의 만남 11/16, 11/2…"
    },
    {
     "key": "ig_snucals_stuco",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "기존 공지처 재확인. 10/30~11/1 표지 4장 확인(11월 일정표·장학금 알리미·선거 공고)"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 중 11/2 이후 4건(11/5 공동유세 11/6 안내, 학부연구생 꿀팁 인터뷰 1~3편) 캡션 확인…"
    },
    {
     "key": "ig_snu_cns",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T05:00:00.000Z",
-    "detail": "2026-11-03 공개 게시물 일부 수동 재확인 · 자동 확인은 중단됨"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 확인: 11/2 이후 0건(최신 11/1). 11/1 게시물 2건 캡션 열람(진로행사 상세 공지 + 포…"
    },
    {
     "key": "health4u",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 9건 제목 확인(휴진·예방접종 안내뿐), 관악건강특강 안내 페이지 확인 → 11/25 특강은 S…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 3건 제목 확인, 행사성 1건(정신건강강좌 11/18 '뇌회복의 기술') 열람 + 포스터 이미지…"
    },
    {
     "key": "counsel",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 1건(스누콜 상담원 모집) 확인, 학업마인드 점프 프로그램 페이지 열람(학기 초 모집, 해당 없…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽 확인: 최신 글 10/27(스누콜 특별상담원 모집), 11/2 이후 0건"
    },
    {
     "key": "library",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽(약 40건, 10/1 이후 약 20건) 제목 확인, 행사성 2건(법학도서관 책나눔, 창간호 잡지 특별전) 열람"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 4건(박완서 아카이브 공사, 창간호 특별전 촬영, CABI·IEEE 시범서비스) 제목 확인: 행…"
    },
    {
     "key": "library_news",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 5건 전부 열람 – 상영회 2건(10/29~30)·북콘서트(10/22, 도서 증정) 종료, 커리…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽 확인: 최신 글 10/22(예술의전당 상영회, 커리어 멘토링 특강), 11/2 이후 0건"
    },
    {
     "key": "snuco",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지사항 10/1 이후 2건 열람(포스터: 건강주간 특식은 구성원 7,000원 유료, A+ 응원밥상 10/21 종료) +…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 1건(2026 건강주간 특식제공 안내) 열람 + 포스터 확인 → '구성원 기준 7,000원' 유…"
    },
    {
     "key": "dorm",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "목록 1쪽, 10/1 이후 5건 제목 확인, 행사성 1건(한울제) 열람. LnL 공지 게시판은 첫 쪽 최신 글이 2025-…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽, 11/2 이후 1건(제15회 한울제, 기존 행사·11/3 종료) 확인"
    },
    {
     "key": "museum",
-    "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 목록 1쪽 최신 글 2026-09-21, 기타 행사 게시판 최신 2025-08 · 10/1 이후 0건"
+    "state": "blocked",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "curl 3회(03:00 전후)·WebFetch 모두 HTTP 500, 홈(/)도 같음. 워드프레스 '이 웹사이트에 치명적…"
    },
    {
     "key": "moa",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지(월별 관람 안내)·현재/예정 행사 2건 열람, 이용안내 확인(관람료 상시 무료). https 주소는 접속 실패, ht…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공지 목록(최신 10/17 월별 안내)·현재/예정 행사 2건 열람: 조르조 모란디 특별강연(11/23, 무료 강연이나 정원…"
    },
    {
     "key": "culture",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "공지 10/1 이후 0건, 행사 목록 12건 제목 확인·2건 열람(Sonic Nomads 10/25 종료 등). 옵/신 무…"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "RSS·행사 목록 확인: 11/2 이후 2건(라운지 서울 11/6~8 전시·워크숍, 새삶스런 예술 전파사) 열람 → 라운지…"
    },
    {
     "key": "athletics",
     "state": "ok",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "소식 10/1 이후 2건·스포츠프로그램 공지 목록 확인, 종합체육대회 안내 열람(접수 10/18 마감, 시상 내용 미기재)"
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "목록 1쪽 확인: 최신 글 10/08(정전 안내), 11/2 이후 0건"
    },
    {
     "key": "ig_snucores",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "생협 홈페이지 하단 링크로 계정 확인, 게시물은 로그인·JS 필요로 미확인"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 확인: 표시명 '서울대학교 생활협동조합 학생위원회', 최신 게시물 2019-11-20"
    },
    {
     "key": "ig_ica_snu",
-    "state": "browser_only",
-    "checkedAt": "2026-11-03T10:31:13.000Z",
-    "detail": "문화예술원 홈페이지 하단 링크로 계정 확인, 게시물은 로그인·JS 필요로 미확인"
+    "state": "ok",
+    "checkedAt": "2026-11-05T18:25:06.000Z",
+    "detail": "공개 그리드 12개 중 11/2 이후 1건(옵/신 페스티벌 at 파워플랜트) 캡션 확인 → 기존 옵/신 무료 티켓 행사와…"
    }
   ]
  },
- "revision": 9
+ "revision": 10
 }
