@@ -1,6 +1,6 @@
 {
  "source": "https://snuco.snu.ac.kr/foodmenu/",
- "fetchedAt": "2026-11-11T10:10+09:00",
+ "fetchedAt": "2026-11-11T16:55+09:00",
  "days": {
   "2026-11-11": [
    {
@@ -5636,6 +5636,66 @@
    {
     "name": "자하연식당 3층",
     "meals": {
+     "lunch": {
+      "items": [
+       {
+        "name": "낙지연포탕(#)",
+        "price": 13000
+       },
+       {
+        "name": "매운삼겹살구이",
+        "price": 14000
+       },
+       {
+        "name": "<+세미뷔페>",
+        "price": null
+       },
+       {
+        "name": "단호박튀김",
+        "price": null
+       },
+       {
+        "name": "도토리묵채소무침",
+        "price": null
+       },
+       {
+        "name": "그린샐러드",
+        "price": null
+       },
+       {
+        "name": "미역국",
+        "price": null
+       },
+       {
+        "name": "후식",
+        "price": null
+       },
+       {
+        "name": "<뷔페 특성상 메뉴의 조기품절",
+        "price": null
+       },
+       {
+        "name": "가능성이 있으니 양해 부탁드립니다>",
+        "price": null
+       }
+      ],
+      "notes": [
+       "운영시간 : 11:30~14:00",
+       "혼잡시간 : 11:30~12:30"
+      ],
+      "hours": [
+       [
+        "11:30",
+        "14:00"
+       ]
+      ],
+      "crowd": [
+       [
+        "11:30",
+        "12:30"
+       ]
+      ]
+     },
      "dinner": {
       "items": [],
       "notes": [
@@ -5652,12 +5712,12 @@
      "lunch": {
       "items": [
        {
-        "name": ":",
-        "price": null
+        "name": "우거지갈비탕",
+        "price": 6000
        },
        {
-        "name": ":",
-        "price": null
+        "name": "핫커리치킨텐더",
+        "price": 6000
        }
       ],
       "notes": [
@@ -5680,8 +5740,8 @@
      "dinner": {
       "items": [
        {
-        "name": ":",
-        "price": null
+        "name": "특순대국밥",
+        "price": 6000
        }
       ],
       "notes": [
@@ -5767,7 +5827,7 @@
         "price": 5500
        },
        {
-        "name": "코코넛밀크새우커리&버팔로봉구이",
+        "name": "코코넛밀크새우커리&버팔로윙구이",
         "price": 6000
        }
       ],
@@ -6493,6 +6553,66 @@
    {
     "name": "자하연식당 3층",
     "meals": {
+     "lunch": {
+      "items": [
+       {
+        "name": "치킨마크니",
+        "price": 14000
+       },
+       {
+        "name": "뚝배기전복미역국&더덕양념구이(#)",
+        "price": 15000
+       },
+       {
+        "name": "<+세미뷔페>",
+        "price": null
+       },
+       {
+        "name": "두부조림",
+        "price": null
+       },
+       {
+        "name": "파프리카잡채",
+        "price": null
+       },
+       {
+        "name": "그린샐러드",
+        "price": null
+       },
+       {
+        "name": "팽이미소국",
+        "price": null
+       },
+       {
+        "name": "후식",
+        "price": null
+       },
+       {
+        "name": "<뷔페 특성상 메뉴의 조기품절",
+        "price": null
+       },
+       {
+        "name": "가능성이 있으니 양해 부탁드립니다>",
+        "price": null
+       }
+      ],
+      "notes": [
+       "운영시간 : 11:30~14:00",
+       "혼잡시간 : 11:30~12:30"
+      ],
+      "hours": [
+       [
+        "11:30",
+        "14:00"
+       ]
+      ],
+      "crowd": [
+       [
+        "11:30",
+        "12:30"
+       ]
+      ]
+     },
      "dinner": {
       "items": [],
       "notes": [
@@ -6509,12 +6629,12 @@
      "lunch": {
       "items": [
        {
-        "name": ":",
-        "price": null
+        "name": "해물짬뽕수제비",
+        "price": 5500
        },
        {
-        "name": ":",
-        "price": null
+        "name": "삼겹살덮밥",
+        "price": 6000
        }
       ],
       "notes": [
@@ -6537,8 +6657,8 @@
      "dinner": {
       "items": [
        {
-        "name": ":",
-        "price": null
+        "name": "규동&양념떡꼬치",
+        "price": 6000
        }
       ],
       "notes": [
