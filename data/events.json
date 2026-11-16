@@ -2527,32 +2527,6 @@
    "publicVerified": true
   },
   {
-   "id": "snu_calendar-nursing-seminar-lunch-20261118",
-   "title": "간호과학연구소 11월 겸무연구원 연구동향세미나 「환자안전역량, 무엇을 측정하는가」",
-   "location": "서울대학교 간호대학 본관 408호 (Zoom 병행) 하이브리드 진행",
-   "benefit": "간단한 점심",
-   "rule": "대면 사전등록자",
-   "eligibility": null,
-   "evidence": "대면 사전등록자에게는 간단한 점심을 드립니다!",
-   "date": "2026-11-18",
-   "start": "12:00",
-   "end": "13:00",
-   "deadline": "2026-11-16",
-   "deadlineTime": "17:00",
-   "category": "food",
-   "registration": "required",
-   "registrationUrl": null,
-   "sourceUrl": "https://www.snu.ac.kr/snunow/events?md=v&bbsidx=179147",
-   "source": "notice",
-   "verifiedAt": "2026-11-16",
-   "uncertain": [
-    "참석 대상 미기재",
-    "대면 사전등록 마감 2026-11-16(월) 17:00",
-    "원문의 사전등록 링크에 공백이 끼어 있어(https://forms.gle/ ...) 그대로 쓸 수 없음 — 신청은 원문 참조"
-   ],
-   "publicVerified": true
-  },
-  {
    "id": "snu_calendar-greenbag-seminar6-snack-20261126",
    "title": "COSS그린바이오 제6회 그린백세미나 「유전자변형 작물 상업화 30년과 유전자교정 작물의 새로운 미래」",
    "location": "서울대학교 75동 B121호",
@@ -2779,7 +2753,7 @@
   }
  ],
  "status": {
-  "updatedAt": "2026-11-16T16:59:02.000Z",
+  "updatedAt": "2026-11-16T17:04:02.000Z",
   "verifiedAt": "2026-11-16",
   "sourceChecks": [
    {
@@ -4062,5 +4036,5 @@
    }
   ]
  },
- "revision": 16
+ "revision": 17
 }
