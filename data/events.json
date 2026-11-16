@@ -2713,15 +2713,15 @@
    "end": "13:30",
    "category": "food",
    "registration": "required",
-   "registrationUrl": null,
+   "registrationUrl": "https://docs.google.com/forms/d/e/1FAIpQLSduW-KDWFqkq2fHhx_h6GNuO-gJhW9CmkHQ5nprSW2Pm8LlQw/viewform",
    "sourceUrl": null,
    "source": "notice",
    "verifiedAt": "2026-11-17",
    "uncertain": [
-    "신청은 포스터의 QR코드(구글폼) — 신청 주소 미확인",
     "신청 마감일 미기재(만석이면 조기 마감)",
     "참가 대상 미기재",
-    "원문 게시글 주소 없음 · 운영자가 올린 포스터(주최 서울대학교 중국연구소) 기준"
+    "원문 게시글 주소 없음 · 운영자가 올린 포스터(주최 서울대학교 중국연구소) 기준",
+    "신청 링크는 포스터 QR코드(네이버 단축 주소)가 가리키는 구글폼"
    ],
    "publicVerified": true
   },
@@ -2779,7 +2779,7 @@
   }
  ],
  "status": {
-  "updatedAt": "2026-11-16T16:56:29.000Z",
+  "updatedAt": "2026-11-16T16:59:02.000Z",
   "verifiedAt": "2026-11-16",
   "sourceChecks": [
    {
@@ -4062,5 +4062,5 @@
    }
   ]
  },
- "revision": 15
+ "revision": 16
 }
