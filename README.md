@@ -2,9 +2,9 @@
 
 서울대 학교 공지와 학생회 공개 게시물에서 확인한 무료 음식·기프티콘·경품·체험 행사를 공강 시간에 맞춰 찾는 정적 웹사이트.
 
-운영(행사 추가·수정, 제보 검수, 인스타 카드, 학식 수집, 출처 확인)은 따로 만든 운영자 사이트 [kkongbap-admin](https://github.com/Yu-Jusang/kkongbap-admin)에서 한다. 운영자 사이트는 이 저장소의 `core.js`·`content.js`를 불러 쓰고 `data/events.json`에 커밋한다.
+운영(행사 추가·수정, 제보 검수, 인스타 카드, 학식 수집, 출처 확인)은 따로 만든 운영자 사이트에서 한다. 운영자 사이트는 이 저장소의 `core.js`·`content.js`를 불러 쓰고 `data/events.json`에 커밋한다.
 
-**Live:** https://yu-jusang.github.io/kkongbap/
+**Live:** https://timetable-research.github.io/kkongbap/
 
 ## 화면
 
@@ -115,6 +115,7 @@ GitHub Pages는 `main` 브랜치 루트를 그대로 배포한다. `main`에 푸
 - 되살린 것: 공개 행사 자료 20건과 출처 확인 기록, 목록·월 캘린더, 검색·혜택·시간표 겹침 필터, 상세와 `.ics` 저장, 시간표 입력·`.ics` 가져오기, 공지문·사진 붙여넣기, 체험 모드. 로직(`model.ts`, `notice-import.ts`)은 그대로 옮겼다.
 - 바꾼 것: React 빌드 대신 빌드 없는 정적 파일, 장학 한눈에 디자인, 상태·출처 필터, 이번 주 카드, 행사별 주소.
 - 되살리지 않은 것: 메일 행사 수집, 서버 저장 API, 학생회 인스타그램 자동 확인.
+- 2026-11-17 저장소를 `timetable-research/kkongbap`으로 옮겼다(새 주소 https://timetable-research.github.io/kkongbap/). 예전 저장소와 주소는 지우지 않았다.
 - 2026-11-03 이름을 ‘꽁밥’으로, 저장소를 `Yu-Jusang/gonggang`에서 `Yu-Jusang/kkongbap`으로 바꿨다. 주소도 `/gonggang/`에서 `/kkongbap/`으로 바뀌었다.
 - 2026-11-03 예전 주소 `/gonggang/`는 안내 저장소 [Yu-Jusang/gonggang](https://github.com/Yu-Jusang/gonggang)이 경로·해시를 붙여 `/kkongbap/`으로 넘긴다.
 - 2026-11-03 자료 갱신: 공식 공지 12곳 첫 페이지 재확인, 행사 5건 추가, 진행 중 4건 원문 재대조. 건강주간 포스터로 세부(시간·장소·점심·간식·경품)를 확인해 프로그램 2건 추가.

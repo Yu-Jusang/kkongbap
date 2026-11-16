@@ -21,7 +21,7 @@ from pathlib import Path
 SOURCE = "https://snuco.snu.ac.kr/foodmenu/"
 OUT = Path(__file__).resolve().parent.parent / "data" / "menu.json"
 KST = dt.timezone(dt.timedelta(hours=9))
-UA = "kkongbap-menu/1.0 (+https://yu-jusang.github.io/kkongbap/)"
+UA = "kkongbap-menu/1.0 (+https://timetable-research.github.io/kkongbap/)"
 MEALS = ("breakfast", "lunch", "dinner")
 
 
