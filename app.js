@@ -7,7 +7,7 @@ const SLOT_KEY='gonggang-slots',PERSONAL_KEY='gonggang-personal-events';
 const VIEWS=['events','food','pick','timetable','import','guide'];
 const read=key=>{try{return JSON.parse(localStorage.getItem(key)||'[]');}catch{return [];}};
 let slots=sanitizeSlots(read(SLOT_KEY)),personal=sanitizePersonal(read(PERSONAL_KEY));
-let events=[],status={},loaded=false,view='events',listView='list',month=koreaDate().slice(0,7),picked='',toastTimer,draft=null;
+let events=[],status={},loaded=false,view='events',listView='calendar',month=koreaDate().slice(0,7),picked='',toastTimer,draft=null;
 
 function toast(message){
   $('#toast').textContent=message;$('#toast').classList.add('visible');clearTimeout(toastTimer);
@@ -181,7 +181,7 @@ function renderToday(){
   box.innerHTML=`<div class="ts-head"><p>${isToday?`<b>오늘의 꽁밥</b> <span class="muted">${fmt(today)} · ${list.length}건</span>`:`<b>${over?'오늘 꽁밥은 끝났어요':'오늘은 꽁밥이 없어요'}</b> <span class="muted">다음 꽁밥 ${fmt(day)} · ${list.length}건</span>`}</p><button type="button" class="text-button" data-pick-day="${day}">그날 전부 보기 →</button></div><ol class="ts-list">${list.slice(0,4).map(row).join('')}</ol>${list.length>4?`<button type="button" class="text-button ts-more" data-pick-day="${day}">+ ${list.length-4}건 더</button>`:''}`;
   box.hidden=false;
 }
-function pickDay(day){month=day.slice(0,7);if(listView==='list')setListView('calendar');picked=day;mapPlace='';mapVB=null;renderEvents();$('#result-note').scrollIntoView({block:'nearest'});}
+function pickDay(day){month=day.slice(0,7);picked=day;mapPlace='';mapVB=null;renderEvents();$('#result-note').scrollIntoView({block:'nearest'});}
 
 // 꽁밥 지도: 고른 날 열리는 행사를 건물 위에 표시한다. 바탕은 OpenStreetMap 건물·길(data/campus.json),
 // 건물 위치는 서울대 캠퍼스맵에서 확인한 좌표(data/places.json). 장소 문구에서 건물을 못 찾으면 지도에 올리지 않는다.
