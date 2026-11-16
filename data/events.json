@@ -2699,10 +2699,87 @@
     "서울대 학생 한정 여부 불명('누구나')"
    ],
    "publicVerified": true
+  },
+  {
+   "id": "ichina-colloquium-leviathan-20261123",
+   "title": "중국연구소 콜로퀴움 「리바이어던의 귀환: 시진핑 시대의 중국 정치」 (조영남 교수)",
+   "location": "아시아연구소 삼익홀(101동 220호)",
+   "benefit": "참여 신청자에게 간단한 점심 식사(제공 예정)",
+   "rule": "참여 신청자 · 만석이면 신청 조기 마감",
+   "eligibility": null,
+   "evidence": "포스터: ※ 참여 신청하신 분들께는 간단한 점심 식사가 제공될 예정입니다.",
+   "date": "2026-11-23",
+   "start": "12:00",
+   "end": "13:30",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": null,
+   "sourceUrl": null,
+   "source": "notice",
+   "verifiedAt": "2026-11-17",
+   "uncertain": [
+    "신청은 포스터의 QR코드(구글폼) — 신청 주소 미확인",
+    "신청 마감일 미기재(만석이면 조기 마감)",
+    "참가 대상 미기재",
+    "원문 게시글 주소 없음 · 운영자가 올린 포스터(주최 서울대학교 중국연구소) 기준"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "ctai-fair-ai-seminar-20261124",
+   "title": "인공지능신뢰성 연구센터 월례세미나 6회 「공정한 인공지능 관련 최근 연구들」 (김용대 교수)",
+   "location": "근대법학교육백주년기념관 최종길홀 (84동 101호)",
+   "benefit": "오프라인 참여 사전 신청자 샌드위치",
+   "rule": "사전 등록에서 오프라인 참여를 고른 사람만 현장 참석 · 좌석 한정",
+   "eligibility": null,
+   "evidence": "현장의 좌석이 한정되어 있어 오프라인 참여를 선택하신 사전 신청자에 한해 현장 참석이 가능합니다(샌드위치 제공).",
+   "date": "2026-11-24",
+   "start": "12:00",
+   "end": "13:00",
+   "deadline": "2026-11-20",
+   "deadlineTime": "15:00",
+   "category": "food",
+   "registration": "required",
+   "registrationUrl": "https://docs.google.com/forms/d/e/1FAIpQLSd5851yVCTuKEb-H1ohjf4hD7CIY0SPArbFDxYK5o06sCxI9Q/viewform",
+   "sourceUrl": null,
+   "source": "notice",
+   "verifiedAt": "2026-11-17",
+   "uncertain": [
+    "참가 대상 미기재",
+    "샌드위치 수량 미기재",
+    "원문 게시글 주소 없음 · 운영자가 올린 안내문(주관 서울대학교 인공지능신뢰성 연구센터) 기준"
+   ],
+   "publicVerified": true
+  },
+  {
+   "id": "cns-hwang-policy-forum-20261125",
+   "title": "황정아 의원 초청 이공계 교육·연구 정책 간담회 「연구에 몰두할 수 있는 나라, 대한민국은 가능한가?」",
+   "location": "자연과학대학 501동 1층 목암홀",
+   "benefit": "사전 질문 채택자 소정의 경품(예정)",
+   "rule": "참가 신청서에 남긴 사전 질문이 채택된 사람",
+   "eligibility": "서울대학교 구성원 전체",
+   "evidence": "사전 질문이 채택된 분께는 소정의 경품을 드릴 예정입니다.",
+   "date": "2026-11-25",
+   "start": "17:00",
+   "end": "19:00",
+   "deadline": "2026-11-20",
+   "deadlineTime": "23:59",
+   "category": "gift",
+   "registration": "required",
+   "registrationUrl": "https://bit.ly/이공계정책간담회",
+   "sourceUrl": null,
+   "source": "notice",
+   "verifiedAt": "2026-11-17",
+   "uncertain": [
+    "경품 종류·수량 미기재",
+    "신청 링크는 안내문의 bit.ly 단축 주소",
+    "원문 게시글 주소 없음 · 운영자가 올린 안내문(자연과학대학 학생회·대학행정자치연구위원회) 기준"
+   ],
+   "publicVerified": true
   }
  ],
  "status": {
-  "updatedAt": "2026-11-16T02:21:09.000Z",
+  "updatedAt": "2026-11-16T16:56:29.000Z",
   "verifiedAt": "2026-11-16",
   "sourceChecks": [
    {
@@ -3985,5 +4062,5 @@
    }
   ]
  },
- "revision": 13
+ "revision": 15
 }
