@@ -173,10 +173,17 @@ def update_chunsik(days, today, path=CHUNSIK):
     return changed
 
 
-def fetch(date):
+def fetch(date, attempts=4):
+    # 생협 서버가 가끔 SSL 연결을 끊어서(UNEXPECTED_EOF), 잠깐 쉬었다가 다시 시도한다.
     req = urllib.request.Request(f"{SOURCE}?date={date}", headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return r.read().decode("utf-8", "replace")
+    for i in range(attempts):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return r.read().decode("utf-8", "replace")
+        except OSError:
+            if i == attempts - 1:
+                raise
+            time.sleep(10 * (i + 1))
 
 
 def main():
